@@ -1,0 +1,21 @@
+{
+  "name": "bugrap",
+  "description": "training exercise",
+  "main": "",
+  "moduleType": [],
+  "authors": [
+    "Sami Suo-Heikki"
+  ],
+  "license": "MIT",
+  "homepage": "www.vaadin.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0"
+  }
+}
