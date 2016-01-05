@@ -4,12 +4,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>Vaadin Bugrap with polymer</title>
-    <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+    <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
     <link rel="import" href="elements.html">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<vaadin-grid selection-mode="multi">
+    <table>
+        <!-- Define the columns -->
+        <col name="index" width="48">
+        <col name="user.picture.thumbnail" width="54">
+        <col name="user.name.first">
+        <col name="user.name.last">
+        <col name="user.email" flex>
+    </table>
+
+    <!-- Define custom column headers -->
+    <thead>
+    <tr>
+        <th>#</th>
+        <th></th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+</vaadin-grid>
 
 <script src="js/app.js"></script>
 </body>
