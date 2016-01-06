@@ -8,8 +8,17 @@
     <link rel="import" href="elements.html">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
+<body  class="fullbleed layout vertical">
+<paper-toolbar>
+    <paper-dropdown-menu label="Choose project">
+        <paper-menu class="dropdown-content">
+            <paper-item>Project 1</paper-item>
+            <paper-item>Project 2</paper-item>
+            <paper-item>Project 3</paper-item>
+            <paper-item>Project 4</paper-item>
+        </paper-menu>
+    </paper-dropdown-menu>
+</paper-toolbar>
 <vaadin-grid selection-mode="multi">
     <table>
         <!-- Define the columns -->

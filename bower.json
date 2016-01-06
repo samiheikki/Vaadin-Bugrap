@@ -17,6 +17,10 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
-    "vaadin-core-elements": "~0.3.0"
+    "vaadin-core-elements": "~0.3.0",
+    "paper-toolbar": "PolymerElements/paper-toolbar#~1.1.2",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#~1.1.2",
+    "paper-menu": "PolymerElements/paper-menu#~1.2.1",
+    "paper-item": "PolymerElements/paper-item#~1.1.3"
   }
 }
