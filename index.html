@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body  class="fullbleed layout vertical">
-<paper-toolbar class="white">
+<paper-toolbar class="white tall">
     <paper-dropdown-menu label="Choose project">
         <paper-menu class="dropdown-content">
             <paper-item>Project 1</paper-item>
@@ -29,6 +29,23 @@
         <paper-icon-button icon="icons:input" class="black"></paper-icon-button>
         <span class="black">Logout</span>
     </iron-label>
+    <iron-label class="middle">
+        <paper-icon-button icon="icons:bug-report" class="black"></paper-icon-button>
+        <span class="black">Report a bug</span>
+    </iron-label>
+    <iron-label class="middle">
+        <paper-icon-button icon="icons:chrome-reader-mode" class="black"></paper-icon-button>
+        <span class="black">Request a feature</span>
+    </iron-label>
+    <iron-label class="middle">
+        <paper-icon-button icon="icons:settings" class="black"></paper-icon-button>
+        <span class="black">Manage project</span>
+    </iron-label>
+    <span class="spacer middle"></span>
+    <paper-input class="short middle" label="Search reports" style="display: inline-block">
+        <paper-icon-button suffix icon="search" alt="search" title="Search" class="black">
+        </paper-icon-button>
+    </paper-input>
 </paper-toolbar>
 <vaadin-grid selection-mode="multi">
     <table>

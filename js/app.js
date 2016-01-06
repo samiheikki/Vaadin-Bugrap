@@ -33,3 +33,8 @@ document.addEventListener("WebComponentsReady", function () {
         cell.element.innerHTML = '<img src="' + cell.data + '" style="width: 24px;">';
     }
 });
+
+function clearInput(e) {
+    console.log(e);
+    document.getElementById('inputWithButton').value = '';
+}
