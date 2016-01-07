@@ -31,8 +31,9 @@ document.addEventListener("WebComponentsReady", function () {
     // Add a renderer for the picture column
     grid.columns[1].renderer = function(cell) {
         cell.element.innerHTML = '<img src="' + cell.data + '" style="width: 24px;">';
-    }
+    };
     distributionBarChange(5, 12, 123);
+    fireBaseTesting();
 });
 
 function clearInput(e) {
@@ -53,6 +54,15 @@ function distributionBarChange(closed, assigned, unassigned) {
     $distributionBarClosed.setAttribute('style','width:'+(totalWidth*closedRelation)+'px; height:'+height+'px');
     $distributionBarAssigned.setAttribute('style','width:'+(totalWidth*assignedRelation)+'px; height:'+height+'px');
     $distributionBarUnAssigned.setAttribute('style','width:'+(totalWidth*unassignedRelation)+'px; height:'+height+'px');
+}
+
+function fireBaseTesting() {
+    var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/project");
+    ref.on("value", function(snapshot) {
+        console.log(snapshot.val());
+    }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    })
 }
 
 Polymer({

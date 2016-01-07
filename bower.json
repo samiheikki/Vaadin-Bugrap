@@ -27,6 +27,8 @@
     "iron-iconset": "PolymerElements/iron-iconset#~1.0.4",
     "iron-label": "PolymerElements/iron-label#~1.0.1",
     "paper-progress": "PolymerElements/paper-progress#~1.0.8",
-    "paper-tabs": "PolymerElements/paper-tabs#~1.2.4"
+    "paper-tabs": "PolymerElements/paper-tabs#~1.2.4",
+    "firebase-element": "GoogleWebComponents/firebase-element#~1.0.9",
+    "paper-listbox": "polymerelements/paper-listbox#~1.1.0"
   }
 }

@@ -1,0 +1,57 @@
+{
+  "vaadin-bugrap": {
+    "project": {
+      "0": {
+        "project_id": "0",
+        "name": "CandyBug"
+      },
+      "1": {
+        "project_id": "1",
+        "name": "VaadinUI"
+      }
+    },
+    "version": {
+      "0": {
+        "version_id": "0",
+        "project_id": "0",
+        "name": "1.0"
+      }
+    },
+    "report": {
+      "0": {
+        "report_id": "0",
+        "project_id": "0",
+        "version_id": "0",
+        "priority": "5",
+        "meta": "Starting the app asks me to login everytime"
+      }
+    },
+    "status": {
+      "0": {
+        "status_id": "0",
+        "name": "0",
+        "iscustom": "true"
+      }
+    },
+    "comment": {
+      "0": {
+        "comment_id": "0",
+        "report_id": "0",
+        "timestamp": "2015-05-03 12:23:11",
+        "text": "I could not repeat the problem"
+      }
+    },
+    "comment_attachment": {
+      "0": {
+        "comment_id": "0",
+        "attachment_id": "0"
+      }
+    },
+    "attachment": {
+      "0": {
+        "attachment_id": "0",
+        "attachment": "blobdata here"
+      }
+    }
+  }
+}
