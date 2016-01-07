@@ -32,9 +32,36 @@ document.addEventListener("WebComponentsReady", function () {
     grid.columns[1].renderer = function(cell) {
         cell.element.innerHTML = '<img src="' + cell.data + '" style="width: 24px;">';
     }
+    distributionBarChange(5, 12, 123);
 });
 
 function clearInput(e) {
     console.log(e);
     document.getElementById('inputWithButton').value = '';
 }
+
+function distributionBarChange(closed, assigned, unassigned) {
+    var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
+        $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
+        $distributionBarUnAssigned = document.getElementById('distribution_bar_unassigned');
+    var total = closed + assigned + unassigned,
+        closedRelation = closed / total,
+        assignedRelation = assigned / total,
+        unassignedRelation = unassigned / total,
+        totalWidth = document.getElementById('distribution_bar').offsetWidth - 10,
+        height = document.getElementById('distribution_bar').offsetHeight;
+    $distributionBarClosed.setAttribute('style','width:'+(totalWidth*closedRelation)+'px; height:'+height+'px');
+    $distributionBarAssigned.setAttribute('style','width:'+(totalWidth*assignedRelation)+'px; height:'+height+'px');
+    $distributionBarUnAssigned.setAttribute('style','width:'+(totalWidth*unassignedRelation)+'px; height:'+height+'px');
+}
+
+Polymer({
+
+    is: 'bugrap-foo',
+
+    ready: function() {
+        console.log(this.$$('#distribution_bar'));
+        this.$.name.textContent = this.tagName;
+    }
+
+});

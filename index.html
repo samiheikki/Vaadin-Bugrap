@@ -4,13 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>Vaadin Bugrap with polymer</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
     <link rel="import" href="elements.html">
     <link rel="import" href="css/custom-style.html">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body  class="fullbleed layout vertical">
-<paper-toolbar class="white tall">
+<body class="fullbleed layout vertical">
+<paper-toolbar class="white">
     <paper-dropdown-menu label="Choose project">
         <paper-menu class="dropdown-content">
             <paper-item>Project 1</paper-item>
@@ -29,27 +30,49 @@
         <paper-icon-button icon="icons:input" class="black"></paper-icon-button>
         <span class="black">Logout</span>
     </iron-label>
-    <iron-label class="middle">
+</paper-toolbar>
+<paper-toolbar class="white">
+    <iron-label>
         <paper-icon-button icon="icons:bug-report" class="black"></paper-icon-button>
         <span class="black">Report a bug</span>
     </iron-label>
-    <iron-label class="middle">
+    <iron-label>
         <paper-icon-button icon="icons:chrome-reader-mode" class="black"></paper-icon-button>
         <span class="black">Request a feature</span>
     </iron-label>
-    <iron-label class="middle">
+    <iron-label>
         <paper-icon-button icon="icons:settings" class="black"></paper-icon-button>
         <span class="black">Manage project</span>
     </iron-label>
-    <span class="spacer middle"></span>
-    <paper-input class="short middle" label="Search reports" style="display: inline-block">
+    <span class="spacer"></span>
+    <paper-input class="short" label="Search reports" style="display: inline-block">
         <paper-icon-button suffix icon="search" alt="search" title="Search" class="black">
         </paper-icon-button>
     </paper-input>
 </paper-toolbar>
+<paper-toolbar class="white">
+    <paper-dropdown-menu label="Reports for">
+        <paper-tabs class="dropdown-content">
+            <paper-tab>1.2.3</paper-tab>
+            <paper-tab>1.2.4</paper-tab>
+            <paper-tab>1.2.5</paper-tab>
+            <paper-tab>1.2.6</paper-tab>
+        </paper-tabs>
+    </paper-dropdown-menu>
+    <div class="distribution_bar" id="distribution_bar">
+        <div class="distribution_bar_closed" id="distribution_bar_closed">
+
+        </div><!--
+        --><div class="distribution_bar_assigned" id="distribution_bar_assigned">
+
+        </div><!--
+        --><div class="distribution_bar_unassigned" id="distribution_bar_unassigned">
+
+        </div>
+    </div>
+</paper-toolbar>
 <vaadin-grid selection-mode="multi">
     <table>
-        <!-- Define the columns -->
         <col name="index" width="48">
         <col name="user.picture.thumbnail" width="54">
         <col name="user.name.first">
@@ -57,7 +80,6 @@
         <col name="user.email" flex>
     </table>
 
-    <!-- Define custom column headers -->
     <thead>
     <tr>
         <th>#</th>
@@ -68,7 +90,6 @@
     </tr>
     </thead>
 </vaadin-grid>
-
 <script src="js/app.js"></script>
 </body>
 </html>

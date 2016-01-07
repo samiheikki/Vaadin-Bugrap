@@ -25,6 +25,8 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#~1.0.6",
     "iron-icon": "PolymerElements/iron-icon#~1.0.7",
     "iron-iconset": "PolymerElements/iron-iconset#~1.0.4",
-    "iron-label": "PolymerElements/iron-label#~1.0.1"
+    "iron-label": "PolymerElements/iron-label#~1.0.1",
+    "paper-progress": "PolymerElements/paper-progress#~1.0.8",
+    "paper-tabs": "PolymerElements/paper-tabs#~1.2.4"
   }
 }
