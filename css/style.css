@@ -14,9 +14,8 @@ paper-icon-button.black, iron-icon.black, span.black {
 TODO Responsive distribution bar
 */
 .distribution_bar {
-    width: 500px;
+    width: 100%;
     height: 10px;
-    /*background-color: black;*/
 }
 
 .distribution_bar > div {

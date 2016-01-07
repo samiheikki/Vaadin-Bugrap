@@ -42,6 +42,14 @@ function clearInput(e) {
 }
 
 function distributionBarChange(closed, assigned, unassigned) {
+    //TODO select distribution values from somewhere, now only static
+    closed = 5;
+    assigned = 12;
+    unassigned = 123;
+
+
+
+
     var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
         $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
         $distributionBarUnAssigned = document.getElementById('distribution_bar_unassigned');

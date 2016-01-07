@@ -60,8 +60,8 @@
             </paper-icon-button>
         </paper-input>
     </paper-toolbar>
-    <paper-toolbar class="white">
-        <paper-dropdown-menu label="Reports fort">
+    <paper-toolbar class="white" id="distribution_toolbar">
+        <paper-dropdown-menu label="Reports fort" id="reports_for">
             <paper-menu class="dropdown-content">
                 <paper-item>1.2.3</paper-item>
                 <paper-item>1.2.4</paper-item>
@@ -69,17 +69,8 @@
                 <paper-item>1.2.6</paper-item>
             </paper-menu>
         </paper-dropdown-menu>
-        <div class="distribution_bar" id="distribution_bar">
-            <div class="distribution_bar_closed" id="distribution_bar_closed">
-
-            </div><!--
-        --><div class="distribution_bar_assigned" id="distribution_bar_assigned">
-
-            </div><!--
-        --><div class="distribution_bar_unassigned" id="distribution_bar_unassigned">
-
-            </div>
-        </div>
+        <distribution-bar>
+        </distribution-bar>
     </paper-toolbar>
     <paper-toolbar class="white">
         <iron-label>

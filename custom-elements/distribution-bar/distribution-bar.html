@@ -1,0 +1,95 @@
+<link href="/bower_components/iron-resizable-behavior/iron-resizable-behavior.html" rel="import">
+
+<dom-module id="inner-bar">
+
+    <style>
+        :host {
+            display: inline-block;
+        }
+    </style>
+
+    <template>
+
+        <div class="distribution_bar" id="distribution_bar">
+            <div class="distribution_bar_closed" id="distribution_bar_closed">
+
+            </div><!--
+        --><div class="distribution_bar_assigned" id="distribution_bar_assigned">
+
+        </div><!--
+        --><div class="distribution_bar_unassigned" id="distribution_bar_unassigned">
+
+        </div>
+        </div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    Polymer({
+        is: 'inner-bar',
+        behaviors: [
+            Polymer.IronResizableBehavior
+        ],
+        properties: {
+            x: {
+                type: Number,
+                value: 0
+            },
+            y: {
+                type: Number,
+                value: 0
+            }
+        },
+        listeners: {
+            'iron-resize': '_onIronResize'
+        },
+        attached: function() {
+            this.async(this.notifyResize, 1);
+        },
+        get parent() {
+            if (this.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+                return this.parentNode.host;
+            }
+            return this.parentNode;
+        },
+        _onIronResize: function() {
+            var toolbarWidth = document.getElementById('distribution_toolbar').offsetWidth,
+                reportsForWidth = document.getElementById('reports_for').offsetWidth;
+            //var x = this.x = Math.floor(this.parent.offsetWidth / 3);
+            //var y = this.y = Math.floor(this.parent.offsetHeight / 3);
+            console.log(toolbarWidth-reportsForWidth);
+            console.log(this.parent);
+            this.parent.setAttribute('style', 'width:'+(toolbarWidth-reportsForWidth-10)+'px');
+            this.setAttribute('style', 'width:'+(toolbarWidth-reportsForWidth-10)+'px');
+            distributionBarChange();
+            //this.translate3d(x + 'px', y + 'px', 0);
+        }
+    });
+</script>
+
+<dom-module id="distribution-bar">
+
+    <style>
+        :host {
+            display: block;
+        }
+    </style>
+
+    <template>
+
+        <inner-bar></inner-bar>
+
+    </template>
+
+</dom-module>
+
+<script>
+    Polymer({
+        is: 'distribution-bar',
+        behaviors: [
+            Polymer.IronResizableBehavior
+        ]
+    });
+</script>
