@@ -71,6 +71,23 @@
         </div>
     </div>
 </paper-toolbar>
+<paper-toolbar class="white">
+    <iron-label>
+        <span class="black">Assignees</span>
+        <paper-tabs selected="0">
+            <paper-tab>Only me</paper-tab>
+            <paper-tab>Everyone</paper-tab>
+        </paper-tabs>
+    </iron-label>
+    <iron-label>
+        <span class="black">Status</span>
+        <paper-tabs selected="0">
+            <paper-tab>Open</paper-tab>
+            <paper-tab>All kinds</paper-tab>
+            <paper-tab>Custom <iron-icon icon="icons:arrow-drop-down"></iron-icon></paper-tab>
+        </paper-tabs>
+    </iron-label>
+</paper-toolbar>
 <vaadin-grid selection-mode="multi">
     <table>
         <col name="index" width="48">
