@@ -62,6 +62,9 @@ function distributionBarChange(closed, assigned, unassigned) {
     $distributionBarClosed.setAttribute('style','width:'+(totalWidth*closedRelation)+'px; height:'+height+'px');
     $distributionBarAssigned.setAttribute('style','width:'+(totalWidth*assignedRelation)+'px; height:'+height+'px');
     $distributionBarUnAssigned.setAttribute('style','width:'+(totalWidth*unassignedRelation)+'px; height:'+height+'px');
+    $distributionBarClosed.innerHTML = closed;
+    $distributionBarAssigned.innerHTML = assigned;
+    $distributionBarUnAssigned.innerHTML = unassigned;
 }
 
 function fireBaseTesting() {

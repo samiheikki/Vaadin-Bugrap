@@ -15,7 +15,7 @@ TODO Responsive distribution bar
 */
 .distribution_bar {
     width: 100%;
-    height: 10px;
+    height: 20px;
 }
 
 .distribution_bar > div {
@@ -32,4 +32,8 @@ TODO Responsive distribution bar
 
 .distribution_bar_unassigned {
     background-color: #CCC6C6;
+}
+
+.button_label {
+    cursor: pointer;
 }
