@@ -18,14 +18,12 @@
     <dom-module id="vaadin-bugrap">
 
         <template>
-
             <!-- Firebase collections -->
             <firebase-collection
                     order-by-child="project_id"
                     location="https://vaadin-bugrap.firebaseio.com/project"
                     data="{{projects}}">
             </firebase-collection>
-
 
             <paper-toolbar class="white">
                 <paper-dropdown-menu label="Choose project" id="project_select_dropdown">
@@ -66,8 +64,9 @@
                 </paper-input>
             </paper-toolbar>
             <paper-toolbar class="white" id="distribution_toolbar">
-                <paper-dropdown-menu label="Reports fort" id="reports_for">
+                <paper-dropdown-menu label="Reports for" id="reports_for">
                     <paper-menu class="dropdown-content">
+                        <paper-item value="all" selected>All versions</paper-item>
                         <template is="dom-repeat" items="{{projectVersions}}" as="version">
                             <paper-item value="{{version.version_id}}">{{version.name}}</paper-item>
                         </template>

@@ -9,6 +9,11 @@ Polymer({
     defaultValues: function() {
         this.currentProject = 0;
         this.projectVersions = [];
+        this.distributionBarValues = {
+            closed: 0,
+            assigned: 0,
+            unassigned: 0
+        }
     },
     events: function events() {
         var self = this;
@@ -60,7 +65,7 @@ Polymer({
         if(typeof this.$.project_select.selectedItem !== 'undefined') {
             self.currentProject = this.$.project_select.selectedItem.value;
             self.updateReportGrid();
-            self.distributionBarChange(5, 12, 123);
+            self.updateDistributionBarValues();
             self.updateVersionList();
         }
     },
@@ -71,7 +76,6 @@ Polymer({
         ref.on("value", function(response) {
             var items = [];
             response.val().forEach(function(element, index, array){
-                console.log(element);
                 if(element.project_id === self.currentProject) {
                     items.push(element);
                 }
@@ -81,11 +85,41 @@ Polymer({
             console.log("The read failed: " + errorObject.code);
         });
     },
-    distributionBarChange: function distributionBarChange(closed, assigned, unassigned) {
-        //TODO select distribution values from somewhere, now only static
-        closed = 5;
-        assigned = 12;
-        unassigned = 123;
+    updateDistributionBarValues: function updateDistributionBarValues() {
+        //get Project report distribution
+        var self = this;
+        this.distributionBarValues.closed = 0;
+        this.distributionBarValues.assigned = 0;
+        this.distributionBarValues.unassigned = 0;
+        var closed = 0,
+            assigned = 0,
+            unassigned = 0;
+        var closedIds = [1],
+            assignedIds = [2,3,4,5,6,7],
+            unassignedIds = [0];
+        var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
+        ref.on("value", function(response) {
+            response.val().forEach(function(element, index, array){
+                if (closedIds.indexOf(element.status_id) > -1) {
+                    self.distributionBarValues.closed++;
+
+                } else if(assignedIds.indexOf(element.status_id) > -1) {
+                    self.distributionBarValues.assigned++;
+
+                } else if(unassignedIds.indexOf(element.status_id) > -1) {
+                    self.distributionBarValues.unassigned++;
+                }
+            });
+            self.distributionBarChange();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    distributionBarChange: function distributionBarChange() {
+
+        var closed = this.distributionBarValues.closed;
+        var assigned = this.distributionBarValues.assigned;
+        var unassigned = this.distributionBarValues.unassigned;
 
         var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
             $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
