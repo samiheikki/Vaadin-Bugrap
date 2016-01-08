@@ -1,24 +1,43 @@
 Polymer({
     is: 'vaadin-bugrap',
     ready: function() {
-        this.updateReportGrid();
+        this.defaultValues();
         this.projectSelect();
-        this.distributionBarChange(5, 12, 123);
+
+        this.events();
+    },
+    defaultValues: function() {
+        this.currentProject = 0;
     },
     events: function events() {
         var self = this;
+
+        //Resize distribution bar when window size changes
         window.addEventListener('resize', function() {
             self.distributionBarChange();
+        });
+
+        //Update site when project is changed
+        document.getElementById('project_select').addEventListener('iron-select', function(){
+            self.projectSelect();
         });
     },
     updateReportGrid: function updateReportGrid() {
         // Reference to the grid element
         var grid = document.querySelector("vaadin-grid");
+        var self = this;
+
 
         // Configure vaadin-grid to show data
         var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
         ref.on("value", function(response) {
-            grid.items = response.val();
+            var items = [];
+            response.val().forEach(function(element, index, array){
+                if(element.report_id === self.currentProject) {
+                    items.push(element);
+                }
+            });
+            grid.items = items;
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
@@ -36,11 +55,12 @@ Polymer({
         });
     },
     projectSelect: function projectSelect() {
-        var element = document.getElementById('project_select');
-        element.addEventListener('iron-select', function(){
-            //console.log($(this).val());
-        });
-        //console.log(element);
+        var self = this;
+        if(typeof this.$.project_select.selectedItem !== 'undefined') {
+            self.currentProject = this.$.project_select.selectedItem.value;
+            self.updateReportGrid();
+            self.distributionBarChange(5, 12, 123);
+        }
     },
     distributionBarChange: function distributionBarChange(closed, assigned, unassigned) {
         //TODO select distribution values from somewhere, now only static

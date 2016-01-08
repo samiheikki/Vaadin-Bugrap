@@ -28,10 +28,10 @@
 
 
             <paper-toolbar class="white">
-                <paper-dropdown-menu label="Choose project">
+                <paper-dropdown-menu label="Choose project" id="project_select_dropdown">
                     <paper-listbox class="dropdown-content" selected="0" id="project_select">
                         <template is="dom-repeat" items="[[projects]]" as="project">
-                            <paper-item>[[project.name]]</paper-item>
+                            <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
                         </template>
                     </paper-listbox>
                 </paper-dropdown-menu>
