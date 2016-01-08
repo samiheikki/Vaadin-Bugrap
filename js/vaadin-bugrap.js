@@ -13,7 +13,8 @@ Polymer({
             closed: 0,
             assigned: 0,
             unassigned: 0
-        }
+        };
+        this.projectSearchFilter = '';
     },
     events: function events() {
         var self = this;
@@ -27,11 +28,21 @@ Polymer({
         document.getElementById('project_select').addEventListener('iron-select', function(){
             self.projectSelect();
         });
+
+        //TODO change without input blur
+        document.getElementById('search_reports').addEventListener('change', function(){
+            self.updateReportGrid();
+        });
     },
     updateReportGrid: function updateReportGrid() {
         // Reference to the grid element
         var grid = document.querySelector("vaadin-grid");
         var self = this;
+        var filterWithSearch = false;
+        this.projectSearchFilter.trim();
+        if (this.projectSearchFilter !== '') {
+            filterWithSearch = true;
+        }
 
 
         // Configure vaadin-grid to show data
@@ -40,7 +51,14 @@ Polymer({
             var items = [];
             response.val().forEach(function(element, index, array){
                 if(element.project_id === self.currentProject) {
-                    items.push(element);
+                    if (filterWithSearch) {
+                        //TODO IMPLEMENT A BETTER SEARCH FILTER
+                        if (element.meta.toLowerCase().indexOf(self.projectSearchFilter.toLowerCase()) > -1) {
+                            items.push(element);
+                        }
+                    } else {
+                        items.push(element);
+                    }
                 }
             });
             grid.items = items;
@@ -91,13 +109,11 @@ Polymer({
         this.distributionBarValues.closed = 0;
         this.distributionBarValues.assigned = 0;
         this.distributionBarValues.unassigned = 0;
-        var closed = 0,
-            assigned = 0,
-            unassigned = 0;
         var closedIds = [1],
             assignedIds = [2,3,4,5,6,7],
             unassignedIds = [0];
         var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
+
         ref.on("value", function(response) {
             response.val().forEach(function(element, index, array){
                 if(element.project_id === self.currentProject) {
