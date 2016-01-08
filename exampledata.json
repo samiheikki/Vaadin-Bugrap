@@ -1,6 +1,6 @@
 {
   "vaadin-bugrap": {
-    "project": {
+    "project": { //check
       "0": {
         "project_id": "0",
         "name": "CandyBug"
@@ -10,30 +10,31 @@
         "name": "VaadinUI"
       }
     },
-    "version": {
+    "version": { //check
       "0": {
         "version_id": "0",
         "project_id": "0",
         "name": "1.0"
       }
     },
-    "report": {
+    "report": { //check
       "0": {
         "report_id": "0",
         "project_id": "0",
         "version_id": "0",
         "priority": "5",
-        "meta": "Starting the app asks me to login everytime"
+        "meta": "Starting the app asks me to login everytime",
+        "type_id": "0"
       }
     },
-    "status": {
+    "status": { //check
       "0": {
         "status_id": "0",
         "name": "0",
         "iscustom": "true"
       }
     },
-    "comment": {
+    "comment": { //check
       "0": {
         "comment_id": "0",
         "report_id": "0",
@@ -51,6 +52,23 @@
       "0": {
         "attachment_id": "0",
         "attachment": "blobdata here"
+      }
+    },
+    "employee": { //check
+      "0": {
+        "employee_id": "0",
+        "firstname": "Sami",
+        "lastname": "Suo-Heikki"
+      }
+    },
+    "type": { //check
+      "0": {
+        "type_id": "0",
+        "name": "Bug"
+      },
+      "1": {
+        "type_id": "1",
+        "name": "Feature"
       }
     }
   }
