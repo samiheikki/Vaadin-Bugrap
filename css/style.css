@@ -37,3 +37,7 @@ TODO Responsive distribution bar
 .button_label {
     cursor: pointer;
 }
+
+paper-toolbar.white {
+    background: white;
+}
