@@ -8,6 +8,7 @@ Polymer({
     },
     defaultValues: function() {
         this.currentProject = 0;
+        this.projectVersions = [];
     },
     events: function events() {
         var self = this;
@@ -33,7 +34,7 @@ Polymer({
         ref.on("value", function(response) {
             var items = [];
             response.val().forEach(function(element, index, array){
-                if(element.report_id === self.currentProject) {
+                if(element.project_id === self.currentProject) {
                     items.push(element);
                 }
             });
@@ -60,7 +61,25 @@ Polymer({
             self.currentProject = this.$.project_select.selectedItem.value;
             self.updateReportGrid();
             self.distributionBarChange(5, 12, 123);
+            self.updateVersionList();
         }
+    },
+    updateVersionList: function updateVersionList() {
+        //Get Project Versions
+        var self = this;
+        var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/version");
+        ref.on("value", function(response) {
+            var items = [];
+            response.val().forEach(function(element, index, array){
+                console.log(element);
+                if(element.project_id === self.currentProject) {
+                    items.push(element);
+                }
+            });
+            self.projectVersions = items;
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
     },
     distributionBarChange: function distributionBarChange(closed, assigned, unassigned) {
         //TODO select distribution values from somewhere, now only static

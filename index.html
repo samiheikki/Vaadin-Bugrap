@@ -68,10 +68,9 @@
             <paper-toolbar class="white" id="distribution_toolbar">
                 <paper-dropdown-menu label="Reports fort" id="reports_for">
                     <paper-menu class="dropdown-content">
-                        <paper-item>1.2.3</paper-item>
-                        <paper-item>1.2.4</paper-item>
-                        <paper-item>1.2.5</paper-item>
-                        <paper-item>1.2.6</paper-item>
+                        <template is="dom-repeat" items="{{projectVersions}}" as="version">
+                            <paper-item value="{{version.version_id}}">{{version.name}}</paper-item>
+                        </template>
                     </paper-menu>
                 </paper-dropdown-menu>
                 <distribution-bar>
