@@ -46,8 +46,6 @@ function updateReportGrid() {
     ref.on("value", function(response) {
         grid.items = response.val();
         console.log(grid.items);
-
-
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
@@ -56,6 +54,14 @@ function updateReportGrid() {
     grid.columns[0].renderer = function(cell) {
         cell.element.innerHTML = cell.row.index;
     };
+
+    grid.addEventListener('sort-order-changed', function() {
+        var sortOrder = grid.sortOrder[0];
+        var sortProperty = grid.columns[sortOrder.column].name;
+        var sortDirection = sortOrder.direction;
+        console.log("sorted");
+        //restApi.setSortProperty(sortProperty, sortDirection);
+    });
 }
 
 Polymer({
