@@ -57,13 +57,9 @@
         _onIronResize: function() {
             var toolbarWidth = document.getElementById('distribution_toolbar').offsetWidth,
                 reportsForWidth = document.getElementById('reports_for').offsetWidth;
-            //var x = this.x = Math.floor(this.parent.offsetWidth / 3);
-            //var y = this.y = Math.floor(this.parent.offsetHeight / 3);
-            //console.log(toolbarWidth-reportsForWidth);
-            //console.log(this.parent);
             this.parent.setAttribute('style', 'width:'+(toolbarWidth-reportsForWidth-10)+'px');
             this.setAttribute('style', 'width:'+(toolbarWidth-reportsForWidth-10)+'px');
-            distributionBarChange();
+            //distributionBarChange();
             //this.translate3d(x + 'px', y + 'px', 0);
         }
     });
