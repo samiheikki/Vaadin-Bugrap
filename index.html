@@ -98,30 +98,18 @@
             </paper-toolbar>
             <vaadin-grid selection-mode="multi">
                 <table>
-                    <col name="index" width="48" sortable="true">
                     <col name="priority" sortable="true">
                     <col name="type_id" sortable="true">
                     <col name="meta" sortable="true">
                     <col name="employee_id" sortable="true">
                     <col name="modifytime" sortable="true">
-                    <col name="createtime" flex sortable="true">
+                    <col name="createtime" sortable="true" flex>
                 </table>
             </vaadin-grid>
         </template>
-
         <script src="js/vaadin-bugrap.js"></script>
-        <script>
-            Polymer({
-                is: 'vaadin-bugrap',
-                ready: function() {
-
-                }
-            });
-        </script>
-
     </dom-module>
     <vaadin-bugrap></vaadin-bugrap>
 </template>
-<script src="js/app.js"></script>
 </body>
 </html>
