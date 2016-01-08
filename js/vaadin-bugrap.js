@@ -100,14 +100,16 @@ Polymer({
         var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
         ref.on("value", function(response) {
             response.val().forEach(function(element, index, array){
-                if (closedIds.indexOf(element.status_id) > -1) {
-                    self.distributionBarValues.closed++;
+                if(element.project_id === self.currentProject) {
+                    if (closedIds.indexOf(element.status_id) > -1) {
+                        self.distributionBarValues.closed++;
 
-                } else if(assignedIds.indexOf(element.status_id) > -1) {
-                    self.distributionBarValues.assigned++;
+                    } else if(assignedIds.indexOf(element.status_id) > -1) {
+                        self.distributionBarValues.assigned++;
 
-                } else if(unassignedIds.indexOf(element.status_id) > -1) {
-                    self.distributionBarValues.unassigned++;
+                    } else if(unassignedIds.indexOf(element.status_id) > -1) {
+                        self.distributionBarValues.unassigned++;
+                    }
                 }
             });
             self.distributionBarChange();
@@ -116,10 +118,10 @@ Polymer({
         });
     },
     distributionBarChange: function distributionBarChange() {
-
-        var closed = this.distributionBarValues.closed;
-        var assigned = this.distributionBarValues.assigned;
-        var unassigned = this.distributionBarValues.unassigned;
+        //TODO REMOVE +1
+        var closed = this.distributionBarValues.closed+1;
+        var assigned = this.distributionBarValues.assigned+1;
+        var unassigned = this.distributionBarValues.unassigned+1;
 
         var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
             $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
