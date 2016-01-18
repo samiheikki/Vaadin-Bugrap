@@ -108,12 +108,23 @@ Polymer({
             },
             employee_id: function(cell) {
                 cell.element.innerHTML = self.employees[cell.data].firstname + ' ' + self.employees[cell.data].lastname;
+            },
+            modifytime: function(cell) {
+                var modifyTime = moment(cell.data);
+                var nowTime = moment();
+                var duration = moment.duration(nowTime.diff(modifyTime));
+                cell.element.innerHTML = self.parseDuration(duration);
+            },
+            createtime: function(cell) {
+                var modifyTime = moment(cell.data);
+                var nowTime = moment();
+                var duration = moment.duration(nowTime.diff(modifyTime));
+                cell.element.innerHTML = self.parseDuration(duration);
             }
 
         };
 
         grid.columns.forEach(function(column) {
-            //console.log(column.name);
             if (renderers[column.name]) {
                 column.renderer = renderers[column.name];
             }
@@ -123,7 +134,6 @@ Polymer({
             var sortOrder = grid.sortOrder[0];
             var sortProperty = grid.columns[sortOrder.column].name;
             var sortDirection = sortOrder.direction;
-            console.log("sorted");
         });
     },
     projectSelect: function projectSelect() {
@@ -202,5 +212,18 @@ Polymer({
         $distributionBarClosed.innerHTML = closed;
         $distributionBarAssigned.innerHTML = assigned;
         $distributionBarUnAssigned.innerHTML = unassigned;
+    },
+    parseDuration: function parseDuration(duration) {
+        if (duration.asYears() >= 1) {
+            return parseInt(duration.asYears()) + ' years ago';
+        } else if (duration.asMonths() >= 1) {
+            return parseInt(duration.asMonths()) + ' months ago';
+        } else if (duration.asDays() >= 1) {
+            return parseInt(duration.asDays()) + ' days ago';
+        } else if (duration.asMinutes() >= 1) {
+            return parseInt(duration.asMinutes()) + ' minutes ago';
+        } else if (duration.asSeconds() >= 1) {
+            return parseInt(duration.asSeconds()) + ' seconds ago';
+        }
     }
 });
