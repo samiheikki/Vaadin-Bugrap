@@ -3,7 +3,8 @@ Polymer({
     ready: function() {
         this.defaultValues();
         this.projectSelect();
-
+        this.setEmployees();
+        this.setTypes();
         this.events();
     },
     defaultValues: function() {
@@ -15,6 +16,8 @@ Polymer({
             unassigned: 0
         };
         this.projectSearchFilter = '';
+        this.types = null;
+        this.employees = null;
     },
     events: function events() {
         var self = this;
@@ -34,7 +37,32 @@ Polymer({
             self.updateReportGrid();
         });
     },
+    setTypes: function setTypes() {
+        var self = this,
+            ref = new Firebase("https://vaadin-bugrap.firebaseio.com/type");
+        ref.once("value", function(response) {
+            self.types = response.val();
+            self.updateReportGrid();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    setEmployees: function setEmployees() {
+        var self = this,
+            ref = new Firebase("https://vaadin-bugrap.firebaseio.com/employee");
+        ref.once("value", function(response) {
+            self.employees = response.val();
+            self.updateReportGrid();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
     updateReportGrid: function updateReportGrid() {
+        if (!this.employees || !this.types) {
+            return;
+        }
+
+
         // Reference to the grid element
         var grid = document.querySelector("vaadin-grid");
         var self = this;
@@ -67,26 +95,29 @@ Polymer({
         });
 
         var renderers = {
-          priority: function(cell) {
+            priority: function(cell) {
               var i,
                   innerHTML = '';
               for(i = 0; i < cell.data; i++ ) {
                   innerHTML += '<span class="priority_'+cell.data+'">|</span>';
               }
               cell.element.innerHTML = innerHTML;
-          }
+            },
+            type_id: function(cell) {
+                cell.element.innerHTML = self.types[cell.data].name;
+            },
+            employee_id: function(cell) {
+                cell.element.innerHTML = self.employees[cell.data].firstname + ' ' + self.employees[cell.data].lastname;
+            }
+
         };
 
         grid.columns.forEach(function(column) {
+            //console.log(column.name);
             if (renderers[column.name]) {
                 column.renderer = renderers[column.name];
             }
         });
-
-        // Add a renderer for the index column
-        /*grid.columns[0].renderer = function(cell) {
-         cell.element.innerHTML = cell.row.index;
-         };*/
 
         grid.addEventListener('sort-order-changed', function() {
             var sortOrder = grid.sortOrder[0];
