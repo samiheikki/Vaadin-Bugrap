@@ -70,8 +70,8 @@ Polymer({
           priority: function(cell) {
               var i,
                   innerHTML = '';
-              for(i = 0; i <= cell.data; i++ ) {
-                  innerHTML += '<i class="icon">&#xe774;</i>';
+              for(i = 0; i < cell.data; i++ ) {
+                  innerHTML += '<span class="priority_'+cell.data+'">|</span>';
               }
               cell.element.innerHTML = innerHTML;
           }

@@ -62,3 +62,25 @@ paper-toolbar.white {
     line-height: 1;
     -webkit-font-smoothing: antialiased;
 }
+
+.priority_5 {
+    color:rgba(255, 0, 0, 0);
+    background-color: #FF0000;
+    margin-right: 2px;
+ }
+.priority_4 {
+    color:rgba(255, 0, 0, 0);
+    background-color:#FF5B00;
+}
+.priority_3 {
+    color:rgba(255, 0, 0, 0);
+    background-color:#FFC600;
+}
+.priority_2 {
+    color:rgba(255, 0, 0, 0);
+    background-color:#C6FF00;
+}
+.priority_1 {
+    color:rgba(255, 0, 0, 0);
+    background-color:#5BFF00;
+}
