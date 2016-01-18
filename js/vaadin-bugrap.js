@@ -18,6 +18,7 @@ Polymer({
         this.projectSearchFilter = '';
         this.types = null;
         this.employees = null;
+        this.grid = null;
     },
     events: function events() {
         var self = this;
@@ -64,7 +65,7 @@ Polymer({
 
 
         // Reference to the grid element
-        var grid = document.querySelector("vaadin-grid");
+        this.grid = document.querySelector("vaadin-grid");
         var self = this;
         var filterWithSearch = false;
         this.projectSearchFilter.trim();
@@ -89,7 +90,7 @@ Polymer({
                     }
                 }
             });
-            grid.items = items;
+            self.grid.items = items;
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
@@ -124,16 +125,20 @@ Polymer({
 
         };
 
-        grid.columns.forEach(function(column) {
+        this.grid.columns.forEach(function(column) {
             if (renderers[column.name]) {
                 column.renderer = renderers[column.name];
             }
         });
 
-        grid.addEventListener('sort-order-changed', function() {
-            var sortOrder = grid.sortOrder[0];
-            var sortProperty = grid.columns[sortOrder.column].name;
+        this.grid.addEventListener('sort-order-changed', function() {
+            var sortOrder = self.grid.sortOrder[0];
+            var sortProperty = self.grid.columns[sortOrder.column].name;
             var sortDirection = sortOrder.direction;
+        });
+
+        this.grid.addEventListener("selected-items-changed", function() {
+            self.updateModificationLayout();
         });
     },
     projectSelect: function projectSelect() {
@@ -190,6 +195,34 @@ Polymer({
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
+    },
+    updateModificationLayout: function updateModificationLayout() {
+        var self = this,
+            lastIndex,
+            totalSelections = 0;
+        self.grid.selection.selected(function(index) {
+            if (index !== null) {
+                totalSelections++;
+                lastIndex = index;
+            }
+        });
+        if (lastIndex === null) { //nothing selected
+            this.hideModificationLayout();
+        }
+        else if (totalSelections == 1) {
+            this.showSingleReportEdit();
+        } else {
+            this.showMultiReportEdit();
+        }
+    },
+    hideModificationLayout: function hideModificationLayout() {
+        //TODO HIDE THE MODIFICATION LAYOUT
+    },
+    showSingleReportEdit: function showSingleReportEdit() {
+        //TODO Show advanced editing
+    },
+    showMultiReportEdit: function showMultiReportEdit() {
+        //TODO Show mass editing
     },
     distributionBarChange: function distributionBarChange() {
         //TODO REMOVE +1
