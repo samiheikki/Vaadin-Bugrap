@@ -66,6 +66,23 @@ Polymer({
             console.log("The read failed: " + errorObject.code);
         });
 
+        var renderers = {
+          priority: function(cell) {
+              var i,
+                  innerHTML = '';
+              for(i = 0; i <= cell.data; i++ ) {
+                  innerHTML += '<i class="icon">&#xe774;</i>';
+              }
+              cell.element.innerHTML = innerHTML;
+          }
+        };
+
+        grid.columns.forEach(function(column) {
+            if (renderers[column.name]) {
+                column.renderer = renderers[column.name];
+            }
+        });
+
         // Add a renderer for the index column
         /*grid.columns[0].renderer = function(cell) {
          cell.element.innerHTML = cell.row.index;
