@@ -2,11 +2,11 @@ Polymer({
     is: 'vaadin-bugrap',
     ready: function() {
         this.defaultValues();
-        this.initSplitter('#splitpanel');
-        this.projectSelect();
         this.setEmployees();
         this.setTypes();
+        this.setStatues();
         this.events();
+        this.setPriorities();
     },
     defaultValues: function defaultValues() {
         this.currentProject = 0;
@@ -23,10 +23,24 @@ Polymer({
         this.reportComments = null;
         this.selectedReportAmount = 0;
         this.selectedReportMeta = '';
+        this.priorities = null;
+        this.statuses = null;
     },
-    initSplitter: function initSplitter(panel) {
-        //$(panel).width("100%").height(400).split({position:'100%'});
-        //this.hideModificationLayout();
+    setPriorities: function setPriorities() {
+        var i = 1,
+            j = 0,
+            priority,
+            priorities = [];
+        for(i = 1; i <= 5; i++ ) {
+            priority = {};
+            priority.number = i;
+            priority.text = '';
+            for(j = 0; j < i; j++) {
+                priority.text += '|';
+            }
+            priorities.push(priority);
+        }
+        this.priorities = priorities;
     },
     events: function events() {
         var self = this;
@@ -38,7 +52,7 @@ Polymer({
 
         //Update site when project is changed
         document.getElementById('project_select').addEventListener('iron-select', function(){
-            self.projectSelect();
+            self.projectSelect(this.selectedItem.value);
         });
 
         //TODO change without input blur
@@ -62,6 +76,15 @@ Polymer({
         ref.once("value", function(response) {
             self.employees = response.val();
             self.updateReportGrid();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    setStatues: function setStatues() {
+        var self = this,
+            ref = new Firebase("https://vaadin-bugrap.firebaseio.com/status");
+        ref.once("value", function(response) {
+            self.statuses = response.val();
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
@@ -149,14 +172,12 @@ Polymer({
             self.updateModificationLayout();
         });
     },
-    projectSelect: function projectSelect() {
+    projectSelect: function projectSelect(project_id) {
         var self = this;
-        if(typeof this.$.project_select.selectedItem !== 'undefined') {
-            self.currentProject = this.$.project_select.selectedItem.value;
-            self.updateReportGrid();
-            self.updateDistributionBarValues();
-            self.updateVersionList();
-        }
+        self.currentProject = project_id;
+        self.updateReportGrid();
+        self.updateDistributionBarValues();
+        self.updateVersionList();
     },
     updateVersionList: function updateVersionList() {
         //Get Project Versions
