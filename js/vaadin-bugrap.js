@@ -247,23 +247,31 @@ Polymer({
     },
     hideModificationLayout: function hideModificationLayout() {
         $('#report_edit').hide();
+        $('#splitpanel').css('height','auto');
+        $('#report-grid').css('height','auto');
         $('#splitpanel').split().destroy();
     },
     showSingleReportEdit: function showSingleReportEdit(report_id) {
+        this.hideModificationLayout();
+        var height = $(document).height() - $('vaadin-bugrap').height() + 90;
         this.getReportComments(report_id);
         this.selectedReportMeta = this.grid.items[report_id].meta;
         $('#report_edit_name').show();
         $('#report_edit_amount').hide();
         $('#report_edit').show();
         $('#report_comments').show();
-        $('#splitpanel').width("100%").height(400).split({position:'50%'});
+        $('#splitpanel').width("100%").height(height).split({position:'30%'});
+        //TODO HEIGHT FIX FOR SPLITPANEL
     },
     showMultiReportEdit: function showMultiReportEdit() {
+        this.hideModificationLayout();
+        var height = $(document).height() - $('vaadin-bugrap').height() + 90;
         $('#report_edit_name').hide();
         $('#report_edit_amount').show();
         $('#report_comments').hide();
         $('#report_edit').show();
-        $('#splitpanel').width("100%").height(400).split({position:'50%'});
+        $('#splitpanel').width("100%").height(height).split({position:'80%'});
+        //TODO HEIGHT FIX FOR SPLITPANEL
     },
     getReportComments: function getReportComments(report_id) {
         var self = this;
