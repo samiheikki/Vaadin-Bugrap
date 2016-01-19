@@ -97,10 +97,15 @@ Polymer({
         });
     },
     getEmployeeWithId: function getEmployeeWithId(employee_id) {
-        if (this.employees && this.employees[employee_id]) {
-            return this.employees[employee_id];
+        var employee = {};
+        if (this.employees) {
+            this.employees.forEach(function(element, index){
+                if (element.employee_id === employee_id) {
+                    employee = element;
+                }
+            });
         }
-        return {};
+        return employee;
     },
     updateReportGrid: function updateReportGrid() {
         if (!this.employees || !this.types) {
@@ -149,10 +154,17 @@ Polymer({
               cell.element.innerHTML = innerHTML;
             },
             type_id: function(cell) {
-                cell.element.innerHTML = self.types[cell.data].name;
+                var type = {};
+                self.types.forEach(function(element, index){
+                   if (element.type_id === cell.data) {
+                       type = element;
+                   }
+                });
+                cell.element.innerHTML = type.name;
             },
             employee_id: function(cell) {
-                cell.element.innerHTML = self.employees[cell.data].firstname + ' ' + self.employees[cell.data].lastname;
+                var employee = self.getEmployeeWithId(cell.data);
+                cell.element.innerHTML = employee.firstname + ' ' + employee.lastname;
             },
             modifytime: function(cell) {
                 cell.element.innerHTML = self.parseDuration(cell.data);
