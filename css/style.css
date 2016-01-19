@@ -6,6 +6,10 @@ paper-icon-button.black, iron-icon.black, span.black {
     color: black;
 }
 
+paper-icon-button.grey, iron-icon.grey, span.grey {
+    color: grey;
+}
+
 .paper-tab {
     color: #000;
 }
@@ -40,6 +44,10 @@ TODO Responsive distribution bar
 
 paper-toolbar.white {
     background: white;
+}
+
+paper-toolbar.grey {
+    background: rgb(244, 244, 244);
 }
 
 @font-face {
@@ -83,4 +91,12 @@ paper-toolbar.white {
 .priority_1 {
     color:rgba(255, 0, 0, 0);
     background-color:#5BFF00;
+}
+
+paper-button.update {
+    background: #4CAF50;
+}
+
+paper-button.discard {
+    background: #FF5252;
 }

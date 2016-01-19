@@ -121,7 +121,67 @@
                     </vaadin-grid>
                 </div>
                 <div id="report_edit" style="display: none;">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed dolor nisl, in suscipit justo. Donec a enim et est porttitor semper at vitae augue. Proin at nulla at dui mattis mattis. Nam a volutpat ante. Aliquam consequat dui eu sem convallis ullamcorper. Nulla suscipit, massa vitae suscipit ornare, tellus est consequat nunc, quis blandit elit odio eu arcu. Nam a urna nec nisl varius sodales. Mauris iaculis tincidunt orci id commodo. Aliquam non magna quis tortor malesuada aliquam eget ut lacus. Nam ut vestibulum est. Praesent volutpat tellus in eros dapibus elementum. Nam laoreet risus non nulla mollis ac luctus felis dapibus. Pellentesque mattis elementum augue non sollicitudin. Nullam lobortis fermentum elit ac mollis. Nam ac varius risus. Cras faucibus euismod nulla, ac auctor diam rutrum sit amet. Nulla vel odio erat, ac mattis enim.
+                    <paper-toolbar class="grey">
+                        <iron-label>
+                            <paper-icon-button icon="icons:open-in-new" class="black"></paper-icon-button>
+                            <span class="black button_label">Project name placeholder</span>
+                        </iron-label>
+                    </paper-toolbar>
+                    <paper-toolbar class="grey">
+                        <paper-dropdown-menu label="Priority" id="project_select_dropdown">
+                            <paper-listbox class="dropdown-content" selected="0" id="project_select">
+                                <template is="dom-repeat" items="[[projects]]" as="project">
+                                    <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="Type" id="project_select_dropdown">
+                            <paper-listbox class="dropdown-content" selected="0" id="project_select">
+                                <template is="dom-repeat" items="[[projects]]" as="project">
+                                    <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="Status" id="project_select_dropdown">
+                            <paper-listbox class="dropdown-content" selected="0" id="project_select">
+                                <template is="dom-repeat" items="[[projects]]" as="project">
+                                    <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="Assigned To" id="project_select_dropdown">
+                            <paper-listbox class="dropdown-content" selected="0" id="project_select">
+                                <template is="dom-repeat" items="[[projects]]" as="project">
+                                    <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="Version" id="project_select_dropdown">
+                            <paper-listbox class="dropdown-content" selected="0" id="project_select">
+                                <template is="dom-repeat" items="[[projects]]" as="project">
+                                    <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <span class="spacer"></span>
+                        <paper-button class="update" raised>Update</paper-button>
+                        <paper-button class="discard" raised>Revert</paper-button>
+                    </paper-toolbar>
+                    <div id="report_comments">
+
+                        <template is="dom-repeat" items="{{reportComments}}">
+                            <paper-toolbar class="white">
+                                <paper-icon-button icon="social:person" class="black"></paper-icon-button>
+                                <span class="black">{{item.employee}}</span>
+                                <span class="grey">&nbsp;({{item.timestamp}})</span>
+                            </paper-toolbar>
+                            <paper-toolbar class="white">
+                                <paper-icon-button icon="social:person"></paper-icon-button>
+                                <span class="black">{{item.text}}</span>
+                            </paper-toolbar>
+                            <hr>
+                        </template>
+                    </div>
                 </div>
             </div>
 

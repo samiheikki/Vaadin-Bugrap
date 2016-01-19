@@ -20,6 +20,7 @@ Polymer({
         this.types = null;
         this.employees = null;
         this.grid = null;
+        this.reportComments = null;
     },
     initSplitter: function initSplitter(panel) {
         //$(panel).width("100%").height(400).split({position:'100%'});
@@ -62,6 +63,12 @@ Polymer({
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
+    },
+    getEmployeeWithId: function getEmployeeWithId(employee_id) {
+        if (this.employees && this.employees[employee_id]) {
+            return this.employees[employee_id];
+        }
+        return {};
     },
     updateReportGrid: function updateReportGrid() {
         if (!this.employees || !this.types) {
@@ -116,16 +123,10 @@ Polymer({
                 cell.element.innerHTML = self.employees[cell.data].firstname + ' ' + self.employees[cell.data].lastname;
             },
             modifytime: function(cell) {
-                var modifyTime = moment(cell.data);
-                var nowTime = moment();
-                var duration = moment.duration(nowTime.diff(modifyTime));
-                cell.element.innerHTML = self.parseDuration(duration);
+                cell.element.innerHTML = self.parseDuration(cell.data);
             },
             createtime: function(cell) {
-                var modifyTime = moment(cell.data);
-                var nowTime = moment();
-                var duration = moment.duration(nowTime.diff(modifyTime));
-                cell.element.innerHTML = self.parseDuration(duration);
+                cell.element.innerHTML = self.parseDuration(cell.data);
             }
 
         };
@@ -203,7 +204,7 @@ Polymer({
     },
     updateModificationLayout: function updateModificationLayout() {
         var self = this,
-            lastIndex,
+            lastIndex = null,
             totalSelections = 0;
         self.grid.selection.selected(function(index) {
             if (index !== null) {
@@ -211,11 +212,11 @@ Polymer({
                 lastIndex = index;
             }
         });
-        if (typeof lastIndex === 'undefined' || lastIndex === null) { //nothing selected
+        if (lastIndex === null) { //nothing selected
             this.hideModificationLayout();
         }
         else if (totalSelections == 1) {
-            this.showSingleReportEdit();
+            this.showSingleReportEdit(lastIndex);
         } else {
             this.showMultiReportEdit();
         }
@@ -224,13 +225,33 @@ Polymer({
         $('#report_edit').hide();
         $('#splitpanel').split().destroy();
     },
-    showSingleReportEdit: function showSingleReportEdit() {
+    showSingleReportEdit: function showSingleReportEdit(report_id) {
+        this.getReportComments(report_id);
         $('#report_edit').show();
         $('#splitpanel').width("100%").height(400).split({position:'50%'});
         //TODO Show advanced editing
     },
     showMultiReportEdit: function showMultiReportEdit() {
         //TODO Show mass editing
+    },
+    getReportComments: function getReportComments(report_id) {
+        var self = this;
+        var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/comment");
+        var employee;
+        ref.on("value", function(response) {
+            var items = [];
+            response.val().forEach(function(element, index, array){
+                if(element.report_id === report_id) {
+                    employee = self.getEmployeeWithId(element.employee_id);
+                    element.timestamp = self.parseDuration(element.timestamp);
+                    element.employee = employee.firstname + ' ' + employee.lastname;
+                    items.push(element);
+                }
+            });
+            self.reportComments = items;
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
     },
     distributionBarChange: function distributionBarChange() {
         //TODO REMOVE +1
@@ -254,7 +275,10 @@ Polymer({
         $distributionBarAssigned.innerHTML = assigned;
         $distributionBarUnAssigned.innerHTML = unassigned;
     },
-    parseDuration: function parseDuration(duration) {
+    parseDuration: function parseDuration(timestamp) {
+        var modifyTime = moment(timestamp);
+        var nowTime = moment();
+        var duration = moment.duration(nowTime.diff(modifyTime));
         if (duration.asYears() >= 1) {
             return parseInt(duration.asYears()) + ' years ago';
         } else if (duration.asMonths() >= 1) {

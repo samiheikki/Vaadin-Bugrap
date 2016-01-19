@@ -15,7 +15,7 @@
 }
 
 .splitter_panel .hsplitter {
-    background-color: #5F5F5F;
+    background-color: rgb(205, 205, 205);
     cursor: row-resize;
     z-index: 800;
     height: 4px;
