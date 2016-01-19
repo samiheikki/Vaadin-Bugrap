@@ -22,6 +22,7 @@ Polymer({
         this.grid = null;
         this.reportComments = null;
         this.selectedReportAmount = 0;
+        this.selectedReportMeta = '';
     },
     initSplitter: function initSplitter(panel) {
         //$(panel).width("100%").height(400).split({position:'100%'});
@@ -229,12 +230,12 @@ Polymer({
     },
     showSingleReportEdit: function showSingleReportEdit(report_id) {
         this.getReportComments(report_id);
+        this.selectedReportMeta = this.grid.items[report_id].meta;
         $('#report_edit_name').show();
         $('#report_edit_amount').hide();
         $('#report_edit').show();
         $('#report_comments').show();
         $('#splitpanel').width("100%").height(400).split({position:'50%'});
-        //TODO Show advanced editing
     },
     showMultiReportEdit: function showMultiReportEdit() {
         $('#report_edit_name').hide();
