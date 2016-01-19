@@ -79,18 +79,22 @@ paper-toolbar.grey {
 .priority_4 {
     color:rgba(255, 0, 0, 0);
     background-color:#FF5B00;
+    margin-right: 2px;
 }
 .priority_3 {
     color:rgba(255, 0, 0, 0);
     background-color:#FFC600;
+    margin-right: 2px;
 }
 .priority_2 {
     color:rgba(255, 0, 0, 0);
     background-color:#C6FF00;
+    margin-right: 2px;
 }
 .priority_1 {
     color:rgba(255, 0, 0, 0);
     background-color:#5BFF00;
+    margin-right: 2px;
 }
 
 paper-button.update {

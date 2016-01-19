@@ -121,10 +121,16 @@
                     </vaadin-grid>
                 </div>
                 <div id="report_edit" style="display: none;">
-                    <paper-toolbar class="grey">
+                    <paper-toolbar class="grey" style="display: none;" id="report_edit_name">
                         <iron-label>
                             <paper-icon-button icon="icons:open-in-new" class="black"></paper-icon-button>
                             <span class="black button_label">Project name placeholder</span>
+                        </iron-label>
+                    </paper-toolbar>
+                    <paper-toolbar class="grey" style="display: none;" id="report_edit_amount">
+                        <iron-label>
+                            <span class="black button_label">{{selectedReportAmount}} reports selected</span>
+                            <span class="grey button_label">&nbsp;- Select a single report to view it contents</span>
                         </iron-label>
                     </paper-toolbar>
                     <paper-toolbar class="grey">
@@ -168,7 +174,6 @@
                         <paper-button class="discard" raised>Revert</paper-button>
                     </paper-toolbar>
                     <div id="report_comments">
-
                         <template is="dom-repeat" items="{{reportComments}}">
                             <paper-toolbar class="white">
                                 <paper-icon-button icon="social:person" class="black"></paper-icon-button>
@@ -179,7 +184,6 @@
                                 <paper-icon-button icon="social:person"></paper-icon-button>
                                 <span class="black">{{item.text}}</span>
                             </paper-toolbar>
-                            <hr>
                         </template>
                     </div>
                 </div>

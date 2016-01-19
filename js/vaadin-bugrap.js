@@ -21,6 +21,7 @@ Polymer({
         this.employees = null;
         this.grid = null;
         this.reportComments = null;
+        this.selectedReportAmount = 0;
     },
     initSplitter: function initSplitter(panel) {
         //$(panel).width("100%").height(400).split({position:'100%'});
@@ -218,6 +219,7 @@ Polymer({
         else if (totalSelections == 1) {
             this.showSingleReportEdit(lastIndex);
         } else {
+            this.selectedReportAmount = totalSelections;
             this.showMultiReportEdit();
         }
     },
@@ -227,12 +229,19 @@ Polymer({
     },
     showSingleReportEdit: function showSingleReportEdit(report_id) {
         this.getReportComments(report_id);
+        $('#report_edit_name').show();
+        $('#report_edit_amount').hide();
         $('#report_edit').show();
+        $('#report_comments').show();
         $('#splitpanel').width("100%").height(400).split({position:'50%'});
         //TODO Show advanced editing
     },
     showMultiReportEdit: function showMultiReportEdit() {
-        //TODO Show mass editing
+        $('#report_edit_name').hide();
+        $('#report_edit_amount').show();
+        $('#report_comments').hide();
+        $('#report_edit').show();
+        $('#splitpanel').width("100%").height(400).split({position:'50%'});
     },
     getReportComments: function getReportComments(report_id) {
         var self = this;
@@ -254,10 +263,9 @@ Polymer({
         });
     },
     distributionBarChange: function distributionBarChange() {
-        //TODO REMOVE +1
-        var closed = this.distributionBarValues.closed+1;
-        var assigned = this.distributionBarValues.assigned+1;
-        var unassigned = this.distributionBarValues.unassigned+1;
+        var closed = this.distributionBarValues.closed;
+        var assigned = this.distributionBarValues.assigned;
+        var unassigned = this.distributionBarValues.unassigned;
 
         var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
             $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
