@@ -261,7 +261,6 @@ Polymer({
         $('#report_edit').show();
         $('#report_comments').show();
         $('#splitpanel').width("100%").height(height).split({position:'30%'});
-        //TODO HEIGHT FIX FOR SPLITPANEL
     },
     showMultiReportEdit: function showMultiReportEdit() {
         this.hideModificationLayout();
@@ -270,8 +269,7 @@ Polymer({
         $('#report_edit_amount').show();
         $('#report_comments').hide();
         $('#report_edit').show();
-        $('#splitpanel').width("100%").height(height).split({position:'80%'});
-        //TODO HEIGHT FIX FOR SPLITPANEL
+        $('#splitpanel').width("100%").height(height).split({position:'60%'});
     },
     getReportComments: function getReportComments(report_id) {
         var self = this;
