@@ -82,23 +82,25 @@
                 </distribution-bar>
             </paper-toolbar>
             <paper-toolbar class="white">
-                <iron-label>
-                    <span class="black">Assignees</span>
-                    <paper-tabs selected="0">
-                        <paper-tab>Only me</paper-tab>
-                        <paper-tab>Everyone</paper-tab>
-                    </paper-tabs>
-                </iron-label>
-                <iron-label>
-                    <span class="black">Status</span>
-                    <paper-tabs selected="0">
-                        <paper-tab>Open</paper-tab>
-                        <paper-tab>All kinds</paper-tab>
-                        <paper-tab>Custom
-                            <iron-icon icon="icons:arrow-drop-down"></iron-icon>
-                        </paper-tab>
-                    </paper-tabs>
-                </iron-label>
+                <paper-tabs selected="1">
+                    <paper-tab disabled="true">Assignees</paper-tab>
+                    <paper-tab>Only me</paper-tab>
+                    <paper-tab>Everyone</paper-tab>
+                </paper-tabs>
+                <paper-radio-group class="status-dialog closed">
+                    <template is="dom-repeat" items="{{statuses}}">
+                        <paper-checkbox style="display: block;" name="{{item.status_id}}"  value="{{item.status_id}}">{{item.name}}</paper-checkbox>
+                    </template>
+                </paper-radio-group>
+                <paper-tabs selected="1">
+                    <paper-tab disabled="true">Status</paper-tab>
+                    <paper-tab>Open</paper-tab>
+                    <paper-tab>All kinds</paper-tab>
+                    <paper-tab id="status-select">Custom
+                        <iron-icon icon="icons:arrow-drop-down" id="status_select_down"></iron-icon>
+                        <iron-icon icon="icons:arrow-drop-up" id="status_select_up" style="display: none"></iron-icon>
+                    </paper-tab>
+                </paper-tabs>
             </paper-toolbar>
             <div id="splitpanel" style="height:auto;">
                 <div id="report-grid" style="height:auto;">

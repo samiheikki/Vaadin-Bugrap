@@ -104,3 +104,17 @@ paper-button.update {
 paper-button.discard {
     background: #FF5252;
 }
+
+paper-radio-group.status-dialog {
+    z-index: 99999999;
+    position: absolute;
+    background: white;
+    margin-left: 64px;
+    margin-top: 54px;
+    border: 1px solid;
+    border-color: black;
+}
+
+.closed {
+    display: none;
+}

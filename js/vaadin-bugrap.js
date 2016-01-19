@@ -66,6 +66,31 @@ Polymer({
         document.getElementById('search_reports').addEventListener('change', function(){
             self.updateReportGrid();
         });
+
+        $(document).on('click', function(event) {
+            var statusDialog = $('.status-dialog');
+            if(!$(event.target).closest('.status-dialog').length && !$(event.target).closest('#status-select').length) {
+                if(statusDialog.is(":visible")) {
+                    statusDialog.addClass('closed');
+                    $('#status_select_down').show();
+                    $('#status_select_up').hide();
+                }
+            }
+        });
+
+        $('#status-select').on('click', self.toggleStatusSelect);
+    },
+    toggleStatusSelect: function toggleStatusSelect() {
+        var statusDialog = $('.status-dialog');
+        if (statusDialog.hasClass('closed')) { //open
+            statusDialog.removeClass('closed');
+            $('#status_select_down').hide();
+            $('#status_select_up').show();
+        } else { //open
+            statusDialog.addClass('closed');
+            $('#status_select_down').show();
+            $('#status_select_up').hide();
+        }
     },
     setTypes: function setTypes() {
         var self = this,

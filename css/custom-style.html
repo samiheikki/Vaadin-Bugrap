@@ -5,4 +5,16 @@
     .spacer {
         @apply(--layout-flex);
     }
+    :root {
+        --my-custom-color: red;
+        --paper-tab-ink: var(--my-custom-color);
+
+        /* custom CSS property */
+        --paper-tabs-selection-bar-color: blue;
+
+        /* custom CSS mixin */
+        --paper-tabs: {
+            color: var(--default-primary-color); /* variable defined in default-theme.html */
+        }
+    }
 </style>
