@@ -7,6 +7,11 @@
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/moment/moment.js"></script>
     <script src='/bower_components/firebase/firebase.js'></script>
+
+    <!-- jQuery Splitter -->
+    <script src="/libs/splitter/js/jquery.splitter-0.14.0.js"></script>
+    <link rel="stylesheet" href="/libs/splitter/css/jquery.splitter.css">
+
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
     <link rel="import" href="elements.html">
@@ -95,23 +100,31 @@
                     </paper-tabs>
                 </iron-label>
             </paper-toolbar>
-            <vaadin-grid selection-mode="multi">
-                <table>
-                    <col name="priority" sortable="true">
-                    <col name="type_id" sortable="true">
-                    <col name="meta" sortable="true">
-                    <col name="employee_id" sortable="true">
-                    <col name="modifytime" sortable="true">
-                    <col name="createtime" sortable="true" flex>
-                </table>
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Value</th>
-                    <th>Progress</th>
-                </tr>
-                </thead>
-            </vaadin-grid>
+            <div id="splitpanel">
+                <div id="report-grid">
+                    <vaadin-grid selection-mode="multi">
+                        <table>
+                            <col name="priority" sortable="true">
+                            <col name="type_id" sortable="true">
+                            <col name="meta" sortable="true">
+                            <col name="employee_id" sortable="true">
+                            <col name="modifytime" sortable="true">
+                            <col name="createtime" sortable="true" flex>
+                        </table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Progress</th>
+                        </tr>
+                        </thead>
+                    </vaadin-grid>
+                </div>
+                <div id="report_edit" style="display: none;">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed dolor nisl, in suscipit justo. Donec a enim et est porttitor semper at vitae augue. Proin at nulla at dui mattis mattis. Nam a volutpat ante. Aliquam consequat dui eu sem convallis ullamcorper. Nulla suscipit, massa vitae suscipit ornare, tellus est consequat nunc, quis blandit elit odio eu arcu. Nam a urna nec nisl varius sodales. Mauris iaculis tincidunt orci id commodo. Aliquam non magna quis tortor malesuada aliquam eget ut lacus. Nam ut vestibulum est. Praesent volutpat tellus in eros dapibus elementum. Nam laoreet risus non nulla mollis ac luctus felis dapibus. Pellentesque mattis elementum augue non sollicitudin. Nullam lobortis fermentum elit ac mollis. Nam ac varius risus. Cras faucibus euismod nulla, ac auctor diam rutrum sit amet. Nulla vel odio erat, ac mattis enim.
+                </div>
+            </div>
+
         </template>
         <script src="js/vaadin-bugrap.js"></script>
     </dom-module>

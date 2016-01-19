@@ -2,12 +2,13 @@ Polymer({
     is: 'vaadin-bugrap',
     ready: function() {
         this.defaultValues();
+        this.initSplitter('#splitpanel');
         this.projectSelect();
         this.setEmployees();
         this.setTypes();
         this.events();
     },
-    defaultValues: function() {
+    defaultValues: function defaultValues() {
         this.currentProject = 0;
         this.projectVersions = [];
         this.distributionBarValues = {
@@ -19,6 +20,10 @@ Polymer({
         this.types = null;
         this.employees = null;
         this.grid = null;
+    },
+    initSplitter: function initSplitter(panel) {
+        //$(panel).width("100%").height(400).split({position:'100%'});
+        //this.hideModificationLayout();
     },
     events: function events() {
         var self = this;
@@ -206,7 +211,7 @@ Polymer({
                 lastIndex = index;
             }
         });
-        if (lastIndex === null) { //nothing selected
+        if (typeof lastIndex === 'undefined' || lastIndex === null) { //nothing selected
             this.hideModificationLayout();
         }
         else if (totalSelections == 1) {
@@ -216,9 +221,12 @@ Polymer({
         }
     },
     hideModificationLayout: function hideModificationLayout() {
-        //TODO HIDE THE MODIFICATION LAYOUT
+        $('#report_edit').hide();
+        $('#splitpanel').split().destroy();
     },
     showSingleReportEdit: function showSingleReportEdit() {
+        $('#report_edit').show();
+        $('#splitpanel').width("100%").height(400).split({position:'50%'});
         //TODO Show advanced editing
     },
     showMultiReportEdit: function showMultiReportEdit() {
