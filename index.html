@@ -134,38 +134,38 @@
                         </iron-label>
                     </paper-toolbar>
                     <paper-toolbar class="grey">
-                        <paper-dropdown-menu label="Priority" id="report_select_priority">
-                            <paper-listbox class="dropdown-content" selected="0" id="priority_select">
+                        <paper-dropdown-menu label="Priority">
+                            <paper-listbox class="dropdown-content" id="report_select_priority" attr-for-selected="name">
                                 <template is="dom-repeat" items="{{priorities}}">
-                                    <paper-item value="{{item.number}}">{{item.text}}</paper-item>
+                                    <paper-item value="{{item.number}}" name="{{item.number}}">{{item.text}}</paper-item>
                                 </template>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu label="Type" id="report_select_type">
-                            <paper-listbox class="dropdown-content" selected="0" id="type_select">
+                        <paper-dropdown-menu label="Type">
+                            <paper-listbox class="dropdown-content" id="report_select_type_id" attr-for-selected="name">
                                 <template is="dom-repeat" items="{{types}}">
-                                    <paper-item value="{{item.type_id}}">{{item.name}}</paper-item>
+                                    <paper-item value="{{item.type_id}}" name="{{item.type_id}}">{{item.name}}</paper-item>
                                 </template>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu label="Status" id="report_select_status">
-                            <paper-listbox class="dropdown-content" selected="0" id="status_select">
+                        <paper-dropdown-menu label="Status">
+                            <paper-listbox class="dropdown-content" id="report_select_status_id" attr-for-selected="name">
                                 <template is="dom-repeat" items="{{statuses}}">
-                                    <paper-item value="{{item.type_id}}">{{item.name}}</paper-item>
+                                    <paper-item value="{{item.status_id}}" name="{{item.status_id}}">{{item.name}}</paper-item>
                                 </template>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu label="Assigned To" id="report_select_employee">
-                            <paper-listbox class="dropdown-content" selected="0" id="employee_select">
+                        <paper-dropdown-menu label="Assigned To">
+                            <paper-listbox class="dropdown-content" id="report_select_employee_id" attr-for-selected="name">
                                 <template is="dom-repeat" items="{{employees}}">
-                                    <paper-item value="{{item.employee_id}}">{{item.firstname}} {{item.lastname}}</paper-item>
+                                    <paper-item value="{{item.employee_id}}" name="{{item.employee_id}}">{{item.firstname}} {{item.lastname}}</paper-item>
                                 </template>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu label="Versions" id="report_select_version">
-                            <paper-listbox class="dropdown-content" selected="0" id="version_select">
+                        <paper-dropdown-menu label="Versions">
+                            <paper-listbox class="dropdown-content" id="report_select_version_id" attr-for-selected="name">
                                 <template is="dom-repeat" items="{{projectVersions}}">
-                                    <paper-item value="{{item.version_id}}">{{item.name}}</paper-item>
+                                    <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
                                 </template>
                             </paper-listbox>
                         </paper-dropdown-menu>

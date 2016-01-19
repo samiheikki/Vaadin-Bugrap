@@ -25,6 +25,13 @@ Polymer({
         this.selectedReportMeta = '';
         this.priorities = null;
         this.statuses = null;
+        this.reportEditValues = {
+            priority: null,
+            type_id: null,
+            status_id: null,
+            employee_id: null,
+            version_id: null
+        };
     },
     setPriorities: function setPriorities() {
         var i = 1,
@@ -229,10 +236,21 @@ Polymer({
         var self = this,
             lastIndex = null,
             totalSelections = 0;
+        this.nullReportEditValues();
         self.grid.selection.selected(function(index) {
             if (index !== null) {
+                var gridRow = self.grid.items[index];
                 totalSelections++;
                 lastIndex = index;
+                for (var k in self.reportEditValues) {
+                    if (self.reportEditValues.hasOwnProperty(k)) {
+                        if(self.reportEditValues[k] === null) {
+                            self.reportEditValues[k] = ""+gridRow[k];
+                        } else if (self.reportEditValues[k] !== ""+gridRow[k]) {
+                            self.reportEditValues[k] = "false";
+                        }
+                    }
+                }
             }
         });
         if (lastIndex === null) { //nothing selected
@@ -240,9 +258,11 @@ Polymer({
         }
         else if (totalSelections == 1) {
             this.showSingleReportEdit(lastIndex);
+            this.setReportEditValues();
         } else {
             this.selectedReportAmount = totalSelections;
             this.showMultiReportEdit();
+            this.setReportEditValues();
         }
     },
     hideModificationLayout: function hideModificationLayout() {
@@ -251,16 +271,17 @@ Polymer({
         $('#report-grid').css('height','auto');
         $('#splitpanel').split().destroy();
     },
-    showSingleReportEdit: function showSingleReportEdit(report_id) {
+    showSingleReportEdit: function showSingleReportEdit(gridIndex) {
+        var report_id = this.grid.items[gridIndex].report_id;
         this.hideModificationLayout();
         var height = $(document).height() - $('vaadin-bugrap').height() + 90;
         this.getReportComments(report_id);
-        this.selectedReportMeta = this.grid.items[report_id].meta;
+        this.selectedReportMeta = this.grid.items[gridIndex].meta;
         $('#report_edit_name').show();
         $('#report_edit_amount').hide();
         $('#report_edit').show();
         $('#report_comments').show();
-        $('#splitpanel').width("100%").height(height).split({position:'30%'});
+        $('#splitpanel').width("100%").height(height).split({position:'50%'});
     },
     showMultiReportEdit: function showMultiReportEdit() {
         this.hideModificationLayout();
@@ -269,7 +290,23 @@ Polymer({
         $('#report_edit_amount').show();
         $('#report_comments').hide();
         $('#report_edit').show();
-        $('#splitpanel').width("100%").height(height).split({position:'60%'});
+        $('#splitpanel').width("100%").height(height).split({position:'50%'});
+    },
+    nullReportEditValues: function nullReportEditValues() {
+        var self = this;
+        for (var k in self.reportEditValues) {
+            if (self.reportEditValues.hasOwnProperty(k)) {
+                self.reportEditValues[k] = null;
+            }
+        }
+    },
+    setReportEditValues: function setReportEditValues() {
+        var self = this;
+        for (var k in self.reportEditValues) {
+            if (self.reportEditValues.hasOwnProperty(k)) {
+                document.getElementById('report_select_'+k).select(""+self.reportEditValues[k]);
+            }
+        }
     },
     getReportComments: function getReportComments(report_id) {
         var self = this;
