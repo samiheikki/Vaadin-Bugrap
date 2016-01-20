@@ -72,7 +72,7 @@
             <paper-toolbar class="white" id="distribution_toolbar">
                 <paper-dropdown-menu label="Reports for" id="reports_for">
                     <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{filters.version}}" id="version_menu">
-                        <template is="dom-repeat" items="{{projectVersions}}">
+                        <template is="dom-repeat" items="{{versions}}">
                             <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
                         </template>
                     </paper-menu>
@@ -105,6 +105,7 @@
                 <div id="report-grid" style="height:auto;">
                     <vaadin-grid selection-mode="multi">
                         <table>
+                            <col name="version_id" sortable="true">
                             <col name="priority" sortable="true">
                             <col name="type_id" sortable="true">
                             <col name="meta" sortable="true">
@@ -165,7 +166,7 @@
                         </paper-dropdown-menu>
                         <paper-dropdown-menu label="Version">
                             <paper-listbox class="dropdown-content" id="report_select_version_id" attr-for-selected="name">
-                                <template is="dom-repeat" items="{{projectVersions}}">
+                                <template is="dom-repeat" items="{{versions}}">
                                     <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
                                 </template>
                             </paper-listbox>

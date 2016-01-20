@@ -10,7 +10,7 @@ Polymer({
     },
     defaultValues: function defaultValues() {
         this.currentProject = 0;
-        this.projectVersions = [];
+        this.versions = [];
         this.distributionBarValues = {
             closed: 0,
             assigned: 0,
@@ -165,6 +165,17 @@ Polymer({
         }
         return employee;
     },
+    getVersionWithId: function getVersionWithId(version_id) {
+        var version = {};
+        if (this.versions) {
+            this.versions.forEach(function(element, index){
+                if (element.version_id === version_id) {
+                    version = element;
+                }
+            });
+        }
+        return version;
+    },
     updateReportGrid: function updateReportGrid() {
         if (!this.employees || !this.types) {
             return;
@@ -193,6 +204,7 @@ Polymer({
                         items.push(element);
                     }
                 });
+                console.log(items);
                 self.grid.items = items;
             }, function (errorObject) {
                 console.log("The read failed: " + errorObject.code);
@@ -226,6 +238,10 @@ Polymer({
             },
             createtime: function(cell) {
                 cell.element.innerHTML = self.parseDuration(cell.data);
+            },
+            version_id: function(cell) {
+                var version = self.getVersionWithId(cell.data);
+                cell.element.innerHTML = version.name;
             }
 
         };
@@ -241,6 +257,9 @@ Polymer({
             var sortProperty = self.grid.columns[sortOrder.column].name;
             var sortDirection = sortOrder.direction;
         });
+
+        //Show version if all selected
+        this.grid.columns[0].hidden = !(self.filters.version === 'all' || self.filters.version === null);
 
         this.grid.addEventListener("selected-items-changed", function() {
             self.updateModificationLayout();
@@ -302,18 +321,18 @@ Polymer({
                     items.push(element);
                 }
             });
-            if (items.length > 1) {
+            if (items.length > 0) { //TODO CHANGE TO 1
                 var allItems = [];
                 allItems.push({name: "All versions", project_id: self.currentProject, version_id: "all"});
                 items.forEach(function(element){
                     allItems.push(element);
                 });
-                self.projectVersions = allItems;
+                self.versions = allItems;
             } else {
-                self.projectVersions = items;
+                self.versions = items;
             }
-            if (typeof self.projectVersions[0] !== 'undefined') {
-                self.filters.version = self.projectVersions[0].version_id;
+            if (typeof self.versions[0] !== 'undefined') {
+                self.filters.version = self.versions[0].version_id;
                 document.getElementById('version_menu').select(self.filters.version);
             }
         }, function (errorObject) {
@@ -384,10 +403,14 @@ Polymer({
         }
     },
     hideModificationLayout: function hideModificationLayout() {
-        $('#report_edit').hide();
-        $('#splitpanel').css('height','auto');
-        $('#report-grid').css('height','auto');
-        $('#splitpanel').split().destroy();
+        var $reportEdit = $('#report_edit'),
+            $splitPanel = $('#splitpanel'),
+            $reportGrid = $('#report-grid');
+
+        $reportEdit.hide();
+        $splitPanel.css('height','auto');
+        $reportGrid.css('height','auto');
+        $splitPanel.split().destroy();
     },
     showSingleReportEdit: function showSingleReportEdit(gridIndex) {
         var report_id = this.grid.items[gridIndex].report_id;
