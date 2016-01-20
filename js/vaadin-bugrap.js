@@ -38,6 +38,8 @@ Polymer({
             status: 'open'
         };
         this.checkedCustomFilters = [];
+
+        this.firebaseReportData = []; //Temporary solution for not fetching same data from firebase when filters change
     },
     setPriorities: function setPriorities() {
         var i = 1,
@@ -158,8 +160,6 @@ Polymer({
     },
     updateReportGrid: function updateReportGrid() {
         if (!this.employees || !this.types) {
-            console.log(this.employees);
-            console.log(this.types);
             return;
         }
 
@@ -168,20 +168,30 @@ Polymer({
         this.grid = document.querySelector("vaadin-grid");
         var self = this;
         var filterWithSearch = false;
+        var items = [];
 
-        // Configure vaadin-grid to show data
-        var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
-        ref.on("value", function(response) {
-            var items = [];
-            response.val().forEach(function(element, index, array){
+        if (self.firebaseReportData.length > 0) { //data already fetched
+            self.firebaseReportData.forEach(function(element, index, array){
                 if (self.elementMatchFilters(element)) {
                     items.push(element);
                 }
             });
             self.grid.items = items;
-        }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
+        } else {
+            var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
+            ref.on("value", function(response) {
+                self.firebaseReportData = response.val();
+                console.log(response.val());
+                response.val().forEach(function(element, index, array){
+                    if (self.elementMatchFilters(element)) {
+                        items.push(element);
+                    }
+                });
+                self.grid.items = items;
+            }, function (errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+        }
 
         var renderers = {
             priority: function(cell) {
