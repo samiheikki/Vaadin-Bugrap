@@ -38,7 +38,7 @@ Polymer({
             status: 'open',
             version: null
         };
-        this.checkedCustomFilters = [];
+        this.checkedCustomFilters = [1,2,3,4,5,6,7,8]; // TODO remove hardcoded
 
         this.firebaseReportData = []; //Temporary solution for not fetching same data from firebase when filters change
     },
@@ -135,6 +135,7 @@ Polymer({
             ref = new Firebase("https://vaadin-bugrap.firebaseio.com/status");
         ref.once("value", function(response) {
             self.statuses = response.val();
+            console.log(self.statuses);
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });

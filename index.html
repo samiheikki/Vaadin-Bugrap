@@ -88,7 +88,7 @@
                 </paper-tabs>
                 <paper-radio-group class="status-dialog closed">
                     <template is="dom-repeat" items="{{statuses}}">
-                        <paper-checkbox style="display: block;" class="custom_filter_checkbox" name="{{item.status_id}}" on-change="customStatusChanged">{{item.name}}</paper-checkbox>
+                        <paper-checkbox style="display: block;" class="custom_filter_checkbox" name="{{item.status_id}}" on-change="customStatusChanged" checked>{{item.name}}</paper-checkbox>
                     </template>
                 </paper-radio-group>
                 <paper-tabs class="tab-filter" attr-for-selected="name" selected="{{filters.status}}">
