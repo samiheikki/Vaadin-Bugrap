@@ -118,3 +118,11 @@ paper-radio-group.status-dialog {
 .closed {
     display: none;
 }
+
+.tab-filter-text {
+    font-weight: bold;
+}
+
+.tab-filter {
+    padding: 5px;
+}

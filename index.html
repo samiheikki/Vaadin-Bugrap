@@ -82,8 +82,8 @@
                 </distribution-bar>
             </paper-toolbar>
             <paper-toolbar class="white">
-                <paper-tabs selected="1">
-                    <paper-tab disabled="true">Assignees</paper-tab>
+                <paper-tabs selected="1" class="tab-filter">
+                    <paper-tab disabled="true" class="tab-filter-text">Assignees</paper-tab>
                     <paper-tab>Only me</paper-tab>
                     <paper-tab>Everyone</paper-tab>
                 </paper-tabs>
@@ -92,8 +92,8 @@
                         <paper-checkbox style="display: block;" name="{{item.status_id}}"  value="{{item.status_id}}">{{item.name}}</paper-checkbox>
                     </template>
                 </paper-radio-group>
-                <paper-tabs selected="1">
-                    <paper-tab disabled="true">Status</paper-tab>
+                <paper-tabs selected="1" class="tab-filter">
+                    <paper-tab disabled="true" class="tab-filter-text">Status</paper-tab>
                     <paper-tab>Open</paper-tab>
                     <paper-tab>All kinds</paper-tab>
                     <paper-tab id="status-select">Custom
