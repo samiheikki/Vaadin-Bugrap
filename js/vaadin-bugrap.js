@@ -181,7 +181,6 @@ Polymer({
             var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
             ref.on("value", function(response) {
                 self.firebaseReportData = response.val();
-                console.log(response.val());
                 response.val().forEach(function(element, index, array){
                     if (self.elementMatchFilters(element)) {
                         items.push(element);
@@ -289,7 +288,16 @@ Polymer({
                     items.push(element);
                 }
             });
-            self.projectVersions = items;
+            if (items.length > 1) {
+                var allItems = [];
+                allItems.push({name: "All versions", project_id: self.currentProject, version_id: "all"});
+                items.forEach(function(element){
+                    allItems.push(element);
+                });
+                self.projectVersions = allItems;
+            } else {
+                self.projectVersions = items;
+            }
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
