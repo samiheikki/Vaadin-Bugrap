@@ -2,6 +2,7 @@ Polymer({
     is: 'vaadin-bugrap',
     ready: function() {
         this.defaultValues();
+        this.getSessionStorageValues();
         this.setEmployees();
         this.setTypes();
         this.setStatues();
@@ -68,7 +69,6 @@ Polymer({
 
         //Update site when project is changed
         document.getElementById('project_select').addEventListener('iron-select', function(){
-            console.log(this.selectedItem.value);
             self.projectSelect(this.selectedItem.value);
         });
 
@@ -253,11 +253,11 @@ Polymer({
             }
         });
 
-        this.grid.addEventListener('sort-order-changed', function() {
+        /*this.grid.addEventListener('sort-order-changed', function() {
             var sortOrder = self.grid.sortOrder[0];
             var sortProperty = self.grid.columns[sortOrder.column].name;
             var sortDirection = sortOrder.direction;
-        });
+        });*/
 
         //Show version if all selected
         this.grid.columns[0].hidden = !(self.filters.version === 'all' || self.filters.version === null);
@@ -265,6 +265,8 @@ Polymer({
         this.grid.addEventListener("selected-items-changed", function() {
             self.updateModificationLayout();
         });
+
+        this.setSessionStorageValues();
     },
     elementMatchFilters: function elementMatchFilters(element) {
         var self = this;
@@ -504,5 +506,29 @@ Polymer({
         } else if (duration.asSeconds() >= 1) {
             return parseInt(duration.asSeconds()) + ' seconds ago';
         }
+    },
+    setSessionStorageValues: function setSessionStorageValues() {
+        sessionStorage.setItem('project', this.filters.project);
+        sessionStorage.setItem('version', this.filters.version);
+        sessionStorage.setItem('assignee', this.filters.assignee);
+        sessionStorage.setItem('status', this.filters.status);
+        sessionStorage.setItem('checkedCustomFilters', JSON.stringify(this.filters.checkedCustomFilters));
+    },
+    getSessionStorageValues: function getSessionStorageValues() { //TODO This function breaks something
+        /*if(sessionStorage.getItem('project') !== null) {
+            this.filters.project = sessionStorage.getItem('project');
+        }
+        if(sessionStorage.getItem('version') !== null) {
+            this.filters.version = sessionStorage.getItem('version');
+        }
+        if(sessionStorage.getItem('assignee') !== null) {
+            this.filters.assignee = sessionStorage.getItem('assignee');
+        }
+        if(sessionStorage.getItem('status') !== null) {
+            this.filters.status = sessionStorage.getItem('status');
+        }
+        if(sessionStorage.getItem('checkedCustomFilters') !== null) {
+            this.filters.checkedCustomFilters = JSON.parse(sessionStorage.getItem('checkedCustomFilters'));
+        }*/
     }
 });
