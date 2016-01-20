@@ -64,7 +64,7 @@
                     <span class="black button_label">Manage project</span>
                 </iron-label>
                 <span class="spacer"></span>
-                <paper-input class="short" label="Search reports" style="display: inline-block" id="search_reports" value="{{projectSearchFilter}}">
+                <paper-input class="short" label="Search reports" style="display: inline-block" id="search_reports" value="{{filters.searchFilter}}">
                     <paper-icon-button suffix icon="search" alt="search" title="Search" class="black">
                     </paper-icon-button>
                 </paper-input>
@@ -82,21 +82,21 @@
                 </distribution-bar>
             </paper-toolbar>
             <paper-toolbar class="white">
-                <paper-tabs selected="1" class="tab-filter">
+                <paper-tabs class="tab-filter" attr-for-selected="name" selected="{{filters.assignee}}">
                     <paper-tab disabled="true" class="tab-filter-text">Assignees</paper-tab>
-                    <paper-tab>Only me</paper-tab>
-                    <paper-tab>Everyone</paper-tab>
+                    <paper-tab name="me" class="tab-select">Only me</paper-tab>
+                    <paper-tab name="everyone" class="tab-select">Everyone</paper-tab>
                 </paper-tabs>
                 <paper-radio-group class="status-dialog closed">
                     <template is="dom-repeat" items="{{statuses}}">
-                        <paper-checkbox style="display: block;" name="{{item.status_id}}"  value="{{item.status_id}}">{{item.name}}</paper-checkbox>
+                        <paper-checkbox style="display: block;" class="custom_filter_checkbox" name="{{item.status_id}}" on-change="customStatusChanged">{{item.name}}</paper-checkbox>
                     </template>
                 </paper-radio-group>
-                <paper-tabs selected="1" class="tab-filter">
+                <paper-tabs class="tab-filter" attr-for-selected="name" selected="{{filters.status}}">
                     <paper-tab disabled="true" class="tab-filter-text">Status</paper-tab>
-                    <paper-tab>Open</paper-tab>
-                    <paper-tab>All kinds</paper-tab>
-                    <paper-tab id="status-select">Custom
+                    <paper-tab name="open" class="tab-select">Open</paper-tab>
+                    <paper-tab name="all_kind" class="tab-select">All kinds</paper-tab>
+                    <paper-tab id="status-select" name="custom" class="tab-select">Custom
                         <iron-icon icon="icons:arrow-drop-down" id="status_select_down"></iron-icon>
                         <iron-icon icon="icons:arrow-drop-up" id="status_select_up" style="display: none"></iron-icon>
                     </paper-tab>

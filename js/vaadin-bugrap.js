@@ -16,7 +16,6 @@ Polymer({
             assigned: 0,
             unassigned: 0
         };
-        this.projectSearchFilter = '';
         this.types = null;
         this.employees = null;
         this.grid = null;
@@ -32,6 +31,13 @@ Polymer({
             employee_id: null,
             version_id: null
         };
+        this.employee_id = 1; //TODO THIS IS STATIC. Change to dynamic.
+        this.filters = {
+            assignee: 'me',
+            searchFilter: '',
+            status: 'open'
+        };
+        this.checkedCustomFilters = [];
     },
     setPriorities: function setPriorities() {
         var i = 1,
@@ -78,6 +84,10 @@ Polymer({
             }
         });
 
+        $('.tab-select').on('click', function(){
+            self.updateReportGrid();
+        });
+
         $('#status-select').on('click', self.toggleStatusSelect);
     },
     toggleStatusSelect: function toggleStatusSelect() {
@@ -121,6 +131,20 @@ Polymer({
             console.log("The read failed: " + errorObject.code);
         });
     },
+    customStatusChanged: function customStatusChanged() {
+        var name = event.target.name;
+        var index = this.checkedCustomFilters.indexOf(name);
+        if(event.target.checked) {
+            if (index < 0) {
+                this.checkedCustomFilters.push(name);
+            }
+        } else {
+            this.checkedCustomFilters = $.grep(this.checkedCustomFilters, function(value) {
+                return value != name;
+            });
+        }
+        this.updateReportGrid();
+    },
     getEmployeeWithId: function getEmployeeWithId(employee_id) {
         var employee = {};
         if (this.employees) {
@@ -134,6 +158,8 @@ Polymer({
     },
     updateReportGrid: function updateReportGrid() {
         if (!this.employees || !this.types) {
+            console.log(this.employees);
+            console.log(this.types);
             return;
         }
 
@@ -142,26 +168,14 @@ Polymer({
         this.grid = document.querySelector("vaadin-grid");
         var self = this;
         var filterWithSearch = false;
-        this.projectSearchFilter.trim();
-        if (this.projectSearchFilter !== '') {
-            filterWithSearch = true;
-        }
-
 
         // Configure vaadin-grid to show data
         var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
         ref.on("value", function(response) {
             var items = [];
             response.val().forEach(function(element, index, array){
-                if(element.project_id === self.currentProject) {
-                    if (filterWithSearch) {
-                        //TODO IMPLEMENT A BETTER SEARCH FILTER
-                        if (element.meta.toLowerCase().indexOf(self.projectSearchFilter.toLowerCase()) > -1) {
-                            items.push(element);
-                        }
-                    } else {
-                        items.push(element);
-                    }
+                if (self.elementMatchFilters(element)) {
+                    items.push(element);
                 }
             });
             self.grid.items = items;
@@ -215,6 +229,37 @@ Polymer({
         this.grid.addEventListener("selected-items-changed", function() {
             self.updateModificationLayout();
         });
+    },
+    elementMatchFilters: function elementMatchFilters(element) {
+        var self = this;
+        var projectMatches = function projectMatches() {
+            return element.project_id === self.currentProject;
+        };
+        var assigneeMatches = function assigneeMatches() {
+            if(self.filters.assignee === 'everyone') {
+                return true;
+            } else { //only me
+                return element.employee_id === self.employee_id;
+            }
+        };
+        var statusMatches = function statusMatches() {
+            if(self.filters.status === 'all_kind') {
+                return true;
+            } else if (self.filters.status === 'open') {
+                return element.status_id === 1;
+            } else { //custom filters
+                return self.checkedCustomFilters.indexOf(element.status_id) > -1;
+            }
+        };
+        var searchMatches = function searchMatches() {
+            //TODO IMPLEMENT A BETTER SEARCH
+            var searchFilter = $.trim(self.filters.searchFilter.toLowerCase());
+            if (searchFilter !== '') {
+                return element.meta.toLowerCase().indexOf(self.filters.searchFilter.toLowerCase()) > -1;
+            }
+            return true;
+        };
+        return projectMatches() && assigneeMatches() && statusMatches() && searchMatches();
     },
     projectSelect: function projectSelect(project_id) {
         var self = this;
