@@ -37,6 +37,7 @@
     "vaadin-combo-box": "~1.0.0-alpha3",
     "paper-checkbox": "PolymerElements/paper-checkbox#~1.1.0",
     "paper-radio-group": "PolymerElements/paper-radio-group#~1.0.9",
-    "paper-radio-button": "PolymerElements/paper-radio-button#~1.0.12"
+    "paper-radio-button": "PolymerElements/paper-radio-button#~1.0.12",
+    "jquery": "~2.2.0"
   }
 }
