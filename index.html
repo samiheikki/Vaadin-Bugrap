@@ -71,9 +71,9 @@
             </paper-toolbar>
             <paper-toolbar class="white" id="distribution_toolbar">
                 <paper-dropdown-menu label="Reports for" id="reports_for">
-                    <paper-menu class="dropdown-content" selected="0">
-                        <template is="dom-repeat" items="{{projectVersions}}" as="version">
-                            <paper-item value="{{version.version_id}}">{{version.name}}</paper-item>
+                    <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{filters.version}}" id="version_menu">
+                        <template is="dom-repeat" items="{{projectVersions}}">
+                            <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
                         </template>
                     </paper-menu>
                 </paper-dropdown-menu>

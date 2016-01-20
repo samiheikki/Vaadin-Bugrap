@@ -35,7 +35,8 @@ Polymer({
         this.filters = {
             assignee: 'me',
             searchFilter: '',
-            status: 'open'
+            status: 'open',
+            version: null
         };
         this.checkedCustomFilters = [];
 
@@ -68,6 +69,11 @@ Polymer({
         //Update site when project is changed
         document.getElementById('project_select').addEventListener('iron-select', function(){
             self.projectSelect(this.selectedItem.value);
+        });
+
+        //Update grid when version changed
+        document.getElementById('version_menu').addEventListener('iron-select', function(){
+            self.updateReportGrid();
         });
 
         //TODO change without input blur
@@ -268,14 +274,21 @@ Polymer({
             }
             return true;
         };
-        return projectMatches() && assigneeMatches() && statusMatches() && searchMatches();
+        var versionMatches = function versionMatches() {
+            if (self.filters.version == 'all') {
+                return true;
+            } else {
+                return self.filters.version = element.version_id;
+            }
+        };
+        return projectMatches() && assigneeMatches() && statusMatches() && searchMatches() && versionMatches();
     },
     projectSelect: function projectSelect(project_id) {
         var self = this;
         self.currentProject = project_id;
+        self.updateVersionList();
         self.updateReportGrid();
         self.updateDistributionBarValues();
-        self.updateVersionList();
     },
     updateVersionList: function updateVersionList() {
         //Get Project Versions
@@ -297,6 +310,10 @@ Polymer({
                 self.projectVersions = allItems;
             } else {
                 self.projectVersions = items;
+            }
+            if (typeof self.projectVersions[0] !== 'undefined') {
+                self.filters.version = self.projectVersions[0].version_id;
+                document.getElementById('version_menu').select(self.filters.version);
             }
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
