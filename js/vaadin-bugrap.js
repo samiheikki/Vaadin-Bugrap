@@ -9,7 +9,6 @@ Polymer({
         this.setPriorities();
     },
     defaultValues: function defaultValues() {
-        this.currentProject = 0;
         this.versions = [];
         this.distributionBarValues = {
             closed: 0,
@@ -33,12 +32,13 @@ Polymer({
         };
         this.employee_id = 1; //TODO THIS IS STATIC. Change to dynamic.
         this.filters = {
+            project: 1,
             assignee: 'me',
             searchFilter: '',
             status: 'open',
-            version: null
+            version: null,
+            checkedCustomFilters: [1,2,3,4,5,6,7,8] // TODO remove hardcoded
         };
-        this.checkedCustomFilters = [1,2,3,4,5,6,7,8]; // TODO remove hardcoded
 
         this.firebaseReportData = []; //Temporary solution for not fetching same data from firebase when filters change
     },
@@ -68,6 +68,7 @@ Polymer({
 
         //Update site when project is changed
         document.getElementById('project_select').addEventListener('iron-select', function(){
+            console.log(this.selectedItem.value);
             self.projectSelect(this.selectedItem.value);
         });
 
@@ -142,13 +143,13 @@ Polymer({
     },
     customStatusChanged: function customStatusChanged() {
         var name = event.target.name;
-        var index = this.checkedCustomFilters.indexOf(name);
+        var index = this.filters.checkedCustomFilters.indexOf(name);
         if(event.target.checked) {
             if (index < 0) {
-                this.checkedCustomFilters.push(name);
+                this.filters.checkedCustomFilters.push(name);
             }
         } else {
-            this.checkedCustomFilters = $.grep(this.checkedCustomFilters, function(value) {
+            this.filters.checkedCustomFilters = $.grep(this.filters.checkedCustomFilters, function(value) {
                 return value != name;
             });
         }
@@ -268,7 +269,7 @@ Polymer({
     elementMatchFilters: function elementMatchFilters(element) {
         var self = this;
         var projectMatches = function projectMatches() {
-            return element.project_id === self.currentProject;
+            return element.project_id === self.filters.project;
         };
         var assigneeMatches = function assigneeMatches() {
             if(self.filters.assignee === 'everyone') {
@@ -283,7 +284,7 @@ Polymer({
             } else if (self.filters.status === 'open') {
                 return element.status_id === 1;
             } else { //custom filters
-                return self.checkedCustomFilters.indexOf(element.status_id) > -1;
+                return self.filters.checkedCustomFilters.indexOf(element.status_id) > -1;
             }
         };
         var searchMatches = function searchMatches() {
@@ -305,7 +306,6 @@ Polymer({
     },
     projectSelect: function projectSelect(project_id) {
         var self = this;
-        self.currentProject = project_id;
         self.updateVersionList();
         self.updateReportGrid();
         self.updateDistributionBarValues();
@@ -317,13 +317,13 @@ Polymer({
         ref.on("value", function(response) {
             var items = [];
             response.val().forEach(function(element, index, array){
-                if(element.project_id === self.currentProject) {
+                if(element.project_id === self.filters.project) {
                     items.push(element);
                 }
             });
-            if (items.length > 0) { //TODO CHANGE TO 1
+            if (items.length > 1) {
                 var allItems = [];
-                allItems.push({name: "All versions", project_id: self.currentProject, version_id: "all"});
+                allItems.push({name: "All versions", project_id: self.filters.project, version_id: "all"});
                 items.forEach(function(element){
                     allItems.push(element);
                 });
@@ -352,7 +352,7 @@ Polymer({
 
         ref.on("value", function(response) {
             response.val().forEach(function(element, index, array){
-                if(element.project_id === self.currentProject) {
+                if(element.project_id === self.filters.project) {
                     if (closedIds.indexOf(element.status_id) > -1) {
                         self.distributionBarValues.closed++;
 
