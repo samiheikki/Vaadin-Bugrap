@@ -22,7 +22,6 @@
 <template is="dom-bind" id="app">
 
     <dom-module id="vaadin-bugrap">
-
         <template>
             <!-- Firebase collections -->
             <firebase-collection
@@ -31,61 +30,71 @@
                     data="{{projects}}">
             </firebase-collection>
 
+            <paper-header-panel class="blue">
+                <paper-toolbar class="paper-header">
+                    <paper-dropdown-menu label="Choose project" id="project_select_dropdown">
+                        <paper-listbox class="dropdown-content" id="project_select" attr-for-selected="value" selected="{{filters.project}}">
+                            <template is="dom-repeat" items="[[projects]]" as="project">
+                                <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
+                            </template>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                    <span class="spacer"></span>
+                    <iron-label>
+                        <paper-icon-button icon="social:person"></paper-icon-button>
+                        <span class="black button_label hide_mobile">Sami Suo-Heikki</span>
+                    </iron-label>
 
-            <paper-toolbar class="white">
-                <paper-dropdown-menu label="Choose project" id="project_select_dropdown">
-                    <paper-listbox class="dropdown-content" id="project_select" attr-for-selected="value" selected="{{filters.project}}">
-                        <template is="dom-repeat" items="[[projects]]" as="project">
-                            <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
-                        </template>
-                    </paper-listbox>
-                </paper-dropdown-menu>
-                <span class="spacer"></span>
-                <iron-label>
-                    <paper-icon-button icon="social:person" class="black"></paper-icon-button>
-                    <span class="black button_label">Sami Suo-Heikki</span>
-                </iron-label>
-
-                <iron-label>
-                    <paper-icon-button icon="icons:input" class="black"></paper-icon-button>
-                    <span class="black button_label">Logout</span>
-                </iron-label>
-            </paper-toolbar>
-            <paper-toolbar class="white">
-                <iron-label>
-                    <paper-icon-button icon="icons:bug-report" class="black"></paper-icon-button>
-                    <span class="black button_label">Report a bug</span>
-                </iron-label>
-                <iron-label>
-                    <paper-icon-button icon="icons:chrome-reader-mode" class="black"></paper-icon-button>
-                    <span class="black button_label">Request a feature</span>
-                </iron-label>
-                <iron-label>
-                    <paper-icon-button icon="icons:settings" class="black"></paper-icon-button>
-                    <span class="black button_label">Manage project</span>
-                </iron-label>
-                <span class="spacer"></span>
-                <paper-input class="short" label="Search reports" style="display: inline-block" id="search_reports" value="{{filters.searchFilter}}">
-                    <paper-icon-button suffix icon="search" alt="search" title="Search" class="black">
-                    </paper-icon-button>
-                </paper-input>
-            </paper-toolbar>
-            <paper-toolbar class="white" id="distribution_toolbar">
-                <paper-dropdown-menu label="Reports for" id="reports_for">
-                    <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{filters.version}}" id="version_menu">
-                        <template is="dom-repeat" items="{{versions}}">
-                            <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
-                        </template>
-                    </paper-menu>
-                </paper-dropdown-menu>
-                <distribution-bar>
-                </distribution-bar>
-            </paper-toolbar>
+                    <iron-label>
+                        <paper-icon-button icon="icons:input"></paper-icon-button>
+                        <span class="black button_label hide_mobile">Logout</span>
+                    </iron-label>
+                </paper-toolbar>
+                <div>
+                    <div class="container flex-horizontal">
+                        <iron-label class="search_row_label">
+                            <paper-icon-button icon="icons:bug-report" class="black"></paper-icon-button>
+                            <span class="black button_label hide_mobile">Report a bug</span>
+                        </iron-label>
+                        <iron-label class="search_row_label">
+                            <paper-icon-button icon="icons:chrome-reader-mode" class="black"></paper-icon-button>
+                            <span class="black button_label hide_mobile">Request a feature</span>
+                        </iron-label>
+                        <iron-label class="flexchild search_row_label">
+                            <paper-icon-button icon="icons:settings" class="black"></paper-icon-button>
+                            <span class="black button_labe hide_mobile">Manage project</span>
+                        </iron-label>
+                        <paper-input class="short search_report" label="Search reports" style="" id="search_reports" value="{{filters.searchFilter}}" no-label-float>
+                            <paper-icon-button suffix icon="search" alt="search" title="Search" class="black">
+                            </paper-icon-button>
+                        </paper-input>
+                    </div>
+                    <div class="container flex-horizontal">
+                        <paper-dropdown-menu label="Reports for" id="reports_for" style="padding-left: 10px">
+                            <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{filters.version}}" id="version_menu">
+                                <template is="dom-repeat" items="{{versions}}">
+                                    <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                        <distribution-bar  class="flexchild" style="padding-top: 33px">
+                        </distribution-bar>
+                    </div>
+                </div>
+            </paper-header-panel>
             <paper-toolbar class="white">
                 <paper-tabs class="tab-filter" attr-for-selected="name" selected="{{filters.assignee}}">
-                    <paper-tab disabled="true" class="tab-filter-text">Assignees</paper-tab>
-                    <paper-tab name="me" class="tab-select">Only me</paper-tab>
-                    <paper-tab name="everyone" class="tab-select">Everyone</paper-tab>
+                    <paper-tab disabled="true" class="tab-filter-text hide_mobile">
+                        Assignees
+                    </paper-tab>
+                    <paper-tab name="me" class="tab-select">
+                        <span class="hide_mobile">Only me</span>
+                        <iron-icon icon="social:person-outline" class="hide_desktop"></iron-icon>
+                    </paper-tab>
+                    <paper-tab name="everyone" class="tab-select">
+                        <span class="hide_mobile">Everyone</span>
+                        <iron-icon icon="social:people-outline" class="hide_desktop"></iron-icon>
+                    </paper-tab>
                 </paper-tabs>
                 <paper-radio-group class="status-dialog closed">
                     <template is="dom-repeat" items="{{statuses}}">
@@ -93,12 +102,23 @@
                     </template>
                 </paper-radio-group>
                 <paper-tabs class="tab-filter" attr-for-selected="name" selected="{{filters.status}}">
-                    <paper-tab disabled="true" class="tab-filter-text">Status</paper-tab>
-                    <paper-tab name="open" class="tab-select">Open</paper-tab>
-                    <paper-tab name="all_kind" class="tab-select">All kinds</paper-tab>
-                    <paper-tab id="status-select" name="custom" class="tab-select">Custom
-                        <iron-icon icon="icons:arrow-drop-down" id="status_select_down"></iron-icon>
-                        <iron-icon icon="icons:arrow-drop-up" id="status_select_up" style="display: none"></iron-icon>
+                    <paper-tab disabled="true" class="tab-filter-text hide_mobile">
+                        <span class="hide_mobile">Status</span>
+                    </paper-tab>
+                    <paper-tab name="open" class="tab-select">
+                        <span class="hide_mobile">Open</span>
+                        <iron-icon icon="icons:radio-button-unchecked" class="hide_desktop"></iron-icon>
+                    </paper-tab>
+                    <paper-tab name="all_kind" class="tab-select">
+                        <span class="hide_mobile">All kinds</span>
+                        <iron-icon icon="icons:radio-button-checked" class="hide_desktop"></iron-icon>
+                    </paper-tab>
+                    <paper-tab id="status-select" name="custom" class="tab-select"><!--
+                        --><span class="hide_mobile">Custom
+                            <iron-icon icon="icons:arrow-drop-down" id="status_select_down"></iron-icon>
+                            <iron-icon icon="icons:arrow-drop-up" id="status_select_up" style="display: none"></iron-icon>
+                        </span>
+                        <iron-icon icon="icons:more-vert" class="hide_desktop"></iron-icon>
                     </paper-tab>
                 </paper-tabs>
             </paper-toolbar>

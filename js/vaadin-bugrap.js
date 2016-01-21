@@ -511,9 +511,9 @@ Polymer({
         });
     },
     distributionBarChange: function distributionBarChange() {
-        var closed = this.distributionBarValues.closed;
-        var assigned = this.distributionBarValues.assigned;
-        var unassigned = this.distributionBarValues.unassigned;
+        var closed = this.distributionBarValues.closed+1;
+        var assigned = this.distributionBarValues.assigned+1;
+        var unassigned = this.distributionBarValues.unassigned+1;
 
         var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
             $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
@@ -522,7 +522,7 @@ Polymer({
             closedRelation = closed / total,
             assignedRelation = assigned / total,
             unassignedRelation = unassigned / total,
-            totalWidth = document.getElementById('distribution_bar').offsetWidth - 10,
+            totalWidth = document.getElementById('distribution_bar').offsetWidth - 25,
             height = document.getElementById('distribution_bar').offsetHeight;
         $distributionBarClosed.setAttribute('style','width:'+(totalWidth*closedRelation)+'px; height:'+height+'px');
         $distributionBarAssigned.setAttribute('style','width:'+(totalWidth*assignedRelation)+'px; height:'+height+'px');

@@ -38,6 +38,7 @@
     "paper-checkbox": "PolymerElements/paper-checkbox#~1.1.0",
     "paper-radio-group": "PolymerElements/paper-radio-group#~1.0.9",
     "paper-radio-button": "PolymerElements/paper-radio-button#~1.0.12",
-    "jquery": "~2.2.0"
+    "jquery": "~2.2.0",
+    "paper-styles": "PolymerElements/paper-styles#~1.1.2"
   }
 }

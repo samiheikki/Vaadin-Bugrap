@@ -2,21 +2,9 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
-paper-icon-button.black, iron-icon.black, span.black {
-    color: black;
-}
-
-paper-icon-button.grey, iron-icon.grey, span.grey {
-    color: grey;
-}
-
 .paper-tab {
     color: #000;
 }
-
-/*
-TODO Responsive distribution bar
-*/
 .distribution_bar {
     width: 100%;
     height: 20px;
@@ -40,14 +28,6 @@ TODO Responsive distribution bar
 
 .button_label {
     cursor: pointer;
-}
-
-paper-toolbar.white {
-    background: white;
-}
-
-paper-toolbar.grey {
-    background: rgb(244, 244, 244);
 }
 
 @font-face {
@@ -125,4 +105,35 @@ paper-radio-group.status-dialog {
 
 .tab-filter {
     padding: 5px;
+}
+
+.search_row_label {
+    padding: 16px 0;
+}
+
+@media (min-width: 600px) {
+    #project_select_dropdown {
+        min-width: 500px;
+    }
+}
+
+
+@media (max-width: 600px) {
+    #project_select_dropdown {
+        min-width: 0px;
+    }
+}
+
+@media (max-width: 520px) {
+    .hide_mobile {
+        display: none !important;
+    }
+    paper-radio-group.status-dialog {
+        margin-left: 0px;
+    }
+}
+@media (min-width: 520px) {
+    .hide_desktop {
+        display: none !important;
+    }
 }
