@@ -254,8 +254,6 @@ Polymer({
                 cell.element.innerHTML = employee.firstname + ' ' + employee.lastname;
             },
             modifytime: function(cell) {
-                console.log(cell.data);
-                console.log(self.parseDuration(cell.data));
                 cell.element.innerHTML = self.parseDuration(cell.data);
             },
             createtime: function(cell) {
@@ -396,7 +394,7 @@ Polymer({
             totalSelections = 0;
         this.nullReportEditValues();
         self.grid.selection.selected(function(index) {
-            if (index !== null) {
+            if (index !== null && typeof self.grid.items[index] !== 'undefined') {
                 var gridRow = self.grid.items[index];
                 totalSelections++;
                 lastIndex = index;
@@ -434,20 +432,29 @@ Polymer({
         $splitPanel.split().destroy();
     },
     showSingleReportEdit: function showSingleReportEdit(gridIndex) {
-        var report_id = this.grid.items[gridIndex].report_id;
+        var report_id = this.grid.items[gridIndex].report_id,
+            $reportComments = $('#report_comments'),
+            $vaadinGrid = $('vaadin-grid');
         this.hideModificationLayout();
+        $reportComments.show();
         var height = $(document).height() - $('vaadin-bugrap').height() + 90;
+        if (height < $reportComments.height()+128+$vaadinGrid.height()) {
+            height = $reportComments.height()+128+$vaadinGrid.height();
+        }
         this.getReportComments(report_id);
         this.selectedReportMeta = this.grid.items[gridIndex].meta;
         $('#report_edit_name').show();
         $('#report_edit_amount').hide();
         $('#report_edit').show();
-        $('#report_comments').show();
         $('#splitpanel').width("100%").height(height).split({position:'50%'});
     },
     showMultiReportEdit: function showMultiReportEdit() {
         this.hideModificationLayout();
-        var height = $(document).height() - $('vaadin-bugrap').height() + 90;
+        var height = $(document).height() - $('vaadin-bugrap').height() + 90,
+            $vaadinGrid = $('vaadin-grid');
+        if (height < 128+$vaadinGrid.height()) {
+            height = 128+$vaadinGrid.height();
+        }
         $('#report_edit_name').hide();
         $('#report_edit_amount').show();
         $('#report_comments').hide();
