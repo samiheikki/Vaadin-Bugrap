@@ -2,6 +2,7 @@ Polymer({
     is: 'vaadin-bugrap',
     ready: function() {
         this.defaultValues();
+        this.createFirebaseInstance();
         this.setEmployees();
         this.setTypes();
         this.setStatues();
@@ -41,7 +42,19 @@ Polymer({
             checkedCustomFilters: JSON.parse(sessionStorage.getItem('checkedCustomFilters')) || [1,2,3,4,5,6,7,8] // TODO remove hardcoded
         };
 
+        this.firebase = {};
+
         this.firebaseReportData = []; //Temporary solution for not fetching same data from firebase when filters change
+    },
+    createFirebaseInstance: function createFirebaseInstance(){
+        this.firebase.ref = new Firebase("https://vaadin-bugrap.firebaseio.com/");
+        this.firebase.comment = this.firebase.ref.child('comment');
+        this.firebase.employee = this.firebase.ref.child('employee');
+        this.firebase.project = this.firebase.ref.child('project');
+        this.firebase.report = this.firebase.ref.child('report');
+        this.firebase.status = this.firebase.ref.child('status');
+        this.firebase.type = this.firebase.ref.child('type');
+        this.firebase.version = this.firebase.ref.child('version');
     },
     setPriorities: function setPriorities() {
         var i = 1,
@@ -112,9 +125,8 @@ Polymer({
         }
     },
     setTypes: function setTypes() {
-        var self = this,
-            ref = new Firebase("https://vaadin-bugrap.firebaseio.com/type");
-        ref.once("value", function(response) {
+        var self = this;
+        this.firebase.type.once("value", function(response) {
             self.types = response.val();
             self.updateReportGrid();
         }, function (errorObject) {
@@ -122,9 +134,8 @@ Polymer({
         });
     },
     setEmployees: function setEmployees() {
-        var self = this,
-            ref = new Firebase("https://vaadin-bugrap.firebaseio.com/employee");
-        ref.once("value", function(response) {
+        var self = this;
+        this.firebase.employee.once("value", function(response) {
             self.employees = response.val();
             self.updateReportGrid();
         }, function (errorObject) {
@@ -132,9 +143,8 @@ Polymer({
         });
     },
     setStatues: function setStatues() {
-        var self = this,
-            ref = new Firebase("https://vaadin-bugrap.firebaseio.com/status");
-        ref.once("value", function(response) {
+        var self = this;
+        this.firebase.status.once("value", function(response) {
             self.statuses = response.val();
             self.setFilterCheckBoxChecked();
         }, function (errorObject) {
@@ -208,8 +218,7 @@ Polymer({
             });
             self.grid.items = items;
         } else {
-            var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
-            ref.on("value", function(response) {
+            this.firebase.report.once("value", function(response) {
                 self.firebaseReportData = response.val();
                 response.val().forEach(function(element, index, array){
                     if (self.elementMatchFilters(element)) {
@@ -245,6 +254,8 @@ Polymer({
                 cell.element.innerHTML = employee.firstname + ' ' + employee.lastname;
             },
             modifytime: function(cell) {
+                console.log(cell.data);
+                console.log(self.parseDuration(cell.data));
                 cell.element.innerHTML = self.parseDuration(cell.data);
             },
             createtime: function(cell) {
@@ -325,8 +336,7 @@ Polymer({
     updateVersionList: function updateVersionList() {
         //Get Project Versions
         var self = this;
-        var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/version");
-        ref.on("value", function(response) {
+        this.firebase.version.on("value", function(response) {
             var items = [];
             response.val().forEach(function(element, index, array){
                 if(element.project_id === self.filters.project) {
@@ -360,9 +370,8 @@ Polymer({
         var closedIds = [1],
             assignedIds = [2,3,4,5,6,7],
             unassignedIds = [0];
-        var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report");
 
-        ref.on("value", function(response) {
+        this.firebase.report.on("value", function(response) {
             response.val().forEach(function(element, index, array){
                 if(element.project_id === self.filters.project) {
                     if (closedIds.indexOf(element.status_id) > -1) {
@@ -478,9 +487,8 @@ Polymer({
     },
     getReportComments: function getReportComments(report_id) {
         var self = this;
-        var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/comment");
         var employee;
-        ref.on("value", function(response) {
+        this.firebase.comment.once("value", function(response) {
             var items = [];
             response.val().forEach(function(element, index, array){
                 if(element.report_id === report_id) {
@@ -528,7 +536,7 @@ Polymer({
             return parseInt(duration.asDays()) + ' days ago';
         } else if (duration.asMinutes() >= 1) {
             return parseInt(duration.asMinutes()) + ' minutes ago';
-        } else if (duration.asSeconds() >= 1) {
+        } else {
             return parseInt(duration.asSeconds()) + ' seconds ago';
         }
     },
@@ -544,7 +552,6 @@ Polymer({
     updateReports: function updateReports() {
         var self = this;
         var values = this.getReportEditValues(),
-            ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report"),
             firebaseUpdate = {};
         if (values.validated) {
             this.grid.selection.selected(function(index) {
@@ -565,7 +572,8 @@ Polymer({
                     };
                 }
             });
-            ref.update(firebaseUpdate);
+            this.firebase.report.update(firebaseUpdate);
+            this.firebaseReportData = [];
             self.updateReportGrid();
         } else {
             this.$.validation_error.show();
