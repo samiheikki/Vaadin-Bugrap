@@ -367,9 +367,9 @@ Polymer({
         this.distributionBarValues.closed = 0;
         this.distributionBarValues.assigned = 0;
         this.distributionBarValues.unassigned = 0;
-        var closedIds = [1],
-            assignedIds = [2,3,4,5,6,7],
-            unassignedIds = [0];
+        var closedIds = [2],
+            assignedIds = [3,4,5,6,7,8],
+            unassignedIds = [1];
 
         this.firebase.report.on("value", function(response) {
             response.val().forEach(function(element, index, array){
