@@ -556,7 +556,7 @@ Polymer({
             this.grid.selection.selected(function(index) {
                 if (index !== null) {
                     var gridRow = self.grid.items[index];
-                    var firebaseIndex = gridRow.project_id - 1; //Stupid hack
+                    var firebaseIndex = gridRow.report_id - 1; //Stupid hack
                     firebaseUpdate[firebaseIndex] = {
                         createtime: gridRow.createtime,
                         employee_id: values.fields.employee_id,
@@ -575,6 +575,7 @@ Polymer({
             this.firebaseReportData = [];
             self.updateReportGrid();
             self.updateDistributionBarValues();
+            this.grid.selection.clear();
         } else {
             this.$.validation_error.show();
         }
