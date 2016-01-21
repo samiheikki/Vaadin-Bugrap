@@ -548,7 +548,6 @@ Polymer({
         sessionStorage.setItem('checkedCustomFilters', JSON.stringify(this.filters.checkedCustomFilters));
         sessionStorage.setItem('searchFilter', this.filters.searchFilter);
     },
-    //TODO UPDATING STILL CREATES A LOT OF BUGS
     updateReports: function updateReports() {
         var self = this;
         var values = this.getReportEditValues(),
@@ -562,7 +561,7 @@ Polymer({
                         createtime: gridRow.createtime,
                         employee_id: values.fields.employee_id,
                         meta: gridRow.meta,
-                        modifytime: moment().format('YYYY-MM-DD HH:mm:ss'), //TODO FIX THIS
+                        modifytime: moment().format('YYYY-MM-DD HH:mm:ss'),
                         priority: values.fields.priority,
                         project_id: gridRow.project_id,
                         report_id: gridRow.report_id,
@@ -575,6 +574,7 @@ Polymer({
             this.firebase.report.update(firebaseUpdate);
             this.firebaseReportData = [];
             self.updateReportGrid();
+            self.updateDistributionBarValues();
         } else {
             this.$.validation_error.show();
         }
