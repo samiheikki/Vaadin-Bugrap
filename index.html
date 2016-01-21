@@ -172,8 +172,8 @@
                             </paper-listbox>
                         </paper-dropdown-menu>
                         <span class="spacer"></span>
-                        <paper-button class="update" raised>Update</paper-button>
-                        <paper-button class="discard" raised>Revert</paper-button>
+                        <paper-button class="update" raised on-click="updateReports">Update</paper-button>
+                        <paper-button class="discard" raised on-click="discardReportsEdit">Revert</paper-button>
                     </paper-toolbar>
                     <div id="report_comments">
                         <template is="dom-repeat" items="{{reportComments}}">

@@ -151,7 +151,6 @@ Polymer({
                 }
             });
         }, 1);
-        console.log(self.statuses);
     },
     customStatusChanged: function customStatusChanged() {
         var name = event.target.name;
@@ -525,5 +524,11 @@ Polymer({
         sessionStorage.setItem('status', this.filters.status);
         sessionStorage.setItem('checkedCustomFilters', JSON.stringify(this.filters.checkedCustomFilters));
         sessionStorage.setItem('searchFilter', this.filters.searchFilter);
+    },
+    updateReports: function updateReports() {
+        //TODO
+    },
+    discardReportsEdit: function discardReportsEdit() {
+        this.grid.selection.clear();
     }
 });
