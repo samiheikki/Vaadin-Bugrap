@@ -2,7 +2,6 @@ Polymer({
     is: 'vaadin-bugrap',
     ready: function() {
         this.defaultValues();
-        this.getSessionStorageValues();
         this.setEmployees();
         this.setTypes();
         this.setStatues();
@@ -10,6 +9,7 @@ Polymer({
         this.setPriorities();
     },
     defaultValues: function defaultValues() {
+        var self = this;
         this.versions = [];
         this.distributionBarValues = {
             closed: 0,
@@ -33,12 +33,12 @@ Polymer({
         };
         this.employee_id = 1; //TODO THIS IS STATIC. Change to dynamic.
         this.filters = {
-            project: 1,
-            assignee: 'me',
-            searchFilter: '',
-            status: 'open',
-            version: null,
-            checkedCustomFilters: [1,2,3,4,5,6,7,8] // TODO remove hardcoded
+            project: parseInt(sessionStorage.getItem('project')) || 1,
+            assignee: sessionStorage.getItem('assignee') || 'me',
+            searchFilter: sessionStorage.getItem('searchFilter') || '',
+            status: sessionStorage.getItem('status') || 'open',
+            version: parseInt(sessionStorage.getItem('version')) || null,
+            checkedCustomFilters: JSON.parse(sessionStorage.getItem('checkedCustomFilters')) || [1,2,3,4,5,6,7,8] // TODO remove hardcoded
         };
 
         this.firebaseReportData = []; //Temporary solution for not fetching same data from firebase when filters change
@@ -105,7 +105,7 @@ Polymer({
             statusDialog.removeClass('closed');
             $('#status_select_down').hide();
             $('#status_select_up').show();
-        } else { //open
+        } else { //close
             statusDialog.addClass('closed');
             $('#status_select_down').show();
             $('#status_select_up').hide();
@@ -205,7 +205,6 @@ Polymer({
                         items.push(element);
                     }
                 });
-                console.log(items);
                 self.grid.items = items;
             }, function (errorObject) {
                 console.log("The read failed: " + errorObject.code);
@@ -513,22 +512,6 @@ Polymer({
         sessionStorage.setItem('assignee', this.filters.assignee);
         sessionStorage.setItem('status', this.filters.status);
         sessionStorage.setItem('checkedCustomFilters', JSON.stringify(this.filters.checkedCustomFilters));
-    },
-    getSessionStorageValues: function getSessionStorageValues() { //TODO This function breaks something
-        /*if(sessionStorage.getItem('project') !== null) {
-            this.filters.project = sessionStorage.getItem('project');
-        }
-        if(sessionStorage.getItem('version') !== null) {
-            this.filters.version = sessionStorage.getItem('version');
-        }
-        if(sessionStorage.getItem('assignee') !== null) {
-            this.filters.assignee = sessionStorage.getItem('assignee');
-        }
-        if(sessionStorage.getItem('status') !== null) {
-            this.filters.status = sessionStorage.getItem('status');
-        }
-        if(sessionStorage.getItem('checkedCustomFilters') !== null) {
-            this.filters.checkedCustomFilters = JSON.parse(sessionStorage.getItem('checkedCustomFilters'));
-        }*/
+        sessionStorage.setItem('searchFilter', this.filters.searchFilter);
     }
 });
