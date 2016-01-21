@@ -136,10 +136,22 @@ Polymer({
             ref = new Firebase("https://vaadin-bugrap.firebaseio.com/status");
         ref.once("value", function(response) {
             self.statuses = response.val();
-            console.log(self.statuses);
+            self.setFilterCheckBoxChecked();
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
+    },
+    setFilterCheckBoxChecked: function setFilterCheckBoxChecked() {
+        var self = this;
+        this.async(function(){
+            $('.custom_filter_checkbox').each(function(index, element){
+                var name = element.name;
+                if($.inArray(name, self.filters.checkedCustomFilters) !== -1) {
+                    element.checked = true;
+                }
+            });
+        }, 1);
+        console.log(self.statuses);
     },
     customStatusChanged: function customStatusChanged() {
         var name = event.target.name;
