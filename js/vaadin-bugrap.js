@@ -461,6 +461,21 @@ Polymer({
             }
         }
     },
+    getReportEditValues: function getReportEditValues() {
+        var self = this,
+            result = {};
+        result.fields = {};
+        result.validated = true;
+        for (var k in self.reportEditValues) {
+            if (self.reportEditValues.hasOwnProperty(k)) {
+                result.fields[k] = parseInt(document.getElementById('report_select_'+k).selected);
+                if (!result.fields[k]) {
+                    result.validated = false;
+                }
+            }
+        }
+        return result;
+    },
     getReportComments: function getReportComments(report_id) {
         var self = this;
         var ref = new Firebase("https://vaadin-bugrap.firebaseio.com/comment");
@@ -525,8 +540,36 @@ Polymer({
         sessionStorage.setItem('checkedCustomFilters', JSON.stringify(this.filters.checkedCustomFilters));
         sessionStorage.setItem('searchFilter', this.filters.searchFilter);
     },
+    //TODO UPDATING STILL CREATES A LOT OF BUGS
     updateReports: function updateReports() {
-        //TODO
+        var self = this;
+        var values = this.getReportEditValues(),
+            ref = new Firebase("https://vaadin-bugrap.firebaseio.com/report"),
+            firebaseUpdate = {};
+        if (values.validated) {
+            this.grid.selection.selected(function(index) {
+                if (index !== null) {
+                    var gridRow = self.grid.items[index];
+                    var firebaseIndex = gridRow.project_id - 1; //Stupid hack
+                    firebaseUpdate[firebaseIndex] = {
+                        createtime: gridRow.createtime,
+                        employee_id: values.fields.employee_id,
+                        meta: gridRow.meta,
+                        modifytime: moment().format('YYYY-MM-DD HH:mm:ss'), //TODO FIX THIS
+                        priority: values.fields.priority,
+                        project_id: gridRow.project_id,
+                        report_id: gridRow.report_id,
+                        status_id: values.fields.status_id,
+                        type_id: values.fields.type_id,
+                        version_id: values.fields.version_id
+                    };
+                }
+            });
+            ref.update(firebaseUpdate);
+            self.updateReportGrid();
+        } else {
+            this.$.validation_error.show();
+        }
     },
     discardReportsEdit: function discardReportsEdit() {
         this.grid.selection.clear();

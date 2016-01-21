@@ -31,6 +31,7 @@
                     data="{{projects}}">
             </firebase-collection>
 
+
             <paper-toolbar class="white">
                 <paper-dropdown-menu label="Choose project" id="project_select_dropdown">
                     <paper-listbox class="dropdown-content" id="project_select" attr-for-selected="value" selected="{{filters.project}}">
@@ -190,6 +191,7 @@
                     </div>
                 </div>
             </div>
+            <paper-toast id="validation_error" text="Please fill all the fields."></paper-toast>
 
         </template>
         <script src="js/vaadin-bugrap.js"></script>
