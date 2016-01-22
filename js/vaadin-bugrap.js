@@ -79,6 +79,11 @@ Polymer({
         //Resize distribution bar when window size changes
         window.addEventListener('resize', function() {
             self.distributionBarChange();
+            self.setReportCommentHeight();
+        });
+
+        $('#report_edit_container').on( "resize", function(event, ui) {
+            self.setReportCommentHeight();
         });
 
         //Update site when project is changed
@@ -503,6 +508,7 @@ Polymer({
     },
     distributionBarChange: function distributionBarChange() {
         //TODO REMOVE +1 !!
+        //TODO move to distribution-element
         var closed = this.distributionBarValues.closed+1;
         var assigned = this.distributionBarValues.assigned+1;
         var unassigned = this.distributionBarValues.unassigned+1;
@@ -590,9 +596,19 @@ Polymer({
             handles: {
                 'n': '#handle'
             },
-            maxHeight: $( window ).height()
+            maxHeight: $( document ).height() //TODO UPDATE WHEN WINDOW SIZE CHANGE
         });
         $reportEditContainer.css('height', ($reportEditContainer.height()-500)+'px');
         $reportEditContainer.css('top', '500px');
+    },
+    setReportCommentHeight: function setReportCommentHeight() {
+        var $reportEdit = $('#report_edit'),
+            $reportComments = $('#report_comments'),
+            $reportEditContainer = $('#report_edit_container'),
+            $reportEditName = $('#report_edit_name'),
+            $reportEditFields = $('#report_edit_fields');
+        if ($reportEdit.is(':visible') && $reportComments.is(':visible')) {
+            $reportComments.height($reportEditContainer.height() - $reportEditName.height() - $reportEditFields.height() - 10);
+        }
     }
 });

@@ -146,7 +146,7 @@
                 </div>
                 <div id="report_edit" style="display: none;">
                     <paper-header-panel class="secondary-blue">
-                        <paper-toolbar class="paper-header " style="display: none;" id="report_edit_name">
+                        <paper-toolbar class="paper-header" style="display: none;" id="report_edit_name">
                             <iron-label>
                                 <paper-icon-button icon="icons:open-in-new" class="black"></paper-icon-button>
                                 <span class="black button_label">{{selectedReportMeta}}</span>
@@ -158,7 +158,7 @@
                                 <span class="grey button_label">&nbsp;- Select a single report to view it contents</span>
                             </iron-label>
                         </paper-toolbar>
-                        <paper-toolbar class="paper-header">
+                        <paper-toolbar class="paper-header" id="report_edit_fields">
                             <paper-dropdown-menu label="Priority">
                                 <paper-listbox class="dropdown-content" id="report_select_priority" attr-for-selected="name">
                                     <template is="dom-repeat" items="{{priorities}}">
@@ -198,7 +198,7 @@
                             <paper-button class="update" raised on-click="updateReports">Update</paper-button>
                             <paper-button class="discard" raised on-click="discardReportsEdit">Revert</paper-button>
                         </paper-toolbar>
-                        <div id="report_comments">
+                        <div id="report_comments" style="overflow: auto;">
                             <template is="dom-repeat" items="{{reportComments}}">
                                 <paper-toolbar class="white">
                                     <paper-icon-button icon="social:person" class="black"></paper-icon-button>
