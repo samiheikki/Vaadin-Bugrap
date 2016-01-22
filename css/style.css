@@ -15,15 +15,15 @@ body {
 }
 
 .distribution_bar_closed {
-    background-color: #655C5C;
+    background-color: #64B5F6;
 }
 
 .distribution_bar_assigned {
-    background-color: #8C8585;
+    background-color: #90CAF9;
 }
 
 .distribution_bar_unassigned {
-    background-color: #CCC6C6;
+    background-color: #BBDEFB;
 }
 
 .button_label {
@@ -152,7 +152,10 @@ paper-radio-group.status-dialog {
     width: 100%;
     height: 8px;
     /*top: -6px;*/
-    background-color: #8C8585;
+    background-color: #1976D2;
     z-index: 99999999;
     cursor: n-resize;
+    -moz-box-shadow:    inset 0 0 10px #E3F2FD;
+    -webkit-box-shadow: inset 0 0 10px #E3F2FD;
+    box-shadow:         inset 0 0 10px #E3F2FD;
 }

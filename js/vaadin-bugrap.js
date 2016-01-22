@@ -507,6 +507,8 @@ Polymer({
         var assigned = this.distributionBarValues.assigned+1;
         var unassigned = this.distributionBarValues.unassigned+1;
 
+        var emptySpace = '&nbsp;&nbsp;';
+
         var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
             $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
             $distributionBarUnAssigned = document.getElementById('distribution_bar_unassigned');
@@ -519,9 +521,9 @@ Polymer({
         $distributionBarClosed.setAttribute('style','width:'+(totalWidth*closedRelation)+'px; height:'+height+'px');
         $distributionBarAssigned.setAttribute('style','width:'+(totalWidth*assignedRelation)+'px; height:'+height+'px');
         $distributionBarUnAssigned.setAttribute('style','width:'+(totalWidth*unassignedRelation)+'px; height:'+height+'px');
-        $distributionBarClosed.innerHTML = closed;
-        $distributionBarAssigned.innerHTML = assigned;
-        $distributionBarUnAssigned.innerHTML = unassigned;
+        $distributionBarClosed.innerHTML = emptySpace+closed;
+        $distributionBarAssigned.innerHTML = emptySpace+assigned;
+        $distributionBarUnAssigned.innerHTML = emptySpace+unassigned;
     },
     parseDuration: function parseDuration(timestamp) {
         var modifyTime = moment(timestamp);
