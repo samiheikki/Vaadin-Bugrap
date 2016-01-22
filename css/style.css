@@ -137,3 +137,22 @@ paper-radio-group.status-dialog {
         display: none !important;
     }
 }
+
+
+#report_edit_container {
+    width: 100%;
+    background: white;
+    height: 100%;
+    bottom: 0;
+    overflow: visible;
+    position:fixed;
+    z-index: 99999999;
+}
+#handle {
+    width: 100%;
+    height: 8px;
+    /*top: -6px;*/
+    background-color: #8C8585;
+    z-index: 99999999;
+    cursor: n-resize;
+}

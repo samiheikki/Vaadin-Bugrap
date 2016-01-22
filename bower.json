@@ -39,6 +39,7 @@
     "paper-radio-group": "PolymerElements/paper-radio-group#~1.0.9",
     "paper-radio-button": "PolymerElements/paper-radio-button#~1.0.12",
     "jquery": "~2.2.0",
+    "jquery-ui": "~1.11.4",
     "paper-styles": "PolymerElements/paper-styles#~1.1.2"
   }
 }

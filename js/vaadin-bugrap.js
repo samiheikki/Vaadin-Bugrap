@@ -3,6 +3,7 @@ Polymer({
     ready: function() {
         this.defaultValues();
         this.createFirebaseInstance();
+        this.setEditResizeable();
         this.setEmployees();
         this.setTypes();
         this.setStatues();
@@ -423,43 +424,33 @@ Polymer({
     },
     hideModificationLayout: function hideModificationLayout() {
         var $reportEdit = $('#report_edit'),
-            $splitPanel = $('#splitpanel'),
-            $reportGrid = $('#report-grid');
+            $reportEditContainer = $('#report_edit_container');
 
         $reportEdit.hide();
-        $splitPanel.css('height','auto');
-        $reportGrid.css('height','auto');
-        $splitPanel.split().destroy();
+        $reportEditContainer.hide();
     },
     showSingleReportEdit: function showSingleReportEdit(gridIndex) {
         var report_id = this.grid.items[gridIndex].report_id,
             $reportComments = $('#report_comments'),
-            $vaadinGrid = $('vaadin-grid');
+            $reportEditContainer = $('#report_edit_container');
         this.hideModificationLayout();
         $reportComments.show();
-        var height = $(document).height() - $('vaadin-bugrap').height() + 90;
-        if (height < $reportComments.height()+128+$vaadinGrid.height()) {
-            height = $reportComments.height()+128+$vaadinGrid.height();
-        }
         this.getReportComments(report_id);
         this.selectedReportMeta = this.grid.items[gridIndex].meta;
         $('#report_edit_name').show();
         $('#report_edit_amount').hide();
         $('#report_edit').show();
-        $('#splitpanel').width("100%").height(height).split({position:'50%'});
+        $reportEditContainer.show();
     },
     showMultiReportEdit: function showMultiReportEdit() {
         this.hideModificationLayout();
-        var height = $(document).height() - $('vaadin-bugrap').height() + 90,
-            $vaadinGrid = $('vaadin-grid');
-        if (height < 128+$vaadinGrid.height()) {
-            height = 128+$vaadinGrid.height();
-        }
+        var $vaadinGrid = $('vaadin-grid'),
+            $reportEditContainer = $('#report_edit_container');
         $('#report_edit_name').hide();
         $('#report_edit_amount').show();
         $('#report_comments').hide();
         $('#report_edit').show();
-        $('#splitpanel').width("100%").height(height).split({position:'50%'});
+        $reportEditContainer.show();
     },
     nullReportEditValues: function nullReportEditValues() {
         var self = this;
@@ -511,6 +502,7 @@ Polymer({
         });
     },
     distributionBarChange: function distributionBarChange() {
+        //TODO REMOVE +1 !!
         var closed = this.distributionBarValues.closed+1;
         var assigned = this.distributionBarValues.assigned+1;
         var unassigned = this.distributionBarValues.unassigned+1;
@@ -589,5 +581,16 @@ Polymer({
     },
     discardReportsEdit: function discardReportsEdit() {
         this.grid.selection.clear();
+    },
+    setEditResizeable: function setEditResizeable() {
+        var $reportEditContainer = $('#report_edit_container');
+        $reportEditContainer.resizable({
+            handles: {
+                'n': '#handle'
+            },
+            maxHeight: $( window ).height()
+        });
+        $reportEditContainer.css('height', ($reportEditContainer.height()-500)+'px');
+        $reportEditContainer.css('top', '500px');
     }
 });

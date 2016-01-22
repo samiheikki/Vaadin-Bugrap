@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>Vaadin Bugrap with polymer</title>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="/bower_components/moment/moment.js"></script>
     <script src='/bower_components/firebase/firebase.js'></script>
-
-    <!-- jQuery Splitter -->
-    <script src="/libs/splitter/js/jquery.splitter-0.14.0.js"></script>
-    <link rel="stylesheet" href="/libs/splitter/css/jquery.splitter.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
@@ -122,96 +119,101 @@
                     </paper-tab>
                 </paper-tabs>
             </paper-toolbar>
-            <div id="splitpanel" style="height:auto;">
-                <div id="report-grid" style="height:auto;">
-                    <vaadin-grid selection-mode="multi">
-                        <table>
-                            <col name="version_id" sortable="true">
-                            <col name="priority" sortable="true">
-                            <col name="type_id" sortable="true">
-                            <col name="meta" sortable="true">
-                            <col name="employee_id" sortable="true">
-                            <col name="modifytime" sortable="true">
-                            <col name="createtime" sortable="true" flex>
-                        </table>
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Value</th>
-                            <th>Progress</th>
-                        </tr>
-                        </thead>
-                    </vaadin-grid>
-                </div>
-                <div id="report_edit" style="display: none;">
-                    <paper-toolbar class="grey" style="display: none;" id="report_edit_name">
-                        <iron-label>
-                            <paper-icon-button icon="icons:open-in-new" class="black"></paper-icon-button>
-                            <span class="black button_label">{{selectedReportMeta}}</span>
-                        </iron-label>
-                    </paper-toolbar>
-                    <paper-toolbar class="grey" style="display: none;" id="report_edit_amount">
-                        <iron-label>
-                            <span class="black button_label">{{selectedReportAmount}} reports selected</span>
-                            <span class="grey button_label">&nbsp;- Select a single report to view it contents</span>
-                        </iron-label>
-                    </paper-toolbar>
-                    <paper-toolbar class="grey">
-                        <paper-dropdown-menu label="Priority">
-                            <paper-listbox class="dropdown-content" id="report_select_priority" attr-for-selected="name">
-                                <template is="dom-repeat" items="{{priorities}}">
-                                    <paper-item value="{{item.number}}" name="{{item.number}}">{{item.text}}</paper-item>
-                                </template>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                        <paper-dropdown-menu label="Type">
-                            <paper-listbox class="dropdown-content" id="report_select_type_id" attr-for-selected="name">
-                                <template is="dom-repeat" items="{{types}}">
-                                    <paper-item value="{{item.type_id}}" name="{{item.type_id}}">{{item.name}}</paper-item>
-                                </template>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                        <paper-dropdown-menu label="Status">
-                            <paper-listbox class="dropdown-content" id="report_select_status_id" attr-for-selected="name">
-                                <template is="dom-repeat" items="{{statuses}}">
-                                    <paper-item value="{{item.status_id}}" name="{{item.status_id}}">{{item.name}}</paper-item>
-                                </template>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                        <paper-dropdown-menu label="Assigned To">
-                            <paper-listbox class="dropdown-content" id="report_select_employee_id" attr-for-selected="name">
-                                <template is="dom-repeat" items="{{employees}}">
-                                    <paper-item value="{{item.employee_id}}" name="{{item.employee_id}}">{{item.firstname}} {{item.lastname}}</paper-item>
-                                </template>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                        <paper-dropdown-menu label="Version">
-                            <paper-listbox class="dropdown-content" id="report_select_version_id" attr-for-selected="name">
-                                <template is="dom-repeat" items="{{versions}}">
-                                    <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
-                                </template>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                        <span class="spacer"></span>
-                        <paper-button class="update" raised on-click="updateReports">Update</paper-button>
-                        <paper-button class="discard" raised on-click="discardReportsEdit">Revert</paper-button>
-                    </paper-toolbar>
-                    <div id="report_comments">
-                        <template is="dom-repeat" items="{{reportComments}}">
-                            <paper-toolbar class="white">
-                                <paper-icon-button icon="social:person" class="black"></paper-icon-button>
-                                <span class="black">{{item.employee}}</span>
-                                <span class="grey">&nbsp;({{item.timestamp}})</span>
-                            </paper-toolbar>
-                            <paper-toolbar class="white">
-                                <paper-icon-button icon="social:person"></paper-icon-button>
-                                <span class="black">{{item.text}}</span>
-                            </paper-toolbar>
-                        </template>
-                    </div>
-                </div>
+            <div id="report-grid">
+                <vaadin-grid selection-mode="multi">
+                    <table>
+                        <col name="version_id" sortable="true">
+                        <col name="priority" sortable="true">
+                        <col name="type_id" sortable="true">
+                        <col name="meta" sortable="true" flex>
+                        <col name="employee_id" sortable="true">
+                        <col name="modifytime" sortable="true">
+                        <col name="createtime" sortable="true">
+                    </table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Value</th>
+                        <th>Progress</th>
+                    </tr>
+                    </thead>
+                </vaadin-grid>
             </div>
             <paper-toast id="validation_error" text="Please fill all the fields."></paper-toast>
+
+            <div id="report_edit_container" class="resizable">
+                <div id="handle" class="ui-resizable-handle ui-resizable-n">
+                </div>
+                <div id="report_edit" style="display: none;">
+                    <paper-header-panel class="secondary-blue">
+                        <paper-toolbar class="paper-header " style="display: none;" id="report_edit_name">
+                            <iron-label>
+                                <paper-icon-button icon="icons:open-in-new" class="black"></paper-icon-button>
+                                <span class="black button_label">{{selectedReportMeta}}</span>
+                            </iron-label>
+                        </paper-toolbar>
+                        <paper-toolbar class="paper-header" style="display: none;" id="report_edit_amount">
+                            <iron-label>
+                                <span class="black button_label">{{selectedReportAmount}} reports selected</span>
+                                <span class="grey button_label">&nbsp;- Select a single report to view it contents</span>
+                            </iron-label>
+                        </paper-toolbar>
+                        <paper-toolbar class="paper-header">
+                            <paper-dropdown-menu label="Priority">
+                                <paper-listbox class="dropdown-content" id="report_select_priority" attr-for-selected="name">
+                                    <template is="dom-repeat" items="{{priorities}}">
+                                        <paper-item value="{{item.number}}" name="{{item.number}}">{{item.text}}</paper-item>
+                                    </template>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
+                            <paper-dropdown-menu label="Type">
+                                <paper-listbox class="dropdown-content" id="report_select_type_id" attr-for-selected="name">
+                                    <template is="dom-repeat" items="{{types}}">
+                                        <paper-item value="{{item.type_id}}" name="{{item.type_id}}">{{item.name}}</paper-item>
+                                    </template>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
+                            <paper-dropdown-menu label="Status">
+                                <paper-listbox class="dropdown-content" id="report_select_status_id" attr-for-selected="name">
+                                    <template is="dom-repeat" items="{{statuses}}">
+                                        <paper-item value="{{item.status_id}}" name="{{item.status_id}}">{{item.name}}</paper-item>
+                                    </template>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
+                            <paper-dropdown-menu label="Assigned To">
+                                <paper-listbox class="dropdown-content" id="report_select_employee_id" attr-for-selected="name">
+                                    <template is="dom-repeat" items="{{employees}}">
+                                        <paper-item value="{{item.employee_id}}" name="{{item.employee_id}}">{{item.firstname}} {{item.lastname}}</paper-item>
+                                    </template>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
+                            <paper-dropdown-menu label="Version">
+                                <paper-listbox class="dropdown-content" id="report_select_version_id" attr-for-selected="name">
+                                    <template is="dom-repeat" items="{{versions}}">
+                                        <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
+                                    </template>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
+                            <span class="spacer"></span>
+                            <paper-button class="update" raised on-click="updateReports">Update</paper-button>
+                            <paper-button class="discard" raised on-click="discardReportsEdit">Revert</paper-button>
+                        </paper-toolbar>
+                        <div id="report_comments">
+                            <template is="dom-repeat" items="{{reportComments}}">
+                                <paper-toolbar class="white">
+                                    <paper-icon-button icon="social:person" class="black"></paper-icon-button>
+                                    <span class="black">{{item.employee}}</span>
+                                    <span class="grey">&nbsp;({{item.timestamp}})</span>
+                                </paper-toolbar>
+                                <paper-toolbar class="white">
+                                    <paper-icon-button icon="social:person"></paper-icon-button>
+                                    <span class="black">{{item.text}}</span>
+                                </paper-toolbar>
+                            </template>
+                        </div>
+                    </paper-header-panel>
+                </div>
+            </div>
 
         </template>
         <script src="js/vaadin-bugrap.js"></script>
