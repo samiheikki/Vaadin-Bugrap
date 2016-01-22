@@ -167,3 +167,7 @@ paper-radio-group.status-dialog {
 .secondary-blue  .paper-input, .secondary-blue  iron-label {
     color: #000 !important;
 }
+
+.white {
+    color: #fff;
+}
