@@ -1,10 +1,4 @@
 <style is="custom-style">
-    paper-toolbar.white {
-        --paper-toolbar-background: white;
-    }
-    .spacer {
-        @apply(--layout-flex);
-    }
     :root {
         --my-custom-color: var(--paper-blue-500);
         --paper-tab-ink: var(--my-custom-color);
@@ -17,6 +11,12 @@
             color: var(--default-primary-color); /* variable defined in default-theme.html */
         }
     }
+    paper-toolbar.white {
+        --paper-toolbar-background: white;
+    }
+    .spacer {
+        @apply(--layout-flex);
+    }
     #validation_error {
         z-index: 99999999;
     }
@@ -27,7 +27,7 @@
     }
 
     .secondary-blue .paper-header {
-        background-color: var(--paper-blue-300);
+        background-color: var(--paper-blue-200);
         @apply(--shadow-elevation-2dp);
     }
 

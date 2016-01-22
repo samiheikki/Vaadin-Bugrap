@@ -29,7 +29,7 @@
 
             <paper-header-panel class="blue">
                 <paper-toolbar class="paper-header">
-                    <paper-dropdown-menu label="Choose project" id="project_select_dropdown">
+                    <paper-dropdown-menu label="Choose project" id="project_select_dropdown" class="project_select_dropdown">
                         <paper-listbox class="dropdown-content" id="project_select" attr-for-selected="value" selected="{{filters.project}}">
                             <template is="dom-repeat" items="[[projects]]" as="project">
                                 <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>

@@ -159,3 +159,11 @@ paper-radio-group.status-dialog {
     -webkit-box-shadow: inset 0 0 10px #E3F2FD;
     box-shadow:         inset 0 0 10px #E3F2FD;
 }
+
+.project_select_dropdown .paper-input  {
+    color: #ffffff !important;
+}
+
+.secondary-blue  .paper-input, .secondary-blue  iron-label {
+    color: #000 !important;
+}
