@@ -321,7 +321,7 @@ Polymer({
             if (self.filters.version == 'all') {
                 return true;
             } else {
-                return self.filters.version = element.version_id;
+                return self.filters.version === element.version_id;
             }
         };
         return projectMatches() && assigneeMatches() && statusMatches() && searchMatches() && versionMatches();
