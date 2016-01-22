@@ -77,12 +77,17 @@ body {
     margin-right: 2px;
 }
 
+paper-button.comment {
+    background: #BA68C8;
+    color: #fff;
+}
+
 paper-button.update {
     background: #4CAF50;
 }
 
 paper-button.discard {
-    background: #FF5252;
+    background: #F44336;
 }
 
 paper-radio-group.status-dialog {
@@ -170,4 +175,8 @@ paper-radio-group.status-dialog {
 
 .white {
     color: #fff;
+}
+
+.grey {
+    color: grey;
 }

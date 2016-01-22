@@ -8,6 +8,7 @@
     <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="/bower_components/moment/moment.js"></script>
     <script src='/bower_components/firebase/firebase.js'></script>
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
@@ -162,7 +163,7 @@
                             <paper-dropdown-menu label="Priority">
                                 <paper-listbox class="dropdown-content" id="report_select_priority" attr-for-selected="name">
                                     <template is="dom-repeat" items="{{priorities}}">
-                                        <paper-item value="{{item.number}}" name="{{item.number}}">{{item.text}}</paper-item>
+                                        <paper-item value="{{item.number}}" name="{{item.number}}">{{item.text}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</paper-item>
                                     </template>
                                 </paper-listbox>
                             </paper-dropdown-menu>
@@ -195,20 +196,24 @@
                                 </paper-listbox>
                             </paper-dropdown-menu>
                             <span class="spacer"></span>
+                            <paper-button class="comment" raised on-click="showCommentAdd" id="comment_button">Add comment</paper-button>
                             <paper-button class="update" raised on-click="updateReports">Update</paper-button>
                             <paper-button class="discard" raised on-click="discardReportsEdit">Revert</paper-button>
                         </paper-toolbar>
                         <div id="report_comments" style="overflow: auto;">
+                            <div id="comment_add" style="display: none">
+                                <textarea></textarea>
+                                <div class="container flex-horizontal">
+                                    <paper-button on-click="addComment">Done</paper-button>
+                                    <paper-button>Attachment</paper-button>
+                                    <paper-button on-click="commentCancel">Cancel</paper-button>
+                                </div>
+                            </div>
                             <template is="dom-repeat" items="{{reportComments}}">
-                                <paper-toolbar class="white">
-                                    <paper-icon-button icon="social:person" class="black"></paper-icon-button>
-                                    <span class="black">{{item.employee}}</span>
-                                    <span class="grey">&nbsp;({{item.timestamp}})</span>
-                                </paper-toolbar>
-                                <paper-toolbar class="white">
-                                    <paper-icon-button icon="social:person" class="white"></paper-icon-button>
-                                    <span class="black">{{item.text}}</span>
-                                </paper-toolbar>
+                                <div class="container flex-vertical">
+                                    <div style="margin-bottom: 2px"><paper-icon-button icon="social:person" class="black"></paper-icon-button> {{item.employee}} &nbsp;<span class="grey">({{item.timestamp}})</span></div>
+                                    <div style="margin-left: 12px;">{{item.text}}</div>
+                                </div>
                             </template>
                         </div>
                     </paper-header-panel>

@@ -9,6 +9,7 @@ Polymer({
         this.setStatues();
         this.events();
         this.setPriorities();
+        this.getMaxCommentId();
     },
     defaultValues: function defaultValues() {
         var self = this;
@@ -42,6 +43,8 @@ Polymer({
             version: parseInt(sessionStorage.getItem('version')) || null,
             checkedCustomFilters: JSON.parse(sessionStorage.getItem('checkedCustomFilters')) || [1,2,3,4,5,6,7,8] // TODO remove hardcoded
         };
+        this.maxcomment_id = 0;
+        this.maxcommentindex = 0;
 
         this.firebase = {};
 
@@ -433,6 +436,7 @@ Polymer({
 
         $reportEdit.hide();
         $reportEditContainer.hide();
+        $('#comment_add').hide();
     },
     showSingleReportEdit: function showSingleReportEdit(gridIndex) {
         var report_id = this.grid.items[gridIndex].report_id,
@@ -445,6 +449,7 @@ Polymer({
         $('#report_edit_name').show();
         $('#report_edit_amount').hide();
         $('#report_edit').show();
+        $('#comment_button').removeAttr('disabled');
         $reportEditContainer.show();
     },
     showMultiReportEdit: function showMultiReportEdit() {
@@ -455,6 +460,7 @@ Polymer({
         $('#report_edit_amount').show();
         $('#report_comments').hide();
         $('#report_edit').show();
+        $('#comment_button').attr('disabled', 'true');
         $reportEditContainer.show();
     },
     nullReportEditValues: function nullReportEditValues() {
@@ -493,14 +499,15 @@ Polymer({
         var employee;
         this.firebase.comment.once("value", function(response) {
             var items = [];
-            response.val().forEach(function(element, index, array){
+            for (var k in response.val()) {
+                var element = response.val()[k];
                 if(element.report_id === report_id) {
                     employee = self.getEmployeeWithId(element.employee_id);
                     element.timestamp = self.parseDuration(element.timestamp);
                     element.employee = employee.firstname + ' ' + employee.lastname;
                     items.push(element);
                 }
-            });
+            }
             self.reportComments = items;
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
@@ -610,5 +617,60 @@ Polymer({
         if ($reportEdit.is(':visible') && $reportComments.is(':visible')) {
             $reportComments.height($reportEditContainer.height() - $reportEditName.height() - $reportEditFields.height() - 10);
         }
+    },
+    showCommentAdd: function showCommentAdd() {
+        tinymce.init({
+            selector:'textarea',
+            height: 150,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code'
+            ],
+            menubar: false,
+            statusbar: false,
+            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent'
+        });
+        $('#comment_add').show();
+    },
+    addComment: function addComment() {
+        var self = this,
+            comment = tinyMCE.activeEditor.getContent(),
+            comment_id = this.maxcomment_id+1,
+            employee_id = this.employee_id,
+            timestamp = moment().format('YYYY-MM-DD HH:mm:ss'),
+            report_id;
+        this.grid.selection.selected(function(index) {
+            report_id = self.grid.items[index].report_id;
+        });
+        this.firebase.comment.push(
+            {
+                comment_id: comment_id,
+                employee_id: employee_id,
+                report_id: report_id,
+                text: comment,
+                timestamp: timestamp
+            }
+        );
+        this.getReportComments(report_id);
+
+        $('#comment_add').hide();
+        tinyMCE.activeEditor.setContent('');
+    },
+    getMaxCommentId: function getMaxCommentId() {
+        var self = this;
+        this.firebase.comment.on("value", function(response) {
+            for (var k in response.val()) {
+                if (response.val()[k].comment_id > self.maxcomment_id) {
+                    self.maxcomment_id = response.val()[k].comment_id;
+                }
+            }
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    commentCancel: function commentCancel() {
+        $('#comment_add').hide();
+        tinyMCE.activeEditor.setContent('');
     }
 });
