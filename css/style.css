@@ -15,15 +15,15 @@ body {
 }
 
 .distribution_bar_closed {
-    background-color: #64B5F6;
-}
-
-.distribution_bar_assigned {
     background-color: #90CAF9;
 }
 
-.distribution_bar_unassigned {
+.distribution_bar_assigned {
     background-color: #BBDEFB;
+}
+
+.distribution_bar_unassigned {
+    background-color: #E3F2FD;
 }
 
 .button_label {
