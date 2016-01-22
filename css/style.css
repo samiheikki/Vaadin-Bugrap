@@ -146,7 +146,7 @@ paper-radio-group.status-dialog {
     bottom: 0;
     overflow: visible;
     position:fixed;
-    z-index: 99999999;
+    z-index: 99999998;
 }
 #handle {
     width: 100%;
