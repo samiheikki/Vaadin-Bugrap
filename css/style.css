@@ -53,27 +53,27 @@ body {
 
 .priority_5 {
     color:rgba(255, 0, 0, 0);
-    background-color: #FF0000;
+    background-color: #42A5F5;
     margin-right: 2px;
  }
 .priority_4 {
     color:rgba(255, 0, 0, 0);
-    background-color:#FF5B00;
+    background-color:#64B5F6;
     margin-right: 2px;
 }
 .priority_3 {
     color:rgba(255, 0, 0, 0);
-    background-color:#FFC600;
+    background-color:#90CAF9;
     margin-right: 2px;
 }
 .priority_2 {
     color:rgba(255, 0, 0, 0);
-    background-color:#C6FF00;
+    background-color:#BBDEFB;
     margin-right: 2px;
 }
 .priority_1 {
     color:rgba(255, 0, 0, 0);
-    background-color:#5BFF00;
+    background-color:#E3F2FD;
     margin-right: 2px;
 }
 

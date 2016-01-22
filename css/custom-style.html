@@ -6,11 +6,11 @@
         @apply(--layout-flex);
     }
     :root {
-        --my-custom-color: blue;
+        --my-custom-color: var(--paper-blue-500);
         --paper-tab-ink: var(--my-custom-color);
 
         /* custom CSS property */
-        --paper-tabs-selection-bar-color: blue;
+        --paper-tabs-selection-bar-color: var(--paper-blue-500);
 
         /* custom CSS mixin */
         --paper-tabs: {
@@ -18,8 +18,7 @@
         }
     }
     #validation_error {
-        --paper-toast-background-color: red;
-        --paper-toast-color: white;
+        z-index: 99999999;
     }
 
     .blue .paper-header {
