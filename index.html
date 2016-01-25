@@ -213,7 +213,8 @@
                             <template is="dom-repeat" items="{{reportComments}}">
                                 <div class="container flex-vertical">
                                     <div style="margin-bottom: 2px"><paper-icon-button icon="social:person" class="black"></paper-icon-button> {{item.employee}} &nbsp;<span class="grey">({{item.timestamp}})</span></div>
-                                    <div style="margin-left: 12px;">{{item.text}}</div>
+                                    <div style="margin-left: 12px;" class="report_comment"></div>
+                                    <input type="hidden" class="report_comment_input" value="{{item.comment_id}}">
                                 </div>
                             </template>
                         </div>

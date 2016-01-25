@@ -207,6 +207,17 @@ Polymer({
         }
         return version;
     },
+    getCommentWithId: function getCommentWithId(comment_id) {
+        var comment = {};
+        if (this.reportComments) {
+            this.reportComments.forEach(function(element, index){
+                if (element.comment_id === comment_id) {
+                    comment = element;
+                }
+            });
+        }
+        return comment;
+    },
     updateReportGrid: function updateReportGrid() {
         if (!this.employees || !this.types) {
             return;
@@ -510,6 +521,7 @@ Polymer({
             }
             items.reverse();
             self.reportComments = items;
+            self.htmlEncodeReportComments();
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
@@ -677,5 +689,15 @@ Polymer({
     commentCancel: function commentCancel() {
         $('#comment_add').hide();
         tinyMCE.activeEditor.setContent('');
+    },
+    htmlEncodeReportComments: function htmlEncodeReportComments() {
+        var self = this;
+        setTimeout(function(){
+            $('.report_comment').each(function(){
+                var comment_id = parseInt($(this).parent().find('.report_comment_input').val());
+                var report = self.getCommentWithId(comment_id);
+                $(this).html(report.text);
+            });
+        }, 1);
     }
 });
