@@ -180,3 +180,7 @@ paper-radio-group.status-dialog {
 .grey {
     color: grey;
 }
+
+#comment_add {
+    margin-bottom: 20px;
+}

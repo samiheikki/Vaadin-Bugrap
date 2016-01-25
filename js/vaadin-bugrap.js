@@ -644,19 +644,23 @@ Polymer({
         this.grid.selection.selected(function(index) {
             report_id = self.grid.items[index].report_id;
         });
-        this.firebase.comment.push(
-            {
-                comment_id: comment_id,
-                employee_id: employee_id,
-                report_id: report_id,
-                text: comment,
-                timestamp: timestamp
-            }
-        );
-        this.getReportComments(report_id);
+        if ($.trim(comment) !== '') {
+            this.firebase.comment.push(
+                {
+                    comment_id: comment_id,
+                    employee_id: employee_id,
+                    report_id: report_id,
+                    text: comment,
+                    timestamp: timestamp
+                }
+            );
+            this.getReportComments(report_id);
 
-        $('#comment_add').hide();
-        tinyMCE.activeEditor.setContent('');
+            $('#comment_add').hide();
+            tinyMCE.activeEditor.setContent('');
+        } else {
+            this.$.comment_validation_error.show();
+        }
     },
     getMaxCommentId: function getMaxCommentId() {
         var self = this;

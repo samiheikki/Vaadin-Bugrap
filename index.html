@@ -141,6 +141,7 @@
                 </vaadin-grid>
             </div>
             <paper-toast id="validation_error" text="Please fill all the fields."></paper-toast>
+            <paper-toast id="comment_validation_error" text="Please add your comment."></paper-toast>
 
             <div id="report_edit_container" class="resizable">
                 <div id="handle" class="ui-resizable-handle ui-resizable-n">
@@ -204,9 +205,9 @@
                             <div id="comment_add" style="display: none">
                                 <textarea></textarea>
                                 <div class="container flex-horizontal">
-                                    <paper-button on-click="addComment">Done</paper-button>
-                                    <paper-button>Attachment</paper-button>
-                                    <paper-button on-click="commentCancel">Cancel</paper-button>
+                                    <paper-button on-click="addComment" raised>Done</paper-button>
+                                    <paper-button raised>Attachment</paper-button>
+                                    <paper-button on-click="commentCancel" raised>Cancel</paper-button>
                                 </div>
                             </div>
                             <template is="dom-repeat" items="{{reportComments}}">
