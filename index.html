@@ -161,7 +161,7 @@
                             </iron-label>
                         </paper-toolbar>
                         <paper-toolbar class="paper-header" id="report_edit_fields">
-                            <paper-dropdown-menu label="Priority">
+                            <paper-dropdown-menu label="Priority" required="true">
                                 <paper-listbox class="dropdown-content" id="report_select_priority" attr-for-selected="name">
                                     <template is="dom-repeat" items="{{priorities}}">
                                         <paper-item value="{{item.number}}" name="{{item.number}}">{{item.text}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</paper-item>
@@ -184,6 +184,7 @@
                             </paper-dropdown-menu>
                             <paper-dropdown-menu label="Assigned To">
                                 <paper-listbox class="dropdown-content" id="report_select_employee_id" attr-for-selected="name">
+                                    <paper-item value="0" name="0">No assignee</paper-item>
                                     <template is="dom-repeat" items="{{employees}}">
                                         <paper-item value="{{item.employee_id}}" name="{{item.employee_id}}">{{item.firstname}} {{item.lastname}}</paper-item>
                                     </template>
@@ -197,9 +198,9 @@
                                 </paper-listbox>
                             </paper-dropdown-menu>
                             <span class="spacer"></span>
-                            <paper-button class="comment" raised on-click="showCommentAdd" id="comment_button">Add comment</paper-button>
                             <paper-button class="update" raised on-click="updateReports">Update</paper-button>
                             <paper-button class="discard" raised on-click="discardReportsEdit">Revert</paper-button>
+                            <paper-button class="comment" raised on-click="showCommentAdd" id="comment_button">Add comment</paper-button>
                         </paper-toolbar>
                         <div id="report_comments" style="overflow: auto;">
                             <div id="comment_add" style="display: none">

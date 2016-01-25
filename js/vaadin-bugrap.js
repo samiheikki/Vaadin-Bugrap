@@ -272,6 +272,10 @@ Polymer({
             },
             employee_id: function(cell) {
                 var employee = self.getEmployeeWithId(cell.data);
+                if (Object.keys(employee).length === 0) {
+                    employee.firstname = 'No';
+                    employee.lastname = 'assignee';
+                }
                 cell.element.innerHTML = employee.firstname + ' ' + employee.lastname;
             },
             modifytime: function(cell) {
@@ -500,7 +504,8 @@ Polymer({
         for (var k in self.reportEditValues) {
             if (self.reportEditValues.hasOwnProperty(k)) {
                 result.fields[k] = parseInt(document.getElementById('report_select_'+k).selected);
-                if (!result.fields[k]) {
+                if (!result.fields[k] && k !== 'employee_id') { //allow no assignee for employee
+                    console.log(k);
                     result.validated = false;
                 }
             }
