@@ -229,6 +229,7 @@ Polymer({
         var self = this;
         var filterWithSearch = false;
         var items = [];
+        var lesser = -1;
 
         if (self.firebaseReportData.length > 0) { //data already fetched
             self.firebaseReportData.forEach(function(element, index, array){
@@ -244,6 +245,9 @@ Polymer({
                     if (self.elementMatchFilters(element)) {
                         items.push(element);
                     }
+                });
+                items.sort(function(a, b){
+                    return (a.version_id < b.version_id) ? lesser : -lesser;
                 });
                 self.grid.items = items;
             }, function (errorObject) {
@@ -296,11 +300,14 @@ Polymer({
             }
         });
 
-        /*this.grid.addEventListener('sort-order-changed', function() {
+        this.grid.addEventListener('sort-order-changed', function() {
             var sortOrder = self.grid.sortOrder[0];
             var sortProperty = self.grid.columns[sortOrder.column].name;
-            var sortDirection = sortOrder.direction;
-        });*/
+            var lesser = self.grid.sortOrder[0].direction == 'asc' ? -1 : 1;
+            items.sort(function(a, b){
+                return (a[sortProperty] < b[sortProperty]) ? lesser : -lesser;
+            });
+        });
 
         //Show version if all selected
         this.grid.columns[0].hidden = !(self.filters.version === 'all' || self.filters.version === null);
@@ -395,7 +402,6 @@ Polymer({
 
         this.firebase.report.on("value", function(response) {
             response.val().forEach(function(element, index, array){
-                console.log(element.employee_id);
                 if(element.project_id === self.filters.project) {
                     if (closedIds.indexOf(element.status_id) > -1) {
                         self.distributionBarValues.closed++;
