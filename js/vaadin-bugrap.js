@@ -14,6 +14,7 @@ Polymer({
     defaultValues: function defaultValues() {
         var self = this;
         this.versions = [];
+        this.versionsWithoutAll = [];
         this.distributionBarValues = {
             closed: 0,
             assigned: 0,
@@ -371,6 +372,7 @@ Polymer({
             } else {
                 self.versions = items;
             }
+            self.versionsWithoutAll = items;
             if (typeof self.versions[0] !== 'undefined') {
                 self.filters.version = self.versions[0].version_id;
                 document.getElementById('version_menu').select(self.filters.version);

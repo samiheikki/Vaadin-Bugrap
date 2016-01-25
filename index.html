@@ -191,7 +191,7 @@
                             </paper-dropdown-menu>
                             <paper-dropdown-menu label="Version">
                                 <paper-listbox class="dropdown-content" id="report_select_version_id" attr-for-selected="name">
-                                    <template is="dom-repeat" items="{{versions}}">
+                                    <template is="dom-repeat" items="{{versionsWithoutAll}}">
                                         <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
                                     </template>
                                 </paper-listbox>
