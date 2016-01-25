@@ -82,7 +82,6 @@ Polymer({
 
         //Resize distribution bar when window size changes
         window.addEventListener('resize', function() {
-            self.distributionBarChange();
             self.setReportCommentHeight();
         });
 
@@ -392,24 +391,26 @@ Polymer({
         this.distributionBarValues.assigned = 0;
         this.distributionBarValues.unassigned = 0;
         var closedIds = [2],
-            assignedIds = [3,4,5,6,7,8],
-            unassignedIds = [1];
+            assignedIds = [1,3,4,5,6,7,8];
 
         this.firebase.report.on("value", function(response) {
             response.val().forEach(function(element, index, array){
+                console.log(element.employee_id);
                 if(element.project_id === self.filters.project) {
                     if (closedIds.indexOf(element.status_id) > -1) {
                         self.distributionBarValues.closed++;
-
+                    } else if (element.employee_id === 0) {
+                        self.distributionBarValues.unassigned++;
                     } else if(assignedIds.indexOf(element.status_id) > -1) {
                         self.distributionBarValues.assigned++;
-
-                    } else if(unassignedIds.indexOf(element.status_id) > -1) {
-                        self.distributionBarValues.unassigned++;
                     }
                 }
             });
-            self.distributionBarChange();
+            self.$.distribution_bar_top.changeValues(
+                self.distributionBarValues.closed,
+                self.distributionBarValues.assigned,
+                self.distributionBarValues.unassigned
+            );
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
@@ -505,7 +506,6 @@ Polymer({
             if (self.reportEditValues.hasOwnProperty(k)) {
                 result.fields[k] = parseInt(document.getElementById('report_select_'+k).selected);
                 if (!result.fields[k] && k !== 'employee_id') { //allow no assignee for employee
-                    console.log(k);
                     result.validated = false;
                 }
             }
@@ -532,31 +532,6 @@ Polymer({
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
-    },
-    distributionBarChange: function distributionBarChange() {
-        //TODO REMOVE +1 !!
-        //TODO move to distribution-element
-        var closed = this.distributionBarValues.closed+1;
-        var assigned = this.distributionBarValues.assigned+1;
-        var unassigned = this.distributionBarValues.unassigned+1;
-
-        var emptySpace = '&nbsp;&nbsp;';
-
-        var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
-            $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
-            $distributionBarUnAssigned = document.getElementById('distribution_bar_unassigned');
-        var total = closed + assigned + unassigned,
-            closedRelation = closed / total,
-            assignedRelation = assigned / total,
-            unassignedRelation = unassigned / total,
-            totalWidth = document.getElementById('distribution_bar').offsetWidth - 25,
-            height = document.getElementById('distribution_bar').offsetHeight;
-        $distributionBarClosed.setAttribute('style','width:'+(totalWidth*closedRelation)+'px; height:'+height+'px');
-        $distributionBarAssigned.setAttribute('style','width:'+(totalWidth*assignedRelation)+'px; height:'+height+'px');
-        $distributionBarUnAssigned.setAttribute('style','width:'+(totalWidth*unassignedRelation)+'px; height:'+height+'px');
-        $distributionBarClosed.innerHTML = emptySpace+closed;
-        $distributionBarAssigned.innerHTML = emptySpace+assigned;
-        $distributionBarUnAssigned.innerHTML = emptySpace+unassigned;
     },
     parseDuration: function parseDuration(timestamp) {
         var modifyTime = moment(timestamp);

@@ -46,6 +46,7 @@
             'iron-resize': '_onIronResize'
         },
         attached: function() {
+            this.defaultValues();
             this.async(this.notifyResize, 1);
         },
         get parent() {
@@ -54,13 +55,50 @@
             }
             return this.parentNode;
         },
-        _onIronResize: function() {
-            /*var toolbarWidth = document.getElementById('distribution_toolbar').offsetWidth,
-                reportsForWidth = document.getElementById('reports_for').offsetWidth;
-            this.parent.setAttribute('style', 'width:'+(toolbarWidth-reportsForWidth-10)+'px');
-            this.setAttribute('style', 'width:'+(toolbarWidth-reportsForWidth-10)+'px');*/
-            //distributionBarChange();
-            //this.translate3d(x + 'px', y + 'px', 0);
+        defaultValues: function(){
+            this.closed = 0;
+            this.assigned = 0;
+            this.unassigned = 0;
+        },
+        _onIronResize: function(){
+            this.resizeBar();
+        },
+        changeValues: function(first, second, trird) {
+            this.closed = first;
+            this.assigned = second;
+            this.unassigned = trird;
+            this.resizeBar();
+        },
+        resizeBar: function() {
+            var emptySpace = '&nbsp;&nbsp;';
+
+            var $distributionBarClosed = document.getElementById('distribution_bar_closed'),
+                    $distributionBarAssigned = document.getElementById('distribution_bar_assigned'),
+                    $distributionBarUnAssigned = document.getElementById('distribution_bar_unassigned');
+            var total = this.closed + this.assigned + this.unassigned,
+                    closedRelation = this.closed / total,
+                    assignedRelation = this.assigned / total,
+                    unassignedRelation = this.unassigned / total,
+                    totalWidth = document.getElementById('distribution_bar').offsetWidth - 25,
+                    height = document.getElementById('distribution_bar').offsetHeight;
+            $distributionBarClosed.setAttribute('style','width:'+(totalWidth*closedRelation)+'px; height:'+height+'px');
+            $distributionBarAssigned.setAttribute('style','width:'+(totalWidth*assignedRelation)+'px; height:'+height+'px');
+            $distributionBarUnAssigned.setAttribute('style','width:'+(totalWidth*unassignedRelation)+'px; height:'+height+'px');
+            if (this.closed === 0) {
+                $distributionBarClosed.innerHTML = '';
+            } else {
+                $distributionBarClosed.innerHTML = emptySpace+this.closed;
+            }
+            if (this.assigned === 0) {
+                $distributionBarAssigned.innerHTML = '';
+            } else {
+                $distributionBarAssigned.innerHTML = emptySpace+this.assigned;
+            }
+            if (this.unassigned === 0) {
+                $distributionBarUnAssigned.innerHTML = '';
+            } else {
+                $distributionBarUnAssigned.innerHTML = emptySpace+this.unassigned;
+            }
         }
     });
 </script>
@@ -86,6 +124,9 @@
         is: 'distribution-bar',
         behaviors: [
             Polymer.IronResizableBehavior
-        ]
+        ],
+        changeValues: function(first, second, trird) {
+            document.querySelector("inner-bar").changeValues(first, second, trird);
+        }
     });
 </script>
