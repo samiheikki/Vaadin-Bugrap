@@ -213,9 +213,9 @@
                                 <textarea></textarea>
                                 <div class="container flex-horizontal">
                                     <paper-button on-click="addComment" raised>Done</paper-button>
-                                    <paper-button raised>Attachment</paper-button>
                                     <paper-button on-click="commentCancel" raised>Cancel</paper-button>
                                 </div>
+                                <file-upload></file-upload>
                             </div>
                             <template is="dom-repeat" items="{{reportComments}}">
                                 <div class="container flex-vertical">

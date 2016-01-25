@@ -1,0 +1,95 @@
+<dom-module id="file-upload">
+    <template>
+        <style>
+            :host {
+                font-family: sans-serif;
+            };
+        </style>
+
+        <paper-button raised on-click="openFileSelect">Attachment...</paper-button>
+
+        <input type="file" id="files" name="file" multiple style="display:none"/>
+        <div class="container flex-horizontal" id="filelist">
+            <template is="dom-repeat" items="{{selectedFiles}}" id="selectedFiles">
+                <paper-card>
+                    <div class="card-content">
+                        {{item.name}} ({{item.type}})
+                        <paper-icon-button icon="icons:delete" on-click="removeFile" id="remove_{{item.index}}"></paper-icon-button>
+                    </div>
+                    <div class="card-actions">
+                        <paper-progress value="{{item.progressvalue}}" id="0" class="transiting"></paper-progress>
+                    </div>
+                </paper-card>
+            </template>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: "file-upload",
+            ready: function() {
+                this.setDefaultValues();
+            },
+            attached: function() {
+                this.events();
+                this.setDefaultValues();
+            },
+            setDefaultValues: function() {
+                this.progress_bar = document.querySelector('.percent');
+                this.selectedFiles = []; //contains all the files that should be uploaded
+                this.progressValue = 0;
+                this.index = 0;
+                this.realFiles = [];
+            },
+            events: function() {
+                var self = this;
+                document.getElementById('files').addEventListener('change', function(evt){
+                    self.handleFileSelect(evt);
+                }, false);
+            },
+            openFileSelect: function() {
+                document.getElementById('files').click();
+            },
+            removeFile(evt) {
+                var index = parseInt(evt.target.parentElement.id.replace('remove_', ''));
+                this.removeFileWithIndex(index);
+            },
+            removeFileWithIndex: function(index) {
+                var arrayIndex = -1;
+                var self = this;
+                for(var i = 0; i < this.selectedFiles.length; i++) {
+                    if (self.selectedFiles[i].index === index) {
+                        arrayIndex = i;
+                    }
+                }
+                if (arrayIndex > -1) {
+                    this.selectedFiles.splice(arrayIndex, 1);
+                }
+                this.$.selectedFiles.render();
+            },
+            handleFileSelect: function(evt) {
+                var self = this;
+
+                var files = evt.target.files; // FileList object
+                realFiles = files;
+
+                var newIndexes = [];
+                for (var i = 0, f; f = files[i]; i++) {
+                    f.index = self.index;
+                    newIndexes.push(self.index);
+                    f.progressvalue = 0;
+                    self.push('selectedFiles', f);
+                    self.index++;
+                }
+                for(var j = 0; j <= 100; j = j + 10){ //TODO REFACTOR THIS PROGRESS THING
+                    for(var k = 0; k < newIndexes.length; k++) {
+                        self.selectedFiles[k].progressvalue = j;
+                    }
+                }
+            },
+            getFiles: function() {
+                return this.realFiles;
+            }
+        });
+    </script>
+</dom-module>

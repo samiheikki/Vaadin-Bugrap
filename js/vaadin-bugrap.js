@@ -60,6 +60,7 @@ Polymer({
         this.firebase.status = this.firebase.ref.child('status');
         this.firebase.type = this.firebase.ref.child('type');
         this.firebase.version = this.firebase.ref.child('version');
+        this.firebase.filetest = this.firebase.ref.child('filetest');
     },
     setPriorities: function setPriorities() {
         var i = 1,
@@ -640,7 +641,12 @@ Polymer({
             comment_id = this.maxcomment_id+1,
             employee_id = this.employee_id,
             timestamp = moment().format('YYYY-MM-DD HH:mm:ss'),
-            report_id;
+            report_id,
+            files = document.querySelector('file-upload').getFiles();
+        //console.log(files);
+        //this.firebase.filetest.set(files);
+        //TODO CONTINUE FROM HERE
+
         this.grid.selection.selected(function(index) {
             report_id = self.grid.items[index].report_id;
         });
