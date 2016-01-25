@@ -508,6 +508,7 @@ Polymer({
                     items.push(element);
                 }
             }
+            items.reverse();
             self.reportComments = items;
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
