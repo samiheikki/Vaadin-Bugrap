@@ -123,21 +123,27 @@
             <div id="report-grid">
                 <vaadin-grid selection-mode="multi">
                     <table>
-                        <col name="version_id" sortable="true">
-                        <col name="priority" sortable="true">
-                        <col name="type_id" sortable="true">
-                        <col name="meta" sortable="true" flex>
-                        <col name="employee_id" sortable="true">
-                        <col name="modifytime" sortable="true">
-                        <col name="createtime" sortable="true">
+                        <colgroup>
+                            <col name="version_id" sortable="true">
+                            <col name="priority" sortable="true">
+                            <col name="type_id" sortable="true">
+                            <col name="meta" sortable="true" flex>
+                            <col name="employee_id" sortable="true">
+                            <col name="modifytime" sortable="true">
+                            <col name="createtime" sortable="true">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>Version</th>
+                            <th>Priority</th>
+                            <th>Type</th>
+                            <th>Summary</th>
+                            <th>Assigned to</th>
+                            <th>Last modified</th>
+                            <th>Reported</th>
+                        </tr>
+                        </thead>
                     </table>
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Value</th>
-                        <th>Progress</th>
-                    </tr>
-                    </thead>
                 </vaadin-grid>
             </div>
             <paper-toast id="validation_error" text="Please fill all the fields."></paper-toast>
