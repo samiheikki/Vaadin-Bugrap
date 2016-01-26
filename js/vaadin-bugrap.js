@@ -10,6 +10,7 @@ Polymer({
         this.events();
         this.setPriorities();
         this.getMaxCommentId();
+        this.getMaxAttachmentId();
     },
     defaultValues: function defaultValues() {
         var self = this;
@@ -46,6 +47,9 @@ Polymer({
         };
         this.maxcomment_id = 0;
         this.maxcommentindex = 0;
+        this.commment_attachment = [];
+
+        this.maxattachment_id = 0;
 
         this.firebase = {};
 
@@ -61,6 +65,8 @@ Polymer({
         this.firebase.type = this.firebase.ref.child('type');
         this.firebase.version = this.firebase.ref.child('version');
         this.firebase.filetest = this.firebase.ref.child('filetest');
+        this.firebase.comment_attachment = this.firebase.ref.child('comment_attachment');
+        this.firebase.attachment = this.firebase.ref.child('attachment');
     },
     setPriorities: function setPriorities() {
         var i = 1,
@@ -543,6 +549,8 @@ Polymer({
                     employee = self.getEmployeeWithId(element.employee_id);
                     element.timestamp = self.parseDuration(element.timestamp);
                     element.employee = employee.firstname + ' ' + employee.lastname;
+                    element.attachment_ids = self.getCommentAttachmentIds(element.comment_id);
+                    self.getCommentAttachments(element.comment_id);
                     items.push(element);
                 }
             }
@@ -667,9 +675,6 @@ Polymer({
             timestamp = moment().format('YYYY-MM-DD HH:mm:ss'),
             report_id,
             files = document.querySelector('file-upload').getFiles();
-        //console.log(files);
-        //this.firebase.filetest.set(files);
-        //TODO CONTINUE FROM HERE
 
         this.grid.selection.selected(function(index) {
             report_id = self.grid.items[index].report_id;
@@ -684,6 +689,29 @@ Polymer({
                     timestamp: timestamp
                 }
             );
+            files.forEach(function(element){
+                var reader = new FileReader();
+                reader.onload = (function(theFile) {
+                    return function(e) {
+                        var filePayload = e.target.result;
+                        var attachment_id = self.maxattachment_id+1;
+                        self.firebase.comment_attachment.push(
+                            {
+                                comment_id: comment_id,
+                                attachment_id: attachment_id
+                            }
+                        );
+                        self.firebase.attachment.push(
+                            {
+                                attachment_id: attachment_id,
+                                attachment: filePayload,
+                                name: theFile.name
+                            }
+                        );
+                    };
+                })(element);
+                reader.readAsDataURL(element);
+            });
             this.getReportComments(report_id);
 
             $('#comment_add').hide();
@@ -704,6 +732,20 @@ Polymer({
             console.log("The read failed: " + errorObject.code);
         });
     },
+    getMaxAttachmentId: function getMaxAttachmentId() {
+        var self = this;
+        this.firebase.comment_attachment.on("value", function(response) {
+            self.commment_attachment = [];
+            for (var k in response.val()) {
+                self.commment_attachment.push(response.val()[k]);
+                if (response.val()[k].attachment_id > self.maxattachment_id) {
+                    self.maxattachment_id = response.val()[k].attachment_id;
+                }
+            }
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
     commentCancel: function commentCancel() {
         $('#comment_add').hide();
         tinyMCE.activeEditor.setContent('');
@@ -717,5 +759,30 @@ Polymer({
                 $(this).html(report.text);
             });
         }, 1);
+    },
+    getCommentAttachmentIds: function getCommentAttachmentIds(comment_id) {
+        var self = this;
+        var attachment_ids = [];
+        self.commment_attachment.forEach(function(element){
+            if (element.comment_id === comment_id) {
+                attachment_ids.push(element.attachment_id);
+            }
+        });
+        return attachment_ids;
+    },
+    getCommentAttachments: function getCommentAttachments(comment_id) {
+        var self = this;
+        var attachment_ids = this.getCommentAttachmentIds(comment_id);
+        this.firebase.attachment.on("value", function(response) {
+            var $parentElement = $('#comment_attachment_'+comment_id);
+            $parentElement.empty();
+            for (var k in response.val()) {
+                if (attachment_ids.indexOf(response.val()[k].attachment_id) > -1) {
+                    $parentElement.append('<a href="'+response.val()[k].attachment+'" target="_blank">'+response.val()[k].name+'</a>');
+                }
+            }
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
     }
 });
