@@ -196,3 +196,7 @@ paper-radio-group.status-dialog {
 .comment_attachments {
     margin-left: 40px;
 }
+
+.visible-hidden {
+    visibility: hidden;
+}

@@ -54,6 +54,7 @@ Polymer({
         this.firebase = {};
 
         this.firebaseReportData = []; //Temporary solution for not fetching same data from firebase when filters change
+        this.editPanelResized = false;
     },
     createFirebaseInstance: function createFirebaseInstance(){
         this.firebase.ref = new Firebase("https://vaadin-bugrap.firebaseio.com/");
@@ -135,6 +136,10 @@ Polymer({
         });
         this.addEventListener('commentCancel', function(){
             self.commentCancel();
+        });
+
+        $('#report_edit_container').on('resize', function( event, ui ){
+            self.editPanelResized = true;
         });
     },
     toggleStatusSelect: function toggleStatusSelect() {
@@ -642,6 +647,9 @@ Polymer({
 
         $reportEditContainer.css('height', (editToolBarHeight)+'px');
         $reportEditContainer.css('top', ($( window ).height() - editToolBarHeight)+'px');
+        this.editPanelResized = false;
+        $('#handle').removeClass('visible-hidden');
+
     },
     editResizeableHeight: function editResizeableHeight() {
         var $reportEditContainer = $('#report_edit_container');
@@ -649,6 +657,7 @@ Polymer({
         $reportEditContainer.resizable( "option", "maxHeight", $( window ).height() );
         $reportEditContainer.css('height', (editToolBarHeight)+'px');
         $reportEditContainer.css('top', ($( window ).height() - editToolBarHeight)+'px');
+        this.editPanelResized = false;
     },
     setReportCommentHeight: function setReportCommentHeight() {
         var $reportEdit = $('#report_edit'),
@@ -674,6 +683,22 @@ Polymer({
             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent'
         });
         $('#comment_add').show();
+        if (!this.editPanelResized) { //resize for comment to show
+            this.resizeEditForCommentAdd();
+        }
+    },
+    resizeEditForCommentAdd: function resizeEditForCommentAdd() {
+        var $reportEditContainer = $('#report_edit_container');
+        var heightToAdd = $('#comment_add').height();
+        var oldTopPosition = $(window).height() - $reportEditContainer.height();
+        if (heightToAdd > oldTopPosition) {
+            heightToAdd = oldTopPosition;
+        }
+        var newTopPosition = oldTopPosition - heightToAdd;
+
+        $reportEditContainer.css('height', ($reportEditContainer.height()+heightToAdd)+'px');
+        $reportEditContainer.css('top', (newTopPosition)+'px');
+        this.editPanelResized = true;
     },
     addComment: function addComment() {
         var self = this,
