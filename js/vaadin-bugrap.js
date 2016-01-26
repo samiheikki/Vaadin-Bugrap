@@ -105,6 +105,7 @@ Polymer({
 
         //Update grid when version changed
         document.getElementById('version_menu').addEventListener('iron-select', function(){
+            self.updateDistributionBarValues();
             self.updateReportGrid();
         });
 
@@ -427,15 +428,15 @@ Polymer({
     updateDistributionBarValues: function updateDistributionBarValues() {
         //get Project report distribution
         var self = this;
-        this.distributionBarValues.closed = 0;
-        this.distributionBarValues.assigned = 0;
-        this.distributionBarValues.unassigned = 0;
         var closedIds = [2],
             assignedIds = [1,3,4,5,6,7,8];
 
-        this.firebase.report.on("value", function(response) {
+        this.firebase.report.once("value", function(response) {
+            self.distributionBarValues.closed = 0;
+            self.distributionBarValues.assigned = 0;
+            self.distributionBarValues.unassigned = 0;
             response.val().forEach(function(element, index, array){
-                if(element.project_id === self.filters.project) {
+                if(element.project_id === self.filters.project && (element.version_id === self.filters.version || self.filters.version === 'all')) {
                     if (closedIds.indexOf(element.status_id) > -1) {
                         self.distributionBarValues.closed++;
                     } else if (element.employee_id === 0) {
@@ -445,6 +446,8 @@ Polymer({
                     }
                 }
             });
+            console.log("here");
+            console.log(self.distributionBarValues);
             self.$.distribution_bar_top.changeValues(
                 self.distributionBarValues.closed,
                 self.distributionBarValues.assigned,
