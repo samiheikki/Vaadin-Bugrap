@@ -4,7 +4,7 @@
 
 Sources for the Vaadin Bugrap https://vaadin-bugrap.firebaseapp.com/. The demo is using [Vaadin Elements](https://www.vaadin.com/elements) and [Polymer](http://polymer-project.org).
 
-![Vaadin Bugrap full stack demo](screenshot.png)
+![Vaadin Bugrap full stack demo](screenshot.PNG)
 
 ## Running the app
 
