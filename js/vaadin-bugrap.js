@@ -562,6 +562,8 @@ Polymer({
             return parseInt(duration.asMonths()) + ' months ago';
         } else if (duration.asDays() >= 1) {
             return parseInt(duration.asDays()) + ' days ago';
+        } else if (duration.asHours() >= 1) {
+            return parseInt(duration.asHours()) + ' hours ago';
         } else if (duration.asMinutes() >= 1) {
             return parseInt(duration.asMinutes()) + ' minutes ago';
         } else {
