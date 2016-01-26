@@ -745,7 +745,13 @@ Polymer({
                 })(element);
                 reader.readAsDataURL(element);
             });
-            this.getReportComments(report_id);
+            if(files.length) {
+                setTimeout(function(){
+                    self.getReportComments(report_id);
+                }, 500);
+            } else {
+                self.getReportComments(report_id);
+            }
 
             $('#comment_add').hide();
             tinyMCE.activeEditor.setContent('');
@@ -767,7 +773,9 @@ Polymer({
     },
     getMaxAttachmentId: function getMaxAttachmentId() {
         var self = this;
+        console.log("fetch_update_comment_attachment");
         this.firebase.comment_attachment.on("value", function(response) {
+            console.log("update_comment_attachment");
             self.commment_attachment = [];
             for (var k in response.val()) {
                 self.commment_attachment.push(response.val()[k]);
@@ -810,7 +818,9 @@ Polymer({
             var $parentElement = $('#comment_attachment_'+comment_id);
             $parentElement.empty();
             $parentElement.html('<paper-spinner alt="Loading attachments" active style="left: 50%"></paper-spinner>');
-            self.firebase.attachment.on("value", function(response) {
+            console.log("fetch_attachment");
+            self.firebase.attachment.once("value", function(response) {
+                console.log("attachment");
                 $parentElement.empty();
                 for (var k in response.val()) {
                     if (attachment_ids.indexOf(response.val()[k].attachment_id) > -1) {

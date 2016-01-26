@@ -206,3 +206,7 @@ paper-radio-group.status-dialog {
     background-color: inherit;
     text-decoration: inherit;
 }
+
+.comment_attachments > paper-button {
+    padding: 0.3em 0.4em;
+}
