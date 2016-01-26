@@ -1,6 +1,6 @@
 {
   "firebase": "vaadin-bugrap",
-  "public": "public",
+  "public": "/",
   "ignore": [
     "firebase.json",
     "**/.*",
