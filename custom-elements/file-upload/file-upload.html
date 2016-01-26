@@ -13,7 +13,7 @@
             <template is="dom-repeat" items="{{selectedFiles}}" id="selectedFiles">
                 <paper-card>
                     <div class="card-content">
-                        {{item.name}} ({{item.type}})
+                        <a id="open_{{item.index}}" target="_blank">{{item.name}} ({{item.type}})</a>
                         <paper-icon-button icon="icons:delete" on-click="removeFile" id="remove_{{item.index}}"></paper-icon-button>
                     </div>
                     <div class="card-actions">
@@ -80,6 +80,14 @@
                     f.progressvalue = 0;
                     self.push('selectedFiles', f);
                     self.index++;
+
+                    var reader = new FileReader();
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            document.getElementById('open_'+theFile.index).setAttribute("href", e.target.result);
+                        };
+                    })(f);
+                    reader.readAsDataURL(f);
                 }
                 for(var j = 0; j <= 100; j = j + 10){ //TODO REFACTOR THIS PROGRESS THING
                     for(var k = 0; k < newIndexes.length; k++) {
