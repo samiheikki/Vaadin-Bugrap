@@ -110,6 +110,8 @@
             },
             commentCancel: function() {
                 this.fire('commentCancel');
+                this.selectedFiles = [];
+                this.$.selectedFiles.render();
             }
         });
     </script>
