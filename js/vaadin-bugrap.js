@@ -84,6 +84,7 @@ Polymer({
         //Resize distribution bar when window size changes
         window.addEventListener('resize', function() {
             self.setReportCommentHeight();
+            self.editResizeableHeight();
         });
 
         $('#report_edit_container').on( "resize", function(event, ui) {
@@ -615,14 +616,23 @@ Polymer({
     },
     setEditResizeable: function setEditResizeable() {
         var $reportEditContainer = $('#report_edit_container');
+        var editToolBarHeight = 138; //TODO maybe change from hard coded
         $reportEditContainer.resizable({
             handles: {
                 'n': '#handle'
             },
-            maxHeight: $( document ).height() //TODO UPDATE WHEN WINDOW SIZE CHANGE
+            maxHeight: $( window ).height()
         });
-        $reportEditContainer.css('height', ($reportEditContainer.height()-500)+'px');
-        $reportEditContainer.css('top', '500px');
+
+        $reportEditContainer.css('height', (editToolBarHeight)+'px');
+        $reportEditContainer.css('top', ($( window ).height() - editToolBarHeight)+'px');
+    },
+    editResizeableHeight: function editResizeableHeight() {
+        var $reportEditContainer = $('#report_edit_container');
+        var editToolBarHeight = 138; //TODO maybe change from hard coded
+        $reportEditContainer.resizable( "option", "maxHeight", $( window ).height() );
+        $reportEditContainer.css('height', (editToolBarHeight)+'px');
+        $reportEditContainer.css('top', ($( window ).height() - editToolBarHeight)+'px');
     },
     setReportCommentHeight: function setReportCommentHeight() {
         var $reportEdit = $('#report_edit'),
