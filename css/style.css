@@ -192,3 +192,7 @@ paper-radio-group.status-dialog {
 #comment_add {
     margin-bottom: 20px;
 }
+
+.comment_attachments {
+    margin-left: 40px;
+}

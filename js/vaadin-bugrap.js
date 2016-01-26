@@ -773,16 +773,23 @@ Polymer({
     getCommentAttachments: function getCommentAttachments(comment_id) {
         var self = this;
         var attachment_ids = this.getCommentAttachmentIds(comment_id);
-        this.firebase.attachment.on("value", function(response) {
+        setTimeout(function(){
             var $parentElement = $('#comment_attachment_'+comment_id);
             $parentElement.empty();
-            for (var k in response.val()) {
-                if (attachment_ids.indexOf(response.val()[k].attachment_id) > -1) {
-                    $parentElement.append('<a href="'+response.val()[k].attachment+'" target="_blank">'+response.val()[k].name+'</a>');
+            $parentElement.html('<paper-spinner alt="Loading attachments" active style="left: 50%"></paper-spinner>');
+            self.firebase.attachment.on("value", function(response) {
+                $parentElement.empty();
+                for (var k in response.val()) {
+                    if (attachment_ids.indexOf(response.val()[k].attachment_id) > -1) {
+                        $parentElement.append(
+                            '<paper-button raised><a href="'+response.val()[k].attachment+'" target="_blank">'+response.val()[k].name+'</a></paper-button>'
+                        );
+                    }
                 }
-            }
-        }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
+            }, function (errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+        }, 1);
+
     }
 });
