@@ -48,7 +48,6 @@
                 this.selectedFiles = []; //contains all the files that should be uploaded
                 this.progressValue = 0;
                 this.index = 0;
-                this.realFiles = [];
             },
             events: function() {
                 var self = this;
@@ -80,7 +79,6 @@
                 var self = this;
 
                 var files = evt.target.files; // FileList object
-                this.realFiles = files;
 
                 var newIndexes = [];
                 for (var i = 0, f; f = files[i]; i++) {
