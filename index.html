@@ -155,16 +155,21 @@
                 <div id="report_edit" style="display: none;">
                     <paper-header-panel class="blue edit_panel">
                         <paper-toolbar class="paper-header" style="display: none;" id="report_edit_name">
-                            <iron-label>
-                                <paper-icon-button icon="icons:open-in-new" class="black"></paper-icon-button>
-                                <span class="black button_label">{{selectedReportMeta}}</span>
-                            </iron-label>
+                            <div class="container flex-horizontal" style="width: 100%">
+                                <iron-label class="flexchild">
+                                    <span class="black button_label">{{selectedReportMeta}}</span>
+                                </iron-label>
+                                <paper-icon-button icon="icons:close" on-click="discardReportsEdit"></paper-icon-button>
+                            </div>
                         </paper-toolbar>
                         <paper-toolbar class="paper-header" style="display: none;" id="report_edit_amount">
-                            <iron-label>
-                                <span class="black button_label">{{selectedReportAmount}} reports selected</span>
-                                <span class="grey button_label">&nbsp;- Select a single report to view it contents</span>
-                            </iron-label>
+                            <div class="container flex-horizontal" style="width: 100%">
+                                <iron-label class="flexchild">
+                                    <span class="black button_label">{{selectedReportAmount}} reports selected</span>
+                                    <span class="almost_white button_label">&nbsp;- Select a single report to view it contents</span>
+                                </iron-label>
+                                <paper-icon-button icon="icons:close" on-click="discardReportsEdit"></paper-icon-button>
+                            </div>
                         </paper-toolbar>
                         <paper-toolbar class="paper-header" id="report_edit_fields">
                             <paper-dropdown-menu label="Priority" required="true">

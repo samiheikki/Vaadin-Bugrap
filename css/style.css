@@ -185,6 +185,10 @@ paper-radio-group.status-dialog {
     color: grey;
 }
 
+.almost_white {
+    color: #f0f0f0;
+}
+
 #comment_add {
     margin-bottom: 20px;
 }
