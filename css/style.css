@@ -170,7 +170,11 @@ paper-radio-group.status-dialog {
 }
 
 .secondary-blue  .paper-input, .secondary-blue  iron-label {
-    color: #000 !important;
+    color: #000000 !important;
+}
+
+.edit_panel  .paper-input, .edit_panel  iron-label {
+    color: #ffffff !important;
 }
 
 .white {
