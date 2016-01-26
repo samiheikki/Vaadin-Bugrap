@@ -446,8 +446,6 @@ Polymer({
                     }
                 }
             });
-            console.log("here");
-            console.log(self.distributionBarValues);
             self.$.distribution_bar_top.changeValues(
                 self.distributionBarValues.closed,
                 self.distributionBarValues.assigned,
