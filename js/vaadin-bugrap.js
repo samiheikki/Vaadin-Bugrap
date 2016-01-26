@@ -824,5 +824,8 @@ Polymer({
             });
         }, 1);
 
+    },
+    showPlaceholderNotification: function showPlaceholderNotification() {
+        this.$.placeholder_notification.show();
     }
 });

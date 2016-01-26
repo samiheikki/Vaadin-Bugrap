@@ -42,30 +42,33 @@
                         </paper-listbox>
                     </paper-dropdown-menu>
                     <span class="spacer"></span>
-                    <iron-label>
+                    <iron-label on-click="showPlaceholderNotification">
                         <paper-icon-button icon="social:person"></paper-icon-button>
                         <span class="black button_label hide_mobile">Sami Suo-Heikki</span>
                     </iron-label>
 
-                    <iron-label>
+                    <iron-label on-click="showPlaceholderNotification">
                         <paper-icon-button icon="icons:input"></paper-icon-button>
                         <span class="black button_label hide_mobile">Logout</span>
                     </iron-label>
                 </paper-toolbar>
                 <div>
                     <div class="container flex-horizontal">
-                        <iron-label class="search_row_label">
+                        <iron-label class="search_row_label" on-click="showPlaceholderNotification">
                             <paper-icon-button icon="icons:bug-report" class="black"></paper-icon-button>
                             <span class="black button_label hide_mobile">Report a bug</span>
                         </iron-label>
-                        <iron-label class="search_row_label">
+                        <iron-label class="search_row_label" on-click="showPlaceholderNotification">
                             <paper-icon-button icon="icons:chrome-reader-mode" class="black"></paper-icon-button>
                             <span class="black button_label hide_mobile">Request a feature</span>
                         </iron-label>
-                        <iron-label class="flexchild search_row_label">
+                        <iron-label class="search_row_label" on-click="showPlaceholderNotification">
                             <paper-icon-button icon="icons:settings" class="black"></paper-icon-button>
                             <span class="black button_label hide_mobile">Manage project</span>
                         </iron-label>
+                        <div class="flexchild">
+
+                        </div>
                         <paper-input class="short search_report" label="Search reports" style="" id="search_reports" value="{{filters.searchFilter}}" no-label-float>
                             <paper-icon-button suffix icon="search" alt="search" title="Search" class="black">
                             </paper-icon-button>
@@ -152,6 +155,7 @@
             </div>
             <paper-toast id="validation_error" text="Please fill all the fields."></paper-toast>
             <paper-toast id="comment_validation_error" text="Please add your comment."></paper-toast>
+            <paper-toast id="placeholder_notification" text="That was just a placeholder ;)"></paper-toast>
 
             <div id="report_edit_container" class="resizable">
                 <div id="handle" class="ui-resizable-handle ui-resizable-n visible-hidden">
