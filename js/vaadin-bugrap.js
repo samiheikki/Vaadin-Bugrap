@@ -230,7 +230,13 @@ Polymer({
         var self = this;
         var filterWithSearch = false;
         var items = [];
-        var lesser = -1;
+        var lesser = 1;
+        var filter = 'priority';
+        var showVersion = (self.filters.version === 'all' || self.filters.version === null);
+        if (showVersion) {
+            lesser = -1;
+            filter = 'version_id';
+        }
 
         if (self.firebaseReportData.length > 0) { //data already fetched
             self.firebaseReportData.forEach(function(element, index, array){
@@ -248,7 +254,7 @@ Polymer({
                     }
                 });
                 items.sort(function(a, b){
-                    return (a.version_id < b.version_id) ? lesser : -lesser;
+                    return (a[filter] < b[filter]) ? lesser : -lesser;
                 });
                 self.grid.items = items;
             }, function (errorObject) {
@@ -311,7 +317,13 @@ Polymer({
         });
 
         //Show version if all selected
-        this.grid.columns[0].hidden = !(self.filters.version === 'all' || self.filters.version === null);
+        this.grid.columns[0].hidden = !showVersion;
+        if (showVersion) {
+            this.grid.sortOrder = [{column: 0, direction: 'asc'}];
+        } else {
+            this.grid.sortOrder = [{column: 1, direction: 'desc'}];
+
+        }
 
         this.grid.addEventListener("selected-items-changed", function() {
             self.updateModificationLayout();
