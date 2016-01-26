@@ -200,3 +200,9 @@ paper-radio-group.status-dialog {
 .visible-hidden {
     visibility: hidden;
 }
+
+.inherit {
+    color: inherit;
+    background-color: inherit;
+    text-decoration: inherit;
+}
