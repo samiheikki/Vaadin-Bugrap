@@ -128,6 +128,14 @@ Polymer({
         });
 
         $('#status-select').on('click', self.toggleStatusSelect);
+
+        //file-upload-events
+        this.addEventListener('addComment', function(){
+           self.addComment();
+        });
+        this.addEventListener('commentCancel', function(){
+            self.commentCancel();
+        });
     },
     toggleStatusSelect: function toggleStatusSelect() {
         var statusDialog = $('.status-dialog');

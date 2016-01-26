@@ -217,10 +217,6 @@
                         <div id="report_comments" style="overflow: auto;">
                             <div id="comment_add" style="display: none">
                                 <textarea></textarea>
-                                <div class="container flex-horizontal">
-                                    <paper-button on-click="addComment" raised>Done</paper-button>
-                                    <paper-button on-click="commentCancel" raised>Cancel</paper-button>
-                                </div>
                                 <file-upload></file-upload>
                             </div>
                             <template is="dom-repeat" items="{{reportComments}}">
