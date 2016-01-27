@@ -103,7 +103,10 @@
                 }
             },
             getFiles: function() {
-                return this.selectedFiles;
+                var files = this.selectedFiles;
+                this.selectedFiles = [];
+                this.$.selectedFiles.render();
+                return files;
             },
             addComment: function() {
                 this.fire('addComment');

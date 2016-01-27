@@ -698,12 +698,13 @@ Polymer({
             employee_id = this.employee_id,
             timestamp = moment().format('YYYY-MM-DD HH:mm:ss'),
             report_id,
-            files = document.querySelector('file-upload').getFiles();
+            files;
 
         this.grid.selection.selected(function(index) {
             report_id = self.grid.items[index].report_id;
         });
         if ($.trim(comment) !== '') {
+            files = document.querySelector('file-upload').getFiles();
             new Firebase(
                 "https://vaadin-bugrap.firebaseio.com/comment/"+report_id
             ).push({
