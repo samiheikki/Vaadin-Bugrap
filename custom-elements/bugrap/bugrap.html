@@ -1,0 +1,487 @@
+<dom-module id="vaadin-bugrap">
+    <template>
+        <style is="custom-style">
+            :root {
+                --my-custom-color: var(--paper-blue-500);
+                --paper-tab-ink: var(--my-custom-color);
+
+                /* custom CSS property */
+                --paper-tabs-selection-bar-color: var(--paper-blue-500);
+
+                /* custom CSS mixin */
+                --paper-tabs: {
+                    color: var(--default-primary-color); /* variable defined in default-theme.html */
+                }
+            }
+            paper-toolbar.white {
+                --paper-toolbar-background: white;
+            }
+            .spacer {
+                @apply(--layout-flex);
+            }
+            #validation_error, #comment_validation_error, #placeholder_notification {
+                z-index: 99999999;
+            }
+
+            .blue .paper-header {
+                background-color: var(--paper-blue-500);
+                @apply(--shadow-elevation-2dp);
+            }
+
+            .secondary-blue .paper-header {
+                background-color: var(--paper-blue-200);
+                @apply(--shadow-elevation-2dp);
+            }
+
+            paper-toolbar.white {
+                background-color: #fff;
+                color: #000;
+            }
+
+
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+            .flexchild {
+                @apply(--layout-flex);
+            }
+            .flex-vertical {
+                @apply(--layout-vertical);
+                margin-bottom: 30px;
+            }
+            .flexchild-vertical {
+                @apply(--layout-flex);
+            }
+            body {
+                font-family: 'Open Sans', sans-serif;
+            }
+
+            .paper-tab {
+                color: #000;
+            }
+            .distribution_bar {
+                width: 100%;
+                height: 20px;
+            }
+
+            .distribution_bar > div {
+                display: inline-block;
+            }
+
+            .distribution_bar_closed {
+                background-color: #90CAF9;
+            }
+
+            .distribution_bar_assigned {
+                background-color: #BBDEFB;
+            }
+
+            .distribution_bar_unassigned {
+                background-color: #E3F2FD;
+            }
+
+            .button_label {
+                cursor: pointer;
+            }
+
+            @font-face {
+                font-family: 'Vaadin-Icons';
+                src: url('/fonts/Vaadin-Icons.eot');
+                src: url('/fonts/Vaadin-Icons.eot?#iefix') format('embedded-opentype'),
+                url('/fonts/Vaadin-Icons.woff') format('woff'),
+                url('/fonts/Vaadin-Icons.ttf') format('truetype'),
+                url('/fonts/Vaadin-Icons.svg#icomoon') format('svg');
+            }
+
+            .icon {
+                font-family: Vaadin-Icons;
+                font-size: 16px;
+                speak: none;
+                font-weight: normal;
+                font-variant: normal;
+                font-style: normal;
+                text-transform: none;
+                line-height: 1;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .priority_5 {
+                color:rgba(255, 0, 0, 0);
+                background-color: #42A5F5;
+                margin-right: 2px;
+            }
+            .priority_4 {
+                color:rgba(255, 0, 0, 0);
+                background-color:#64B5F6;
+                margin-right: 2px;
+            }
+            .priority_3 {
+                color:rgba(255, 0, 0, 0);
+                background-color:#90CAF9;
+                margin-right: 2px;
+            }
+            .priority_2 {
+                color:rgba(255, 0, 0, 0);
+                background-color:#BBDEFB;
+                margin-right: 2px;
+            }
+            .priority_1 {
+                color:rgba(255, 0, 0, 0);
+                background-color:#E3F2FD;
+                margin-right: 2px;
+            }
+
+            paper-button.comment {
+                background: #BA68C8;
+                color: #fff;
+            }
+
+            paper-button.update {
+                background: #4CAF50;
+            }
+
+            paper-button.discard {
+                background: #F44336;
+            }
+
+            paper-radio-group.status-dialog {
+                z-index: 99999999;
+                position: absolute;
+                background: white;
+                margin-left: 64px;
+                margin-top: 54px;
+                border: 1px solid;
+                border-color: black;
+            }
+
+            .closed {
+                display: none;
+            }
+
+            .tab-filter-text {
+                font-weight: bold;
+            }
+
+            .tab-filter {
+                padding: 5px;
+            }
+
+            .search_row_label {
+                padding: 16px 0;
+            }
+
+            @media (min-width: 600px) {
+                #project_select_dropdown {
+                    min-width: 461px;
+                }
+            }
+
+
+            @media (max-width: 600px) {
+                #project_select_dropdown {
+                    min-width: 0px;
+                }
+            }
+
+            @media (max-width: 520px) {
+                .hide_mobile {
+                    display: none !important;
+                }
+                paper-radio-group.status-dialog {
+                    margin-left: 0px;
+                }
+            }
+            @media (min-width: 520px) {
+                .hide_desktop {
+                    display: none !important;
+                }
+            }
+
+
+            #report_edit_container {
+                width: 100%;
+                background: white;
+                height: 100%;
+                bottom: 0;
+                overflow: visible;
+                position:fixed;
+                z-index: 99999998;
+            }
+            #handle {
+                width: 100%;
+                height: 8px;
+                /*top: -6px;*/
+                background-color: #1976D2;
+                z-index: 99999999;
+                cursor: n-resize;
+                -moz-box-shadow:    inset 0 0 10px #E3F2FD;
+                -webkit-box-shadow: inset 0 0 10px #E3F2FD;
+                box-shadow:         inset 0 0 10px #E3F2FD;
+            }
+
+            .project_select_dropdown .paper-input  {
+                color: #ffffff !important;
+            }
+
+            .secondary-blue  .paper-input, .secondary-blue  iron-label {
+                color: #000000 !important;
+            }
+
+            .edit_panel  .paper-input, .edit_panel  iron-label {
+                color: #ffffff !important;
+            }
+
+            .white {
+                color: #fff;
+            }
+
+            .grey {
+                color: grey;
+            }
+
+            .almost_white {
+                color: #f0f0f0;
+            }
+
+            #comment_add {
+                margin-bottom: 20px;
+            }
+
+            .comment_attachments {
+                margin-left: 40px;
+            }
+
+            .visible-hidden {
+                visibility: hidden;
+            }
+
+            .inherit {
+                color: inherit;
+                background-color: inherit;
+                text-decoration: inherit;
+            }
+
+            .comment_attachments > paper-button {
+                padding: 0.3em 0.4em;
+            }
+        </style>
+        <!-- Add content here -->
+        <!-- Firebase collections -->
+        <firebase-collection
+                order-by-child="project_id"
+                location="https://vaadin-bugrap.firebaseio.com/project"
+                data="{{projects}}">
+        </firebase-collection>
+
+        <paper-header-panel class="blue">
+            <paper-toolbar class="paper-header">
+                <paper-dropdown-menu label="Choose project" id="project_select_dropdown" class="project_select_dropdown">
+                    <paper-listbox class="dropdown-content" id="project_select" attr-for-selected="value" selected="{{filters.project}}">
+                        <template is="dom-repeat" items="[[projects]]" as="project">
+                            <paper-item value="[[project.project_id]]">[[project.name]]</paper-item>
+                        </template>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+                <span class="spacer"></span>
+                <a href="http://suoheikki.com" target="_blank" class="inherit">
+                    <iron-label>
+                        <paper-icon-button icon="social:person"></paper-icon-button>
+                        <span class="black button_label hide_mobile">Sami Suo-Heikki</span>
+                    </iron-label>
+                </a>
+
+                <iron-label on-click="showPlaceholderNotification">
+                    <paper-icon-button icon="icons:input"></paper-icon-button>
+                    <span class="black button_label hide_mobile">Logout</span>
+                </iron-label>
+            </paper-toolbar>
+            <div>
+                <div class="container flex-horizontal">
+                    <iron-label class="search_row_label" on-click="showPlaceholderNotification">
+                        <paper-icon-button icon="icons:bug-report" class="black"></paper-icon-button>
+                        <span class="black button_label hide_mobile">Report a bug</span>
+                    </iron-label>
+                    <iron-label class="search_row_label" on-click="showPlaceholderNotification">
+                        <paper-icon-button icon="icons:chrome-reader-mode" class="black"></paper-icon-button>
+                        <span class="black button_label hide_mobile">Request a feature</span>
+                    </iron-label>
+                    <iron-label class="search_row_label" on-click="showPlaceholderNotification">
+                        <paper-icon-button icon="icons:settings" class="black"></paper-icon-button>
+                        <span class="black button_label hide_mobile">Manage project</span>
+                    </iron-label>
+                    <div class="flexchild">
+
+                    </div>
+                    <paper-input class="short search_report" label="Search reports" style="" id="search_reports" value="{{filters.searchFilter}}" no-label-float>
+                        <paper-icon-button suffix icon="search" alt="search" title="Search" class="black">
+                        </paper-icon-button>
+                    </paper-input>
+                </div>
+                <div class="container flex-horizontal">
+                    <paper-dropdown-menu label="Reports for" id="reports_for" style="padding-left: 10px">
+                        <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{filters.version}}" id="version_menu">
+                            <template is="dom-repeat" items="{{versions}}">
+                                <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
+                            </template>
+                        </paper-menu>
+                    </paper-dropdown-menu>
+                    <distribution-bar class="flexchild" style="padding-top: 30px; padding-left: 15px;" id="distribution_bar_top">
+                    </distribution-bar>
+                </div>
+            </div>
+        </paper-header-panel>
+        <paper-toolbar class="white">
+            <paper-tabs class="tab-filter" attr-for-selected="name" selected="{{filters.assignee}}">
+                <paper-tab disabled="true" class="tab-filter-text hide_mobile">
+                    Assignees
+                </paper-tab>
+                <paper-tab name="me" class="tab_select">
+                    <span class="hide_mobile">Only me</span>
+                    <iron-icon icon="social:person-outline" class="hide_desktop"></iron-icon>
+                </paper-tab>
+                <paper-tab name="everyone" class="tab_select">
+                    <span class="hide_mobile">Everyone</span>
+                    <iron-icon icon="social:people-outline" class="hide_desktop"></iron-icon>
+                </paper-tab>
+            </paper-tabs>
+            <paper-radio-group class="status-dialog closed">
+                <template is="dom-repeat" items="{{statuses}}">
+                    <paper-checkbox style="display: block;" class="custom_filter_checkbox" name="{{item.status_id}}" on-change="customStatusChanged">{{item.name}}</paper-checkbox>
+                </template>
+            </paper-radio-group>
+            <paper-tabs class="tab-filter" attr-for-selected="name" selected="{{filters.status}}">
+                <paper-tab disabled="true" class="tab-filter-text hide_mobile">
+                    <span class="hide_mobile">Status</span>
+                </paper-tab>
+                <paper-tab name="open" class="tab_select">
+                    <span class="hide_mobile">Open</span>
+                    <iron-icon icon="icons:radio-button-unchecked" class="hide_desktop"></iron-icon>
+                </paper-tab>
+                <paper-tab name="all_kind" class="tab_select">
+                    <span class="hide_mobile">All kinds</span>
+                    <iron-icon icon="icons:radio-button-checked" class="hide_desktop"></iron-icon>
+                </paper-tab>
+                <paper-tab id="status_select" name="custom" class="tab_select"><!--
+                        --><span class="hide_mobile">Custom
+                            <iron-icon icon="icons:arrow-drop-down" id="status_select_down"></iron-icon>
+                            <iron-icon icon="icons:arrow-drop-up" id="status_select_up" style="display: none"></iron-icon>
+                        </span>
+                    <iron-icon icon="icons:more-vert" class="hide_desktop"></iron-icon>
+                </paper-tab>
+            </paper-tabs>
+        </paper-toolbar>
+        <div id="report-grid">
+            <vaadin-grid selection-mode="multi" id="vaadin_grid">
+                <table>
+                    <colgroup>
+                        <col name="version_id" sortable="true">
+                        <col name="priority" sortable="true">
+                        <col name="type_id" sortable="true">
+                        <col name="meta" sortable="true" flex>
+                        <col name="employee_id" sortable="true">
+                        <col name="modifytime" sortable="true">
+                        <col name="createtime" sortable="true">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Version</th>
+                        <th>Priority</th>
+                        <th>Type</th>
+                        <th>Summary</th>
+                        <th>Assigned to</th>
+                        <th>Last modified</th>
+                        <th>Reported</th>
+                    </tr>
+                    </thead>
+                </table>
+            </vaadin-grid>
+        </div>
+        <paper-toast id="validation_error" text="Please fill all the fields."></paper-toast>
+        <paper-toast id="comment_validation_error" text="Please add your comment."></paper-toast>
+        <paper-toast id="placeholder_notification" text="That was just a placeholder ;)"></paper-toast>
+
+        <div id="report_edit_container" class="resizable">
+            <div id="handle" class="ui-resizable-handle ui-resizable-n visible-hidden">
+            </div>
+            <div id="report_edit" style="display: none;">
+                <paper-header-panel class="blue edit_panel">
+                    <paper-toolbar class="paper-header" style="display: none;" id="report_edit_name">
+                        <div class="container flex-horizontal" style="width: 100%">
+                            <iron-label class="flexchild">
+                                <span class="black button_label">{{selectedReportMeta}}</span>
+                            </iron-label>
+                            <paper-icon-button icon="icons:close" on-click="discardReportsEdit"></paper-icon-button>
+                        </div>
+                    </paper-toolbar>
+                    <paper-toolbar class="paper-header" style="display: none;" id="report_edit_amount">
+                        <div class="container flex-horizontal" style="width: 100%">
+                            <iron-label class="flexchild">
+                                <span class="black button_label">{{selectedReportAmount}} reports selected</span>
+                                <span class="almost_white button_label">&nbsp;- Select a single report to view it contents</span>
+                            </iron-label>
+                            <paper-icon-button icon="icons:close" on-click="discardReportsEdit"></paper-icon-button>
+                        </div>
+                    </paper-toolbar>
+                    <paper-toolbar class="paper-header" id="report_edit_fields">
+                        <paper-dropdown-menu label="Priority" required="true">
+                            <paper-listbox class="dropdown-content" id="report_select_priority" attr-for-selected="name">
+                                <template is="dom-repeat" items="{{priorities}}">
+                                    <paper-item value="{{item.number}}" name="{{item.number}}">{{item.text}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="Type">
+                            <paper-listbox class="dropdown-content" id="report_select_type_id" attr-for-selected="name">
+                                <template is="dom-repeat" items="{{types}}">
+                                    <paper-item value="{{item.type_id}}" name="{{item.type_id}}">{{item.name}}</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="Status">
+                            <paper-listbox class="dropdown-content" id="report_select_status_id" attr-for-selected="name">
+                                <template is="dom-repeat" items="{{statuses}}">
+                                    <paper-item value="{{item.status_id}}" name="{{item.status_id}}">{{item.name}}</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="Assigned To">
+                            <paper-listbox class="dropdown-content" id="report_select_employee_id" attr-for-selected="name">
+                                <paper-item value="0" name="0">No assignee</paper-item>
+                                <template is="dom-repeat" items="{{employees}}">
+                                    <paper-item value="{{item.employee_id}}" name="{{item.employee_id}}">{{item.firstname}} {{item.lastname}}</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="Version">
+                            <paper-listbox class="dropdown-content" id="report_select_version_id" attr-for-selected="name">
+                                <template is="dom-repeat" items="{{versionsWithoutAll}}">
+                                    <paper-item value="{{item.version_id}}" name="{{item.version_id}}">{{item.name}}</paper-item>
+                                </template>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <span class="spacer"></span>
+                        <paper-button class="update" raised on-click="updateReports">Update</paper-button>
+                        <paper-button class="discard" raised on-click="discardReportsEdit">Revert</paper-button>
+                        <paper-button class="comment" raised on-click="showCommentAdd" id="comment_button">Add comment</paper-button>
+                    </paper-toolbar>
+                    <div id="report_comments" style="overflow: auto;">
+                        <div id="comment_add" style="display: none">
+                            <textarea></textarea>
+                            <file-upload></file-upload>
+                        </div>
+                        <template is="dom-repeat" items="{{reportComments}}">
+                            <div class="container flex-vertical">
+                                <div style="margin-bottom: 2px"><paper-icon-button icon="social:person" class="grey"></paper-icon-button> {{item.employee}} &nbsp;<span class="grey">({{item.timestamp}})</span></div>
+                                <div style="margin-left: 44px;" class="report_comment"></div>
+                                <input type="hidden" class="report_comment_input" value="{{item.comment_id}}">
+                                <div class="comment_attachments" id="comment_attachment_{{item.comment_id}}"></div>
+                            </div>
+                        </template>
+                    </div>
+                </paper-header-panel>
+            </div>
+        </div>
+    </template>
+
+    <script src="bugrap.js"></script>
+</dom-module>
