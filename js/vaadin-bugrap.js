@@ -46,7 +46,6 @@ Polymer({
             checkedCustomFilters: JSON.parse(sessionStorage.getItem('checkedCustomFilters')) || [1,2,3,4,5,6,7,8] // TODO remove hardcoded
         };
         this.maxcomment_id = 0;
-        this.maxcommentindex = 0;
         this.commment_attachment = [];
 
         this.maxattachment_id = 0;
@@ -563,7 +562,6 @@ Polymer({
                     employee = self.getEmployeeWithId(element.employee_id);
                     element.timestamp = self.parseDuration(element.timestamp);
                     element.employee = employee.firstname + ' ' + employee.lastname;
-                    element.attachment_ids = self.getCommentAttachmentIds(element.comment_id);
                     self.getCommentAttachments(element.comment_id);
                     items.push(element);
                 }
@@ -728,20 +726,13 @@ Polymer({
                 reader.onload = (function(theFile) {
                     return function(e) {
                         var filePayload = e.target.result;
-                        var attachment_id = self.maxattachment_id+1;
-                        self.firebase.comment_attachment.push(
-                            {
-                                comment_id: comment_id,
-                                attachment_id: attachment_id
-                            }
-                        );
-                        self.firebase.attachment.push(
-                            {
-                                attachment_id: attachment_id,
-                                attachment: filePayload,
-                                name: theFile.name
-                            }
-                        );
+                        var attachment = new Firebase(
+                            "https://vaadin-bugrap.firebaseio.com/attachment/"+comment_id
+                        ).push({
+                            attachment: filePayload,
+                            name: theFile.name,
+                            comment_id: comment_id
+                        });
                     };
                 })(element);
                 reader.readAsDataURL(element);
@@ -800,31 +791,18 @@ Polymer({
             });
         }, 1);
     },
-    getCommentAttachmentIds: function getCommentAttachmentIds(comment_id) {
-        var self = this;
-        var attachment_ids = [];
-        self.commment_attachment.forEach(function(element){
-            if (element.comment_id === comment_id) {
-                attachment_ids.push(element.attachment_id);
-            }
-        });
-        return attachment_ids;
-    },
     getCommentAttachments: function getCommentAttachments(comment_id) {
         var self = this;
-        var attachment_ids = this.getCommentAttachmentIds(comment_id);
         setTimeout(function(){
             var $parentElement = $('#comment_attachment_'+comment_id);
             $parentElement.empty();
             $parentElement.html('<paper-spinner alt="Loading attachments" active style="left: 50%"></paper-spinner>');
-            self.firebase.attachment.once("value", function(response) {
+            new Firebase("https://vaadin-bugrap.firebaseio.com/attachment/"+comment_id).once("value", function(response) {
                 $parentElement.empty();
                 for (var k in response.val()) {
-                    if (attachment_ids.indexOf(response.val()[k].attachment_id) > -1) {
-                        $parentElement.append(
-                            '<paper-button raised><a href="'+response.val()[k].attachment+'" target="_blank">'+response.val()[k].name+'</a></paper-button>'
-                        );
-                    }
+                    $parentElement.append(
+                        '<paper-button raised><a href="'+response.val()[k].attachment+'" target="_blank">'+response.val()[k].name+'</a></paper-button>'
+                    );
                 }
             }, function (errorObject) {
                 console.log("The read failed: " + errorObject.code);
