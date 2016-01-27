@@ -90,6 +90,7 @@ Polymer({
 
         $('#report_edit_container').on( "resize", function(event, ui) {
             self.setReportCommentHeight();
+            self.editPanelResized = true;
         });
 
         //Update site when project is changed
@@ -131,10 +132,6 @@ Polymer({
         });
         this.addEventListener('commentCancel', function(){
             self.commentCancel();
-        });
-
-        $('#report_edit_container').on('resize', function( event, ui ){
-            self.editPanelResized = true;
         });
     },
     toggleStatusSelect: function toggleStatusSelect() {
