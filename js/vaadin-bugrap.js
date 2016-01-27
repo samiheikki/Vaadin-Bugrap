@@ -1,5 +1,9 @@
 Polymer({
     is: 'vaadin-bugrap',
+
+    /****************************
+     * Controller functions begin
+     ***************************/
     ready: function() {
         this.defaultValues();
         this.createFirebaseInstance();
@@ -60,7 +64,6 @@ Polymer({
         this.firebase.status = this.firebase.ref.child('status');
         this.firebase.type = this.firebase.ref.child('type');
         this.firebase.version = this.firebase.ref.child('version');
-        this.firebase.filetest = this.firebase.ref.child('filetest');
     },
     setPriorities: function setPriorities() {
         var i = 1,
@@ -77,172 +80,6 @@ Polymer({
             priorities.push(priority);
         }
         this.priorities = priorities;
-    },
-    events: function events() {
-        var self = this;
-
-        //Resize distribution bar when window size changes
-        window.addEventListener('resize', function() {
-            self.setReportCommentHeight();
-            self.editResizeableHeight();
-        });
-
-        $('#report_edit_container').on( "resize", function(event, ui) {
-            self.setReportCommentHeight();
-            self.editPanelResized = true;
-        });
-
-        //Update site when project is changed
-        document.getElementById('project_select').addEventListener('iron-select', function(){
-            self.projectSelect(this.selectedItem.value);
-        });
-
-        //Update grid when version changed
-        document.getElementById('version_menu').addEventListener('iron-select', function(){
-            self.updateDistributionBarValues();
-            self.updateReportGrid();
-        });
-
-        document.getElementById('search_reports').addEventListener('change', function(){
-            self.updateReportGrid();
-        });
-
-        $(document).on('click', function(event) {
-            var statusDialog = $('.status-dialog');
-            if(!$(event.target).closest('.status-dialog').length && !$(event.target).closest('#status-select').length) {
-                if(statusDialog.is(":visible")) {
-                    statusDialog.addClass('closed');
-                    $('#status_select_down').show();
-                    $('#status_select_up').hide();
-                }
-            }
-        });
-
-        $('.tab-select').on('click', function(){
-            self.updateReportGrid();
-        });
-
-        $('#status-select').on('click', self.toggleStatusSelect);
-
-        //file-upload-events
-        this.addEventListener('addComment', function(){
-           self.addComment();
-        });
-        this.addEventListener('commentCancel', function(){
-            self.commentCancel();
-        });
-
-        this.grid.addEventListener("selected-items-changed", function() {
-            self.updateModificationLayout();
-        });
-
-        this.grid.addEventListener('sort-order-changed', function() {
-            var sortOrder = self.grid.sortOrder[0];
-            var sortProperty = self.grid.columns[sortOrder.column].name;
-            var lesser = self.grid.sortOrder[0].direction == 'asc' ? -1 : 1;
-            if (typeof self.grid.items !== 'undefined') {
-                self.grid.items.sort(function(a, b){
-                    return (a[sortProperty] < b[sortProperty]) ? lesser : -lesser;
-                });
-            }
-        });
-    },
-    toggleStatusSelect: function toggleStatusSelect() {
-        var statusDialog = $('.status-dialog');
-        if (statusDialog.hasClass('closed')) { //open
-            statusDialog.removeClass('closed');
-            $('#status_select_down').hide();
-            $('#status_select_up').show();
-        } else { //close
-            statusDialog.addClass('closed');
-            $('#status_select_down').show();
-            $('#status_select_up').hide();
-        }
-    },
-    setTypes: function setTypes() {
-        var self = this;
-        this.firebase.type.once("value", function(response) {
-            self.types = response.val();
-            self.updateReportGrid();
-        }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
-    },
-    setEmployees: function setEmployees() {
-        var self = this;
-        this.firebase.employee.once("value", function(response) {
-            self.employees = response.val();
-            self.updateReportGrid();
-        }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
-    },
-    setStatues: function setStatues() {
-        var self = this;
-        this.firebase.status.once("value", function(response) {
-            self.statuses = response.val();
-            self.setFilterCheckBoxChecked();
-        }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
-    },
-    setFilterCheckBoxChecked: function setFilterCheckBoxChecked() {
-        var self = this;
-        this.async(function(){
-            $('.custom_filter_checkbox').each(function(index, element){
-                var name = element.name;
-                if($.inArray(name, self.filters.checkedCustomFilters) !== -1) {
-                    element.checked = true;
-                }
-            });
-        }, 1);
-    },
-    customStatusChanged: function customStatusChanged() {
-        var name = event.target.name;
-        var index = this.filters.checkedCustomFilters.indexOf(name);
-        if(event.target.checked) {
-            if (index < 0) {
-                this.filters.checkedCustomFilters.push(name);
-            }
-        } else {
-            this.filters.checkedCustomFilters = $.grep(this.filters.checkedCustomFilters, function(value) {
-                return value != name;
-            });
-        }
-        this.updateReportGrid();
-    },
-    getEmployeeWithId: function getEmployeeWithId(employee_id) {
-        var employee = {};
-        if (this.employees) {
-            this.employees.forEach(function(element, index){
-                if (element.employee_id === employee_id) {
-                    employee = element;
-                }
-            });
-        }
-        return employee;
-    },
-    getVersionWithId: function getVersionWithId(version_id) {
-        var version = {};
-        if (this.versions) {
-            this.versions.forEach(function(element, index){
-                if (element.version_id === version_id) {
-                    version = element;
-                }
-            });
-        }
-        return version;
-    },
-    getCommentWithId: function getCommentWithId(comment_id) {
-        var comment = {};
-        if (this.reportComments) {
-            this.reportComments.forEach(function(element, index){
-                if (element.comment_id === comment_id) {
-                    comment = element;
-                }
-            });
-        }
-        return comment;
     },
     updateReportGrid: function updateReportGrid() {
         if (!this.employees || !this.types) {
@@ -284,19 +121,19 @@ Polymer({
 
         var renderers = {
             priority: function(cell) {
-              var i,
-                  innerHTML = '';
-              for(i = 0; i < cell.data; i++ ) {
-                  innerHTML += '<span class="priority_'+cell.data+'">|</span>';
-              }
-              cell.element.innerHTML = innerHTML;
+                var i,
+                    innerHTML = '';
+                for(i = 0; i < cell.data; i++ ) {
+                    innerHTML += '<span class="priority_'+cell.data+'">|</span>';
+                }
+                cell.element.innerHTML = innerHTML;
             },
             type_id: function(cell) {
                 var type = {};
                 self.types.forEach(function(element, index){
-                   if (element.type_id === cell.data) {
-                       type = element;
-                   }
+                    if (element.type_id === cell.data) {
+                        type = element;
+                    }
                 });
                 cell.element.innerHTML = type.name;
             },
@@ -409,6 +246,397 @@ Polymer({
             console.log("The read failed: " + errorObject.code);
         });
     },
+    nullReportEditValues: function nullReportEditValues() {
+        var self = this;
+        for (var k in self.reportEditValues) {
+            if (self.reportEditValues.hasOwnProperty(k)) {
+                self.reportEditValues[k] = null;
+            }
+        }
+    },
+    setReportEditValues: function setReportEditValues() {
+        var self = this;
+        for (var k in self.reportEditValues) {
+            if (self.reportEditValues.hasOwnProperty(k)) {
+                document.getElementById('report_select_'+k).select(""+self.reportEditValues[k]);
+            }
+        }
+    },
+    getReportEditValues: function getReportEditValues() {
+        var self = this,
+            result = {};
+        result.fields = {};
+        result.validated = true;
+        for (var k in self.reportEditValues) {
+            if (self.reportEditValues.hasOwnProperty(k)) {
+                result.fields[k] = parseInt(document.getElementById('report_select_'+k).selected);
+                if (!result.fields[k] && k !== 'employee_id') { //allow no assignee for employee
+                    result.validated = false;
+                }
+            }
+        }
+        return result;
+    },
+    parseDuration: function parseDuration(timestamp) {
+        var modifyTime = moment(timestamp);
+        var nowTime = moment();
+        var duration = moment.duration(nowTime.diff(modifyTime));
+        if (duration.asYears() >= 1) {
+            return parseInt(duration.asYears()) + ' years ago';
+        } else if (duration.asMonths() >= 1) {
+            return parseInt(duration.asMonths()) + ' months ago';
+        } else if (duration.asDays() >= 1) {
+            return parseInt(duration.asDays()) + ' days ago';
+        } else if (duration.asHours() >= 1) {
+            return parseInt(duration.asHours()) + ' hours ago';
+        } else if (duration.asMinutes() >= 1) {
+            return parseInt(duration.asMinutes()) + ' minutes ago';
+        } else {
+            return parseInt(duration.asSeconds()) + ' seconds ago';
+        }
+    },
+    setSessionStorageValues: function setSessionStorageValues() {
+        sessionStorage.setItem('project', this.filters.project);
+        sessionStorage.setItem('version', this.filters.version);
+        sessionStorage.setItem('assignee', this.filters.assignee);
+        sessionStorage.setItem('status', this.filters.status);
+        sessionStorage.setItem('checkedCustomFilters', JSON.stringify(this.filters.checkedCustomFilters));
+        sessionStorage.setItem('searchFilter', this.filters.searchFilter);
+    },
+    discardReportsEdit: function discardReportsEdit() {
+        this.grid.selection.clear();
+    },
+    /****************************
+     * Controller functions end
+     ***************************/
+
+
+
+
+    /****************************
+     * Model functions begin
+     ***************************/
+
+    setTypes: function setTypes() {
+        var self = this;
+        this.firebase.type.once("value", function(response) {
+            self.types = response.val();
+            self.updateReportGrid();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    setEmployees: function setEmployees() {
+        var self = this;
+        this.firebase.employee.once("value", function(response) {
+            self.employees = response.val();
+            self.updateReportGrid();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    setStatues: function setStatues() {
+        var self = this;
+        this.firebase.status.once("value", function(response) {
+            self.statuses = response.val();
+            self.setFilterCheckBoxChecked();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    getEmployeeWithId: function getEmployeeWithId(employee_id) {
+        var employee = {};
+        if (this.employees) {
+            this.employees.forEach(function(element, index){
+                if (element.employee_id === employee_id) {
+                    employee = element;
+                }
+            });
+        }
+        return employee;
+    },
+    getVersionWithId: function getVersionWithId(version_id) {
+        var version = {};
+        if (this.versions) {
+            this.versions.forEach(function(element, index){
+                if (element.version_id === version_id) {
+                    version = element;
+                }
+            });
+        }
+        return version;
+    },
+    getCommentWithId: function getCommentWithId(comment_id) {
+        var comment = {};
+        if (this.reportComments) {
+            this.reportComments.forEach(function(element, index){
+                if (element.comment_id === comment_id) {
+                    comment = element;
+                }
+            });
+        }
+        return comment;
+    },
+    getReportComments: function getReportComments(report_id) {
+        var self = this;
+        var employee;
+        new Firebase("https://vaadin-bugrap.firebaseio.com/comment/"+report_id).once("value", function(response) {
+            var items = [];
+            for (var k in response.val()) {
+                var element = response.val()[k];
+                if(element.report_id === report_id) {
+                    employee = self.getEmployeeWithId(element.employee_id);
+                    element.timestamp = self.parseDuration(element.timestamp);
+                    element.employee = employee.firstname + ' ' + employee.lastname;
+                    self.getCommentAttachments(element.comment_id);
+                    items.push(element);
+                }
+            }
+            items.reverse();
+            self.reportComments = items;
+            self.htmlEncodeReportComments();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    updateReports: function updateReports() {
+        var self = this;
+        var values = this.getReportEditValues(),
+            firebaseUpdate = {};
+        if (values.validated) {
+            this.grid.selection.selected(function(index) {
+                if (index !== null) {
+                    var gridRow = self.grid.items[index];
+                    var firebaseIndex = gridRow.report_id - 1; //Stupid hack
+                    firebaseUpdate[firebaseIndex] = {
+                        createtime: gridRow.createtime,
+                        employee_id: values.fields.employee_id,
+                        meta: gridRow.meta,
+                        modifytime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                        priority: values.fields.priority,
+                        project_id: gridRow.project_id,
+                        report_id: gridRow.report_id,
+                        status_id: values.fields.status_id,
+                        type_id: values.fields.type_id,
+                        version_id: values.fields.version_id
+                    };
+                }
+            });
+            this.firebase.report.update(firebaseUpdate);
+            this.firebaseReportData = [];
+            self.updateReportGrid();
+            self.updateDistributionBarValues();
+            this.grid.selection.clear();
+        } else {
+            this.$.validation_error.show();
+        }
+    },
+    addComment: function addComment() {
+        var self = this,
+            comment = tinyMCE.activeEditor.getContent(),
+            comment_id = this.maxcomment_id+1,
+            employee_id = this.employee_id,
+            timestamp = moment().format('YYYY-MM-DD HH:mm:ss'),
+            report_id,
+            files;
+
+        this.grid.selection.selected(function(index) {
+            report_id = self.grid.items[index].report_id;
+        });
+        if ($.trim(comment) !== '') {
+            files = document.querySelector('file-upload').getFiles();
+            new Firebase(
+                "https://vaadin-bugrap.firebaseio.com/comment/"+report_id
+            ).push({
+                comment_id: comment_id,
+                employee_id: employee_id,
+                report_id: report_id,
+                text: comment,
+                timestamp: timestamp
+            });
+            files.forEach(function(element){
+                var reader = new FileReader();
+                reader.onload = (function(theFile) {
+                    return function(e) {
+                        var filePayload = e.target.result;
+                        new Firebase(
+                            "https://vaadin-bugrap.firebaseio.com/attachment/"+comment_id
+                        ).push({
+                            attachment: filePayload,
+                            name: theFile.name,
+                            comment_id: comment_id
+                        });
+                    };
+                })(element);
+                reader.readAsDataURL(element);
+            });
+            if(files.length) {
+                setTimeout(function(){
+                    self.getReportComments(report_id);
+                }, 500);
+            } else {
+                self.getReportComments(report_id);
+            }
+
+            $('#comment_add').hide();
+            tinyMCE.activeEditor.setContent('');
+        } else {
+            this.$.comment_validation_error.show();
+        }
+    },
+    getMaxCommentId: function getMaxCommentId() {
+        var self = this;
+        this.firebase.comment.on("value", function(response) {
+            for (var k in response.val()) {
+                for (var j in response.val()[k]) {
+                    var comment = response.val()[k][j];
+                    if (comment.comment_id > self.maxcomment_id) {
+                        self.maxcomment_id = comment.comment_id;
+                    }
+                }
+            }
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+    },
+    getCommentAttachments: function getCommentAttachments(comment_id) {
+        var self = this;
+        setTimeout(function(){
+            var $parentElement = $('#comment_attachment_'+comment_id);
+            $parentElement.empty();
+            $parentElement.html('<paper-spinner alt="Loading attachments" active style="left: 1%"></paper-spinner>');
+            new Firebase("https://vaadin-bugrap.firebaseio.com/attachment/"+comment_id).once("value", function(response) {
+                $parentElement.empty();
+                for (var k in response.val()) {
+                    $parentElement.append(
+                        '<paper-button raised><a href="'+response.val()[k].attachment+'" target="_blank">'+response.val()[k].name+'</a></paper-button>'
+                    );
+                }
+            }, function (errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+        }, 1);
+
+    },
+
+    /****************************
+     * Model functions end
+     ***************************/
+
+
+
+
+
+    /****************************
+     * View functions begin
+     ***************************/
+
+    events: function events() {
+        var self = this;
+
+        //Resize distribution bar when window size changes
+        window.addEventListener('resize', function() {
+            self.setReportCommentHeight();
+            self.editResizeableHeight();
+        });
+
+        $('#report_edit_container').on( "resize", function(event, ui) {
+            self.setReportCommentHeight();
+            self.editPanelResized = true;
+        });
+
+        //Update site when project is changed
+        document.getElementById('project_select').addEventListener('iron-select', function(){
+            self.projectSelect(this.selectedItem.value);
+        });
+
+        //Update grid when version changed
+        document.getElementById('version_menu').addEventListener('iron-select', function(){
+            self.updateDistributionBarValues();
+            self.updateReportGrid();
+        });
+
+        document.getElementById('search_reports').addEventListener('change', function(){
+            self.updateReportGrid();
+        });
+
+        $(document).on('click', function(event) {
+            var statusDialog = $('.status-dialog');
+            if(!$(event.target).closest('.status-dialog').length && !$(event.target).closest('#status-select').length) {
+                if(statusDialog.is(":visible")) {
+                    statusDialog.addClass('closed');
+                    $('#status_select_down').show();
+                    $('#status_select_up').hide();
+                }
+            }
+        });
+
+        $('.tab-select').on('click', function(){
+            self.updateReportGrid();
+        });
+
+        $('#status-select').on('click', self.toggleStatusSelect);
+
+        //file-upload-events
+        this.addEventListener('addComment', function(){
+            self.addComment();
+        });
+        this.addEventListener('commentCancel', function(){
+            self.commentCancel();
+        });
+
+        this.grid.addEventListener("selected-items-changed", function() {
+            self.updateModificationLayout();
+        });
+
+        this.grid.addEventListener('sort-order-changed', function() {
+            var sortOrder = self.grid.sortOrder[0];
+            var sortProperty = self.grid.columns[sortOrder.column].name;
+            var lesser = self.grid.sortOrder[0].direction == 'asc' ? -1 : 1;
+            if (typeof self.grid.items !== 'undefined') {
+                self.grid.items.sort(function(a, b){
+                    return (a[sortProperty] < b[sortProperty]) ? lesser : -lesser;
+                });
+            }
+        });
+    },
+    toggleStatusSelect: function toggleStatusSelect() {
+        var statusDialog = $('.status-dialog');
+        if (statusDialog.hasClass('closed')) { //open
+            statusDialog.removeClass('closed');
+            $('#status_select_down').hide();
+            $('#status_select_up').show();
+        } else { //close
+            statusDialog.addClass('closed');
+            $('#status_select_down').show();
+            $('#status_select_up').hide();
+        }
+    },
+    setFilterCheckBoxChecked: function setFilterCheckBoxChecked() {
+        var self = this;
+        this.async(function(){
+            $('.custom_filter_checkbox').each(function(index, element){
+                var name = element.name;
+                if($.inArray(name, self.filters.checkedCustomFilters) !== -1) {
+                    element.checked = true;
+                }
+            });
+        }, 1);
+    },
+    customStatusChanged: function customStatusChanged() {
+        var name = event.target.name;
+        var index = this.filters.checkedCustomFilters.indexOf(name);
+        if(event.target.checked) {
+            if (index < 0) {
+                this.filters.checkedCustomFilters.push(name);
+            }
+        } else {
+            this.filters.checkedCustomFilters = $.grep(this.filters.checkedCustomFilters, function(value) {
+                return value != name;
+            });
+        }
+        this.updateReportGrid();
+    },
     updateDistributionBarValues: function updateDistributionBarValues() {
         //get Project report distribution
         var self = this;
@@ -505,120 +733,6 @@ Polymer({
         $('#comment_button').attr('disabled', 'true');
         $reportEditContainer.show();
     },
-    nullReportEditValues: function nullReportEditValues() {
-        var self = this;
-        for (var k in self.reportEditValues) {
-            if (self.reportEditValues.hasOwnProperty(k)) {
-                self.reportEditValues[k] = null;
-            }
-        }
-    },
-    setReportEditValues: function setReportEditValues() {
-        var self = this;
-        for (var k in self.reportEditValues) {
-            if (self.reportEditValues.hasOwnProperty(k)) {
-                document.getElementById('report_select_'+k).select(""+self.reportEditValues[k]);
-            }
-        }
-    },
-    getReportEditValues: function getReportEditValues() {
-        var self = this,
-            result = {};
-        result.fields = {};
-        result.validated = true;
-        for (var k in self.reportEditValues) {
-            if (self.reportEditValues.hasOwnProperty(k)) {
-                result.fields[k] = parseInt(document.getElementById('report_select_'+k).selected);
-                if (!result.fields[k] && k !== 'employee_id') { //allow no assignee for employee
-                    result.validated = false;
-                }
-            }
-        }
-        return result;
-    },
-    getReportComments: function getReportComments(report_id) {
-        var self = this;
-        var employee;
-        new Firebase("https://vaadin-bugrap.firebaseio.com/comment/"+report_id).once("value", function(response) {
-            var items = [];
-            for (var k in response.val()) {
-                var element = response.val()[k];
-                if(element.report_id === report_id) {
-                    employee = self.getEmployeeWithId(element.employee_id);
-                    element.timestamp = self.parseDuration(element.timestamp);
-                    element.employee = employee.firstname + ' ' + employee.lastname;
-                    self.getCommentAttachments(element.comment_id);
-                    items.push(element);
-                }
-            }
-            items.reverse();
-            self.reportComments = items;
-            self.htmlEncodeReportComments();
-        }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
-    },
-    parseDuration: function parseDuration(timestamp) {
-        var modifyTime = moment(timestamp);
-        var nowTime = moment();
-        var duration = moment.duration(nowTime.diff(modifyTime));
-        if (duration.asYears() >= 1) {
-            return parseInt(duration.asYears()) + ' years ago';
-        } else if (duration.asMonths() >= 1) {
-            return parseInt(duration.asMonths()) + ' months ago';
-        } else if (duration.asDays() >= 1) {
-            return parseInt(duration.asDays()) + ' days ago';
-        } else if (duration.asHours() >= 1) {
-            return parseInt(duration.asHours()) + ' hours ago';
-        } else if (duration.asMinutes() >= 1) {
-            return parseInt(duration.asMinutes()) + ' minutes ago';
-        } else {
-            return parseInt(duration.asSeconds()) + ' seconds ago';
-        }
-    },
-    setSessionStorageValues: function setSessionStorageValues() {
-        sessionStorage.setItem('project', this.filters.project);
-        sessionStorage.setItem('version', this.filters.version);
-        sessionStorage.setItem('assignee', this.filters.assignee);
-        sessionStorage.setItem('status', this.filters.status);
-        sessionStorage.setItem('checkedCustomFilters', JSON.stringify(this.filters.checkedCustomFilters));
-        sessionStorage.setItem('searchFilter', this.filters.searchFilter);
-    },
-    updateReports: function updateReports() {
-        var self = this;
-        var values = this.getReportEditValues(),
-            firebaseUpdate = {};
-        if (values.validated) {
-            this.grid.selection.selected(function(index) {
-                if (index !== null) {
-                    var gridRow = self.grid.items[index];
-                    var firebaseIndex = gridRow.report_id - 1; //Stupid hack
-                    firebaseUpdate[firebaseIndex] = {
-                        createtime: gridRow.createtime,
-                        employee_id: values.fields.employee_id,
-                        meta: gridRow.meta,
-                        modifytime: moment().format('YYYY-MM-DD HH:mm:ss'),
-                        priority: values.fields.priority,
-                        project_id: gridRow.project_id,
-                        report_id: gridRow.report_id,
-                        status_id: values.fields.status_id,
-                        type_id: values.fields.type_id,
-                        version_id: values.fields.version_id
-                    };
-                }
-            });
-            this.firebase.report.update(firebaseUpdate);
-            this.firebaseReportData = [];
-            self.updateReportGrid();
-            self.updateDistributionBarValues();
-            this.grid.selection.clear();
-        } else {
-            this.$.validation_error.show();
-        }
-    },
-    discardReportsEdit: function discardReportsEdit() {
-        this.grid.selection.clear();
-    },
     setEditResizeable: function setEditResizeable() {
         var $reportEditContainer = $('#report_edit_container');
         var editToolBarHeight = 138; //TODO maybe change from hard coded
@@ -684,74 +798,6 @@ Polymer({
         $reportEditContainer.css('top', (newTopPosition)+'px');
         this.editPanelResized = true;
     },
-    addComment: function addComment() {
-        var self = this,
-            comment = tinyMCE.activeEditor.getContent(),
-            comment_id = this.maxcomment_id+1,
-            employee_id = this.employee_id,
-            timestamp = moment().format('YYYY-MM-DD HH:mm:ss'),
-            report_id,
-            files;
-
-        this.grid.selection.selected(function(index) {
-            report_id = self.grid.items[index].report_id;
-        });
-        if ($.trim(comment) !== '') {
-            files = document.querySelector('file-upload').getFiles();
-            new Firebase(
-                "https://vaadin-bugrap.firebaseio.com/comment/"+report_id
-            ).push({
-                comment_id: comment_id,
-                employee_id: employee_id,
-                report_id: report_id,
-                text: comment,
-                timestamp: timestamp
-            });
-            files.forEach(function(element){
-                var reader = new FileReader();
-                reader.onload = (function(theFile) {
-                    return function(e) {
-                        var filePayload = e.target.result;
-                        new Firebase(
-                            "https://vaadin-bugrap.firebaseio.com/attachment/"+comment_id
-                        ).push({
-                            attachment: filePayload,
-                            name: theFile.name,
-                            comment_id: comment_id
-                        });
-                    };
-                })(element);
-                reader.readAsDataURL(element);
-            });
-            if(files.length) {
-                setTimeout(function(){
-                    self.getReportComments(report_id);
-                }, 500);
-            } else {
-                self.getReportComments(report_id);
-            }
-
-            $('#comment_add').hide();
-            tinyMCE.activeEditor.setContent('');
-        } else {
-            this.$.comment_validation_error.show();
-        }
-    },
-    getMaxCommentId: function getMaxCommentId() {
-        var self = this;
-        this.firebase.comment.on("value", function(response) {
-            for (var k in response.val()) {
-                for (var j in response.val()[k]) {
-                    var comment = response.val()[k][j];
-                    if (comment.comment_id > self.maxcomment_id) {
-                        self.maxcomment_id = comment.comment_id;
-                    }
-                }
-            }
-        }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
-    },
     commentCancel: function commentCancel() {
         $('#comment_add').hide();
         tinyMCE.activeEditor.setContent('');
@@ -766,26 +812,10 @@ Polymer({
             });
         }, 1);
     },
-    getCommentAttachments: function getCommentAttachments(comment_id) {
-        var self = this;
-        setTimeout(function(){
-            var $parentElement = $('#comment_attachment_'+comment_id);
-            $parentElement.empty();
-            $parentElement.html('<paper-spinner alt="Loading attachments" active style="left: 1%"></paper-spinner>');
-            new Firebase("https://vaadin-bugrap.firebaseio.com/attachment/"+comment_id).once("value", function(response) {
-                $parentElement.empty();
-                for (var k in response.val()) {
-                    $parentElement.append(
-                        '<paper-button raised><a href="'+response.val()[k].attachment+'" target="_blank">'+response.val()[k].name+'</a></paper-button>'
-                    );
-                }
-            }, function (errorObject) {
-                console.log("The read failed: " + errorObject.code);
-            });
-        }, 1);
-
-    },
     showPlaceholderNotification: function showPlaceholderNotification() {
         this.$.placeholder_notification.show();
     }
+    /****************************
+     * View functions end
+     ***************************/
 });
