@@ -22,7 +22,7 @@ Polymer({
         };
         this.types = null;
         this.employees = null;
-        this.grid = null;
+        this.grid = document.querySelector("vaadin-grid");
         this.reportComments = null;
         this.selectedReportAmount = 0;
         this.selectedReportMeta = '';
@@ -133,6 +133,10 @@ Polymer({
         this.addEventListener('commentCancel', function(){
             self.commentCancel();
         });
+
+        this.grid.addEventListener("selected-items-changed", function() {
+            self.updateModificationLayout();
+        });
     },
     toggleStatusSelect: function toggleStatusSelect() {
         var statusDialog = $('.status-dialog');
@@ -235,10 +239,6 @@ Polymer({
         if (!this.employees || !this.types) {
             return;
         }
-
-
-        // Reference to the grid element
-        this.grid = document.querySelector("vaadin-grid");
         var self = this;
         var filterWithSearch = false;
         var items = [];
@@ -337,9 +337,8 @@ Polymer({
 
         }
 
-        this.grid.addEventListener("selected-items-changed", function() {
-            self.updateModificationLayout();
-        });
+        //Jos siirtää tämän
+
 
         this.setSessionStorageValues();
     },
