@@ -12,7 +12,6 @@ Polymer({
         this.getMaxCommentId();
     },
     defaultValues: function defaultValues() {
-        var self = this;
         this.versions = [];
         this.versionsWithoutAll = [];
         this.distributionBarValues = {
@@ -104,7 +103,6 @@ Polymer({
             self.updateReportGrid();
         });
 
-        //TODO change without input blur
         document.getElementById('search_reports').addEventListener('change', function(){
             self.updateReportGrid();
         });
@@ -136,6 +134,17 @@ Polymer({
 
         this.grid.addEventListener("selected-items-changed", function() {
             self.updateModificationLayout();
+        });
+
+        this.grid.addEventListener('sort-order-changed', function() {
+            var sortOrder = self.grid.sortOrder[0];
+            var sortProperty = self.grid.columns[sortOrder.column].name;
+            var lesser = self.grid.sortOrder[0].direction == 'asc' ? -1 : 1;
+            if (typeof self.grid.items !== 'undefined') {
+                self.grid.items.sort(function(a, b){
+                    return (a[sortProperty] < b[sortProperty]) ? lesser : -lesser;
+                });
+            }
         });
     },
     toggleStatusSelect: function toggleStatusSelect() {
@@ -240,7 +249,6 @@ Polymer({
             return;
         }
         var self = this;
-        var filterWithSearch = false;
         var items = [];
         var lesser = 1;
         var filter = 'priority';
@@ -319,15 +327,6 @@ Polymer({
             }
         });
 
-        this.grid.addEventListener('sort-order-changed', function() {
-            var sortOrder = self.grid.sortOrder[0];
-            var sortProperty = self.grid.columns[sortOrder.column].name;
-            var lesser = self.grid.sortOrder[0].direction == 'asc' ? -1 : 1;
-            items.sort(function(a, b){
-                return (a[sortProperty] < b[sortProperty]) ? lesser : -lesser;
-            });
-        });
-
         //Show version if all selected
         this.grid.columns[0].hidden = !showVersion;
         if (showVersion) {
@@ -336,10 +335,6 @@ Polymer({
             this.grid.sortOrder = [{column: 1, direction: 'desc'}];
 
         }
-
-        //Jos siirtää tämän
-
-
         this.setSessionStorageValues();
     },
     elementMatchFilters: function elementMatchFilters(element) {
@@ -364,7 +359,6 @@ Polymer({
             }
         };
         var searchMatches = function searchMatches() {
-            //TODO IMPLEMENT A BETTER SEARCH
             var searchFilter = $.trim(self.filters.searchFilter.toLowerCase());
             if (searchFilter !== '') {
                 return element.meta.toLowerCase().indexOf(self.filters.searchFilter.toLowerCase()) > -1;
