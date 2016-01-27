@@ -468,13 +468,7 @@ Polymer({
                 })(element);
                 reader.readAsDataURL(element);
             });
-            if(files.length) {
-                setTimeout(function(){
-                    self.getReportComments(report_id);
-                }, 500);
-            } else {
-                self.getReportComments(report_id);
-            }
+            self.getReportComments(report_id);
 
             $('#comment_add').hide();
             tinyMCE.activeEditor.setContent('');
