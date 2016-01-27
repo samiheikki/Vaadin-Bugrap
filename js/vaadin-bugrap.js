@@ -82,7 +82,7 @@ Polymer({
         this.priorities = priorities;
     },
     updateReportGrid: function updateReportGrid() {
-        if (!this.employees || !this.types) {
+        if (!this.employees || !this.types || this.filters.version === null) {
             return;
         }
         var self = this;
@@ -214,8 +214,6 @@ Polymer({
     projectSelect: function projectSelect(project_id) {
         var self = this;
         self.updateVersionList();
-        self.updateReportGrid();
-        self.updateDistributionBarValues();
     },
     updateVersionList: function updateVersionList() {
         //Get Project Versions
