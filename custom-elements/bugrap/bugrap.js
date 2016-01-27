@@ -573,7 +573,7 @@ Polymer({
         });
 
         this.grid.addEventListener("selected-items-changed", function() {
-            self.updateModificationLayout(); //sami
+            self.updateModificationLayout();
         });
 
         this.grid.addEventListener('sort-order-changed', function() {
