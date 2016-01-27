@@ -10,7 +10,6 @@ Polymer({
         this.events();
         this.setPriorities();
         this.getMaxCommentId();
-        this.getMaxAttachmentId();
     },
     defaultValues: function defaultValues() {
         var self = this;
@@ -48,8 +47,6 @@ Polymer({
         this.maxcomment_id = 0;
         this.commment_attachment = [];
 
-        this.maxattachment_id = 0;
-
         this.firebase = {};
 
         this.firebaseReportData = []; //Temporary solution for not fetching same data from firebase when filters change
@@ -65,8 +62,6 @@ Polymer({
         this.firebase.type = this.firebase.ref.child('type');
         this.firebase.version = this.firebase.ref.child('version');
         this.firebase.filetest = this.firebase.ref.child('filetest');
-        this.firebase.comment_attachment = this.firebase.ref.child('comment_attachment');
-        this.firebase.attachment = this.firebase.ref.child('attachment');
     },
     setPriorities: function setPriorities() {
         var i = 1,
@@ -554,7 +549,7 @@ Polymer({
     getReportComments: function getReportComments(report_id) {
         var self = this;
         var employee;
-        this.firebase.comment.once("value", function(response) {
+        new Firebase("https://vaadin-bugrap.firebaseio.com/comment/"+report_id).once("value", function(response) {
             var items = [];
             for (var k in response.val()) {
                 var element = response.val()[k];
@@ -712,21 +707,21 @@ Polymer({
             report_id = self.grid.items[index].report_id;
         });
         if ($.trim(comment) !== '') {
-            this.firebase.comment.push(
-                {
-                    comment_id: comment_id,
-                    employee_id: employee_id,
-                    report_id: report_id,
-                    text: comment,
-                    timestamp: timestamp
-                }
-            );
+            new Firebase(
+                "https://vaadin-bugrap.firebaseio.com/comment/"+report_id
+            ).push({
+                comment_id: comment_id,
+                employee_id: employee_id,
+                report_id: report_id,
+                text: comment,
+                timestamp: timestamp
+            });
             files.forEach(function(element){
                 var reader = new FileReader();
                 reader.onload = (function(theFile) {
                     return function(e) {
                         var filePayload = e.target.result;
-                        var attachment = new Firebase(
+                        new Firebase(
                             "https://vaadin-bugrap.firebaseio.com/attachment/"+comment_id
                         ).push({
                             attachment: filePayload,
@@ -755,22 +750,11 @@ Polymer({
         var self = this;
         this.firebase.comment.on("value", function(response) {
             for (var k in response.val()) {
-                if (response.val()[k].comment_id > self.maxcomment_id) {
-                    self.maxcomment_id = response.val()[k].comment_id;
-                }
-            }
-        }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
-    },
-    getMaxAttachmentId: function getMaxAttachmentId() {
-        var self = this;
-        this.firebase.comment_attachment.on("value", function(response) {
-            self.commment_attachment = [];
-            for (var k in response.val()) {
-                self.commment_attachment.push(response.val()[k]);
-                if (response.val()[k].attachment_id > self.maxattachment_id) {
-                    self.maxattachment_id = response.val()[k].attachment_id;
+                for (var j in response.val()[k]) {
+                    var comment = response.val()[k][j];
+                    if (comment.comment_id > self.maxcomment_id) {
+                        self.maxcomment_id = comment.comment_id;
+                    }
                 }
             }
         }, function (errorObject) {
@@ -796,7 +780,7 @@ Polymer({
         setTimeout(function(){
             var $parentElement = $('#comment_attachment_'+comment_id);
             $parentElement.empty();
-            $parentElement.html('<paper-spinner alt="Loading attachments" active style="left: 50%"></paper-spinner>');
+            $parentElement.html('<paper-spinner alt="Loading attachments" active style="left: 1%"></paper-spinner>');
             new Firebase("https://vaadin-bugrap.firebaseio.com/attachment/"+comment_id).once("value", function(response) {
                 $parentElement.empty();
                 for (var k in response.val()) {
