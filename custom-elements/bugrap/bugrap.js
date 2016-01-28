@@ -659,6 +659,7 @@ Polymer({
             lastIndex = null,
             totalSelections = 0;
         this.nullReportEditValues();
+        $('#report_edit_amount').click();
         self.grid.selection.selected(function(index) {
             if (index !== null && typeof self.grid.items[index] !== 'undefined') {
                 var gridRow = self.grid.items[index];
